@@ -1,0 +1,146 @@
+练习：
+1、列出当前主机以安装的所有RPM软件
+
+	[root@A ~]# rpm -qa 
+
+2、查看firefox软件包的安装清单
+
+	[root@A ~]# rpm -ql firefox
+
+3、查看firefox软件包的用途
+
+	[root@A ~]# rpm -qi firefox
+
+4、查询光盘中的lynx软件包的用途，安装清单
+
+	[root@A ~]# rpm -qpi /mnt/Packages/lynx-2.8.8-0.3.dev15.el7.x86_64.rpm 
+	[root@A ~]# rpm -qpl /mnt/Packages/lynx-2.8.8-0.3.dev15.el7.x86_64.rpm 
+	
+5、利用rpm安装vsftpd这个软件包
+	
+	[root@A ~]# rpm -ivh /mnt/Packages/vsftpd-3.0.2-22.el7.x86_64.rpm 
+	[root@A ~]# rpm -q vsftpd
+	vsftpd-3.0.2-22.el7.x86_64
+	
+6、删除vim、vi、hostname命令程序
+	
+	[root@A ~]# which vim vi hostname
+	/usr/bin/vim
+	/usr/bin/vi
+	/usr/bin/hostname
+	[root@A ~]# rm -rf /usr/bin/vim /usr/bin/vi /usr/bin/hostname
+	[root@A ~]# 
+
+7、修复vim、vi、hostname
+
+	[root@A ~]# rpm -qf /usr/bin/vim
+	vim-enhanced-7.4.160-4.el7.x86_64
+	[root@A ~]# rpm -ivh --force /mnt/Packages/vim-enhanced-7.4.160-4.el7.x86_64.rpm 
+	警告：/mnt/Packages/vim-enhanced-7.4.160-4.el7.x86_64.rpm: 头V3 RSA/SHA256 Signature, 密钥 ID f4a80eb5: NOKEY
+	准备中...                                                  ################################# [100%]
+	正在升级/安装...
+	   1:vim-enhanced-2:7.4.160-4.el7                          ################################# [100%]
+	[root@A ~]# ls /usr/bin/vim
+	/usr/bin/vim
+
+8、安装bind-chroot包，体验依赖关系
+	
+	[root@A ~]# rpm -ivh /mnt/Packages/bind-chroot-9.9.4-61.el7.x86_64.rpm 
+	警告：/mnt/Packages/bind-chroot-9.9.4-61.el7.x86_64.rpm: 头V3 RSA/SHA256 Signature, 密钥 ID f4a80eb5: NOKEY
+	错误：依赖检测失败：
+	bind = 32:9.9.4-61.el7 被 bind-chroot-32:9.9.4-61.el7.x86_64 需要
+	[root@A ~]# 
+
+	[root@A ~]# rpm -ivh /mnt/Packages/bind-9.9.4-61.el7.x86_64.rpm 
+	[root@A ~]# rpm -ivh /mnt/Packages/bind-chroot-9.9.4-61.el7.x86_64.rpm 
+
+9、卸载vsftpd软件
+
+	[root@A ~]# rpm -e vsftpd
+	[root@A ~]# rpm -q vsftpd
+	未安装软件包 vsftpd 
+	[root@A ~]# 
+
+注：which命令可以查找到命令可执行程序所在位置
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Yum机制概述
+--YUM，Yellowdog Updater Modified
+--基于RPM包构建的软件更新机制
+--自动解决软件包依赖关系
+--所有软件包由集中的YUM软件仓库提供
+
+软件仓库的提供方式
+--本地目录：file://...
+--FTP或HTTP服务：ftp://... 、http://...
+
+服务端配置：
+[root@A ~]#  mount /dev/cdrom /dvd/
+[root@A ~]#   ls /dvd/
+
+客户端配置：
+
+--仓库配置：/etc/yum.repos.d/*.repo
+注：客户端文件路径：/etc/yum.repos.d/*.repo，在此路径下，错误的配置文件会影响正确的配置文件
+
+.repo 基本配置项
+--[源名称] ：自定义名称，具有唯一性
+--name：本软件源的描述字串
+--baseurl：指定YUM服务端的URL地址 
+--enabled：是否启用此频道
+--gpgcheck：是否验证待安装的RPM包
+--gpgkey：用于RPM软件包验证的密钥文件 
+
+创建mnt.repo配置文件，添加本地仓库
+
+[root@A ~]#  vim /etc/yum.repos.d/mnt.repo
+[root@A ~]#  cat /etc/yum.repos.d/mnt.repo
+[mnt]
+name=Centos7.5
+baseurl=file:///dvd
+enabled=1
+gpgcheck=0
+
+[root@A ~]#   rm -rf /etc/yum.repos.d/CentOS-*
+[root@A ~]#   yum repolist             #列出仓库信息
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

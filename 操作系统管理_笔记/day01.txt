@@ -1,0 +1,52 @@
+Linux系统简介
+
+Linux是一种操作系统!!
+
+操作系统:一堆软件的集合,让计算机的硬件正常工作
+
+Unix/Linux发展史
+
+• UNIX诞生,1970-1-1                                     
+
+• Linux之父,Linus Torwalds
+– 1991年10月,发布0.02版(第一个公开版)内核
+– 1994年03月,发布1.0版内核
+– 标准读音: 哩呐科斯
+
+     内核:合理控制众多硬件
+
+    用户------>内核-------->硬件
+    版本号:主版本.次版本.修订号
+
+Linux发行版本
+• 发行版的名称/版本由发行方决定
+– Red Hat Enterprise Linux 5/6/7
+– Suse Linux Enterprise 12
+– Debian Linux 7.8
+– Ubuntu Linux 14.10/15.04
+
+Red Hat系列版本
+• 红帽 Linux 企业版
+– 简称RHEL(Red Hat Enterprise Linux)
+– http://www.redhat.com/
+
+• Fedora Core 社区版
+– http://fedoraproject.org/
+
+• CentOS,社区企业操作系统
+– Community Enterprise Operating System
+– http://www.centos.org/
+
+#################################################
+利用虚拟机安装Linux系统
+1.建立一台全新的虚拟机
+  Ctrl+ALT=鼠标回到真机
+
+作业：新建一台虚拟机要求如下：
+1. 内存2G，硬盘80G
+2. 软件选择：“带GUI的服务器”
+
+
+
+
+		

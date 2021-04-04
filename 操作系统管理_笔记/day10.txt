@@ -1,0 +1,160 @@
+find高级使用
+与wc连用
+
+	[root@A ~]# wc /etc/passwd
+	  44     85     2276       /etc/passwd
+	   行数 单词  文件大小   文件名
+	[root@A ~]#  wc -l /etc/passwd                            #查看这个文件有多少行
+	[root@A ~]#  find /etc/ -name "*tab"
+	[root@A ~]#  find /etc/ -name "*tab" | wc -l
+	[root@A ~]# find /etc/ -name "*.conf"
+	[root@A ~]#  find /etc/ -name "*.conf" | wc -l
+	[root@A ~]#  rm -rf /opt/*
+	[root@A ~]#  mkdir /opt/nsd01
+	[root@A ~]#  touch /opt/nsd02.txt
+	[root@A ~]#  touch /opt/nsd03.txt
+	[root@A ~]#  find /opt/ -type f
+	[root@A ~]# find /opt/ -type d
+	[root@A ~]#  find /opt/ -name "nsd*"
+
+-a 并且（都满足，默认是-a） -o 或者（满足其一即可）
+
+	[root@A ~]#  find /opt/ -name "nsd*" -a -type f
+	[root@A ~]#  find /opt/ -name "nsd*" -o -type f
+	[root@A ~]#  find /opt/ -name "nsd*"  -type d
+
+查找并处理文件
+
+使用find命令的-exec操作
+--find   [目录]  条件  -exec   处理命令   {}   \;
+--根据条件查找并处理结果
+
+注：-exec是额外操作
+       {}：替代每一个查找结果
+       \;   处理操作结束
+
+[root@A ~]# find /boot/ -name "vm*" -exec cp {} /opt \;                 #查找/boot目录中以vm开头的所有文件拷贝到/opt下
+[root@A ~]# ls /opt/
+[root@A ~]#  find /boot/ -size +10M -type f -exec cp {} /opt/ \;
+[root@A ~]#  ls /opt/
+
+
+
+
+
+案例：查找并处理文件
+1、利用find查找所有用户student拥有的必须是文件，把他们拷贝到/root/findfiles文件夹中
+
+	[root@A ~]# useradd student
+	[root@A ~]#  mkdir /root/findfiles
+	[root@A ~]#  find / -user student -type f
+	[root@A ~]#  find / -user student -type f -exec cp {} /root/findfiles/ \;
+	[root@A ~]#  ls -A /root/findfiles/
+
+2、利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
+
+[root@A ~]# find /boot/ -size +10M -a -type f
+[root@A ~]# find /boot/ -size +10M -a -type f -exec cp {} /opt/  \;
+[root@A ~]# ls /opt/
+initramfs-0-rescue-cb8e00417ae6496ea70331268908d159.img
+initramfs-3.10.0-862.el7.x86_64.img
+initramfs-3.10.0-862.el7.x86_64kdump.img
+
+
+3、利用find查找/boot/目录下以vm开头且必须是文件，拷贝到/opt
+
+[root@A ~]# find /boot -name "vm*" -type f
+/boot/vmlinuz-3.10.0-862.el7.x86_64
+/boot/vmlinuz-0-rescue-cb8e00417ae6496ea70331268908d159
+[root@A ~]# find /boot -name "vm*" -type f -exec cp {} /opt/ \;
+[root@A ~]# ls /opt/
+
+4、利用find查找/boot/目录下为快捷方式
+
+	[root@A ~]# find /boot/ -type l
+
+5、利用find查找/etc目录下，以tab作为结尾的必须是文件
+	
+	[root@A ~]# find /etc/ -name "*tab" -type f
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+mount挂载操作：可以让目录成为设备的访问点
+
+显示光盘内容：
+         windows：   光盘文件------》光驱设备-------》cd驱动器（图标） 访问点
+
+         Linux：   光盘文件------》光驱设备--------》访问点（目录）   
+                                                    /dev/hdc：表示光驱设备是IDE接口类型
+			    /dev/sr0：表示光驱设备是SCSI接口类型
+
+1、图形将光盘文件放入设备
+2、查看光驱设备
+[root@A ~]#  ls  /dev/hdc
+[root@A ~]#  ls  /dev/sr0
+[root@A ~]#  ls  -l  /dev/cdrom
+
+3、挂载设备
+[root@A ~]#  mkdir  /dvd
+[root@A ~]#  ls   /dvd
+
+使用mount命令
+格式： mount   设备路径    挂载点目录
+
+[root@A ~]#  mount   /dev/cdrom   /dvd
+[root@A ~]#  ls  /dvd
+
+4、卸载
+
+使用umount命令
+格式：umount   挂载点目录
+
+[root@A ~]# umount /dvd
+[root@A ~]# ls /dvd
+
+注意事项：
+1、卸载时当前目录不要再挂载点目录下
+
+[root@A dvd]# umount /dvd
+umount: /dvd：目标忙。
+        (有些情况下通过 lsof(8) 或 fuser(1) 可以
+         找到有关使用该设备的进程的有用信息)
+[root@A dvd]# 
+
+2、一个设备可以有多个挂载点
+3、不允许一个挂载点有多个设备
+4、建议挂载点目录的选择，最好自己创建
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+RPM的含义
+RPM Package  Manager
+--由红帽公司提出，Redhat、SUSE等系列采用
+--建立集中数据库，记录软件包安装/卸载等变化信息，分析软件包依赖关系
+
+RPM包文件名特征
+--软件名-版本信息.操作系统.硬件架构.rpm
+
+查询已安装的RPM软件包的信息
+格式：rpm  -q[子选项]   [软件名称]
+
+常用的子选项：
+-a：列出已安装的所有软件包
+-i：查看指定软件的详细信息
+-l：查看指定软件的文件安装清单
+
+[root@A /]# rpm -q firefox
+[root@A /]#  rpm -q haha
+[root@A /]#  rpm -qi firefox
+[root@A /]#  rpm -ql firefox
+[root@A /]#  rpm -qa
+[root@A /]#  rpm -qa | wc -l
+[root@A /]#  rpm  -qa  |  grep  vim
+
+
+
+
+
+
+
+
+

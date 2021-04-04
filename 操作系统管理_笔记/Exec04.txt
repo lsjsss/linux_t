@@ -1,0 +1,34 @@
+1. 查看根目录下内容
+
+2. 显示根目录本身详细属性   
+
+3. 切换到/boot目录，显示当前目录内容的详细属性,并加上易读的容量单位
+
+4. 显示/root的全部内容，包括隐藏文档
+5. 显示/bin/bash程序，详细属性
+
+6. 显示/dev/cdrom光驱设备，详细属性
+
+7. 在根目录下创建一个子目录 tedu
+	
+8. 利用Tab键补全快速找出下列文件
+/etc/sysconfig/network-scripts/ifcfg-*
+/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+
+9. 说出下列快捷键含义并进行练习
+Ctrl + l:  
+Ctrl + u：
+Ctrl + w：
+Ctrl + c：
+Esc + . ：
+
+10. 创建tom用户，并切换到tom用户的家目录
+
+11. 一条命令创建/protected/project/tts10
+
+12. 显示dev下tty20-tty30设备
+
+
+
+
+

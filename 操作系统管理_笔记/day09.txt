@@ -1,0 +1,218 @@
+系统时间：
+date--查看/调整系统日期时间
+修改时间格式：date  -s  "yyyy-mm-dd HH:MM:SS"
+
+[root@A ~]# date                                           #查看时间
+[root@A ~]# date +%F                                   #查看年月日
+[root@A ~]# date +%R                                  #查看时间
+[root@A ~]#  date +%Y
+[root@A ~]#  date +%m
+[root@A ~]#  date +%d
+[root@A ~]#  date +%H
+[root@A ~]#  date +%M
+[root@A ~]#  date +%S
+[root@A ~]#  date -s "2020-10-1 08:00:00"                    #设置时间为2020年10月1日
+[root@A ~]#  date
+[root@A ~]#  hwclock -s                                  #重设系统时间
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+制作连接文件
+ln, 创建软连接
+--软连接---->原始文档---->文档数据
+--ln  -s   原始文件或目录    软连接文件
+--若原始文件或目录被删除，连接文件将失效
+--软连接可以存放在不同的分区/文件系统
+
+ln，创建硬链接
+--硬链接---->文档数据
+--ln   原始文件   硬链接文件
+--若原始文件被删除，链接文件仍可用
+--硬链接与原始文件必须在同一分区/文件系统
+
+青色：快捷方式
+
+[root@A ~]# ln -s /etc/shells /opt/
+[root@A ~]#  ls /opt/
+[root@A ~]#  cat /opt/shells 
+[root@A ~]#  rm -rf /opt/*
+[root@A ~]#  ls /opt/
+[root@A ~]#  echo AAAA > /opt/A.txt
+[root@A ~]#  ln -s /opt/A.txt /opt/B.txt
+[root@A ~]#  ls   /opt
+[root@A ~]#  ln /opt/A.txt /opt/C.txt
+[root@A ~]#  ls /opt/
+[root@A ~]#  cat /opt/A.txt 
+[root@A ~]#  cat /opt/B.txt 
+[root@A ~]#  cat /opt/C.txt 
+[root@A ~]#  rm -rf /opt/A.txt 
+[root@A ~]#  ls /opt/
+[root@A ~]#  cat /opt/B.txt 
+[root@A ~]#  cat /opt/C.txt 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++
+重定向补充：
+类型                                     操作符                              用途
+覆盖重定向输出		>                  	将命令行的正常执行输出覆盖保存到文件
+追加重定向输出		>>                  	将命令行的正常执行输出追加保存到文件
+覆盖重定向错误输出		2>                  	将命令行的错误执行输出覆盖保存到文件
+追加重定向错误输出		2>>                  	将命令行的错误执行输出追加保存到文件
+混合重定向                              &>                           将正确和错误的输出都覆盖到同一个文件
+混合重定向                              &>>                         将正确和错误的输出都追加到同一个文件
+
+[root@A ~]# ls   /hahah 
+[root@A ~]#  ls   /hahah > /opt/a.txt
+[root@A ~]#  ls   /root > /opt/a.txt 
+[root@A ~]#  ls   /hahah 2> /opt/a.txt
+[root@A ~]#  ls   /root  /hhaa > /opt/a.txt 
+[root@A ~]#  ls   /root /hhaa 2> /opt/a.txt 
+[root@A ~]#  ls  /root /hhaa 2>> /opt/a.txt 
+[root@A ~]#  ls  /root /hhaa &> /opt/a.txt 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+别名：简化复杂的命令
+
+定义别名：
+    alias     别名名称='实际执行的命令'
+
+查看别名：
+   alias    [别名名称]
+
+取消别名：
+   unalias   别名名称
+
+永久设置别名：
+
+所有用户都有效：
+/etc/bashrc：
+
+	[root@student ~]# vim /etc/bashrc 
+	alias hn='hostname'
+	:wq
+	新开一个终端验证别名
+	[root@student ~]# hn
+	[root@student ~]# su  -  lisi                             #切换到lisi用户
+	[lisi@student ~]$ hn
+
+只对当前用户有效：
+~/.bashrc
+
+	[lisi@student ~]$  vim  ~/.bashrc
+	alias  ic='ifconfig | head -2'
+	:wq
+	用lisi用户新开一个终端验证
+	[lisi@student ~]$ exit
+	[root@student ~]# su  - lisi                             #切换到lisi用户
+	[lisi@student ~]$ ic
+	[root@student ~]# ic
+快捷键：
+Ctrl+Shift+t                #一个终端上开多个窗口
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+归档和压缩
+归档的含义：
+--将许多零散的文件整理问一个文件
+--文件总的大小基本不变
+
+压缩的含义：
+--按某种算法减小文件所占用空间的大小
+--恢复时按对应的逆向算法解压
+
+常见的压缩格式及命令工具：
+.gz --->gzip、gunzip
+.bz2--->bzip2、bunzip2
+.xz---> xz、unxz
+
+tar工具的常用选项
+
+-c：创建归档
+-x：释放归档
+-f：指定归档文件名称
+-z、-j、-J：调用 .gz、.bz2、.xz 格式的工具进行处理
+-t：显示归档中的文件清单
+-C：指定释放路径
+
+制作tar包：
+格式：tar   选项     /路径/压缩包的名字            被压缩的源数据
+
+[root@A ~]#  tar -zcf   /opt/abc.tar.gz /boot/ /home/
+[root@A ~]#   ls  /opt/
+[root@A ~]#  tar -jcf  /opt/abc.tar.bz2 /home/ /root/
+[root@A ~]#  ls  /opt/
+[root@A ~]#  tar -Jcf  /opt/abc.tar.xz /boot /root /home/
+[root@A ~]#  ls  /opt/
+
+从tar备份包恢复文档：
+格式：   tar    选项         /路径/压缩包的名字        [-C  解压的路径]
+
+[root@A ~]#  mkdir  /abc   /dvd
+[root@A ~]# tar -xf /opt/abc.tar.gz 
+[root@A ~]#  ls 
+[root@A ~]#  tar -xf /opt/abc.tar.bz2 -C /abc
+[root@A ~]#  ls /abc/
+[root@A ~]#  tar -xf /opt/abc.tar.xz -C /dvd/
+[root@A ~]#  ls /dvd
+[root@A ~]#  ls /dvd/etc/
+[root@A ~]#  ls /opt/
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+zip归档工具
+归档+压缩操作
+zip  [-r]  备份文件.zip  被归档的文档... 
+
+释放归档+解压操作
+unzip  备份文件.zip  [-d 目标文件夹]  
+
+[root@localhost ~]# zip -r /opt/abc.zip /etc/passwd /home/
+[root@localhost ~]# ls /opt/
+[root@localhost ~]# mkdir /abcd
+[root@localhost ~]# ls /opt/
+[root@localhost ~]# unzip /opt/abc.zip -d  /abcd
+[root@localhost ~]# ls /abc
+[root@localhost ~]#  ls /abc/etc/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+find精确查找
+--根据预设的条件递归查找对应的文件
+格式：  find     [目录]    [条件1]
+常用条件表示：
+           -type：类型（f：文本文件；d：目录，l：快捷方式）	
+
+	[root@A ~]# find  /boot   -type   f
+	[root@A ~]# find  /boot   -type  d
+	[root@A ~]# find  /dev   -type  l
+                 [root@A ~]#  
+
+           -name “文档名称”
+
+	[root@A ~]# find /etc/ -name "passwd"
+	[root@A ~]#  find /etc/ -name "*tab"
+	[root@A ~]#  find /etc/ -name "*.conf"
+	[root@A ~]#  ls /etc/*.conf
+	[root@A ~]#  find /etc/ -name "re*"
+
+        -size     + 或 -  文件大小（k，M，G）
+
+	[root@A ~]# find /boot/ -size -10M
+	[root@A ~]#  find /boot/ -size +3000k
+	[root@A ~]# find  /boot/  -size  +10M
+
+       -user   用户名       #按照所有者进行查找 （所有者：文件的创建者）
+
+	[root@A ~]# useradd tom
+	[root@A ~]# useradd zhangsan
+	[root@A ~]#  ls -l /home/
+	[root@A ~]#  find /home/ -user tom
+	[root@A ~]#  find / -user tom
+
+     -mtime    根据文件修改时间（所有的时间都是过去时间）
+       -10：最近10天之内的
+       +10：10天之前的
+
+	[root@A ~]# find /root -mtime +10
+	[root@A ~]#  find /root -mtime -10
+
+
+
+
+
+
+

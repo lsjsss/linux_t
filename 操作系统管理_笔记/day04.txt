@@ -1,0 +1,147 @@
+Linux命令：
+--用来实现某一功能的指令或程序
+--命令的执行依赖于解释器（/bin/bash)
+	用户----->解释器----->内核------->硬件
+
+[root@A ~]# cat /etc/shells                  #查看系统自带的解释器
+[root@A ~]# 
+
+命令行的一般格式：
+基本用法：
+   
+           命令字           [选项]       [参数1]      [参数2]      .....
+	
+              打                 工具            朋友
+
+短选项：-A   -l    -d ....
+复合选项：-ld    -la  ....
+长选项： --help
+
+ [root@A ~]#  cat /etc/shells 
+ [root@A ~]#  ls --help
+ [root@A ~]#   ls -a /root/
+ [root@A ~]#  ls -l /root
+ [root@A ~]#   ls -ld /root
+ [root@A ~]#   ls -ldh /root
+++++++++++++++++++++++++++++++++++++++++++++++++++
+快速编辑技巧：
+
+Tab键自动补齐
+ -可补齐命令字、选项、参数、文件路径、软件名、服务名
+ 注：一下tab键是补齐；两下tab键是查找
+
+快捷键：
+-Ctrl +l：清空整个屏幕
+-Ctrl +u：清空至行首
+-Ctrl +w：往回删除一个单词（以空格界定）
+-Ctrl +c：废弃当前编辑的命令行
+-Esc+ .  或Alt+ . ：粘贴上一个命令的参数 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cd--Change Directory
+用途：切换工作目录
+格式： cd     [目标文件夹位置]
+
+. : 当前目录
+.. : 父目录（上一层）
+~user:  用户user的家目录
+
+/root:   管理员用户的家目录
+/home:  普通用户的家目录
+
+绝对路径：以 / 开始的路径
+相对路径：以当前为参照的路径（不以 / 开始的路径）
+
+ [root@A ~]#  cd /etc/pki/CA/
+ [root@A ~]#   pwd
+  [root@A ~]#   cd ..
+ [root@A ~]#   cd ~root
+ [root@A ~]#  cd ~lisi                                     #切换到普通用户lisi的家目录
+  [root@A ~]#   useradd zhangsan                 #创建用户zhangsan
+ [root@A ~]#   cd ~zhangsan                         #切换到普通用户zhangsan的家目录
+ [root@A ~]#  cd /etc/pki/CA                          #绝对路径
+  [root@A ~]#   pwd
+  [root@A ~]# cd  /
+ [root@A  /]#   cd etc/                                #相对路径
+ [root@A etc]#  cd pki/
+ [root@A pki]#   cd CA
+ [root@A CA]#   pwd
+
+++++++++++++++++++++++++++++++++++++++++++++++
+ls -- list
+格式： ls    [选项]    [目录或文件名]
+常用命令选项
+-l：以长格式显示（显示详细属性信息）
+-A：显示所有内容包含隐藏数据（不包含. 和.. 两个文件）
+-d：显示目录本身（而不是内容）的属性
+-h：提供易读的容量单位（K、M等）
+-R：递归显示内容
+-a：显示所有文件（包含. 和.. 两个文件）
+
+  [root@A ~]# ls -l /etc
+  [root@A ~]# ls -l /root
+  [root@A ~]# ls -lh /etc/
+  [root@A ~]#  ls -ld /etc/
+  [root@A ~]#  ls -A /root
+  [root@A ~]#  ls /root
+  [root@A ~]#  ls -a /root
+  [root@A ~]#  ls -R /var
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+使用通配符
+针对不确定的文档名称，以特殊字符表示
+*：任意多个任意字符
+?：单个字符
+[a-z]：多个字符或连续范围中的一个，若无则忽略
+{a,min,xy}：多组不同的字符串，全匹配
+
+[root@A ~]# ls /m*                                       #查看以m开头的文件
+[root@A ~]#  ls /etc/re*                                #查看etc下以re开头的文件
+[root@A ~]#  ls /etc/*.conf                            #查看etc下以.conf结尾的文件
+[root@A ~]#  ls /dev/tty?                         
+[root@A ~]#  ls /dev/tty??
+[root@A ~]#  ls /dev/tty[0-9]                         
+[root@A ~]#  ls /dev/tty{1,5,7}
+++++++++++++++++++++++++++++++++++++++++++++++
+ 创建目录
+
+mkdir  --- Make   Dircetory          
+格式： mkdir   [选项]    [/路径/]目录名
+ 
+-p： 连父目录一起创建
+
+[root@A ~]# mkdir  -p /aa/bb/cc/dd/ee
+[root@A ~]# ls  -R  /aa
+[root@A ~]# mkdir -p /abc/bcd/cde/def/
+[root@A ~]# ls -R /abc/
+++++++++++++++++++++++++++++++++++++++++++++++++++
+别名的定义：简化复杂的命令
+定义别名：
+格式： alias   别名名称='实际执行的命令'
+
+查看别名：alias
+
+取消别名: unalias   别名名称
+
+[root@A ~]# alias                                                            #显示当前系统有效的别名
+[root@A ~]# hostname
+[root@A ~]# alias hn='hostname'                                #定义别名hn
+[root@A ~]#  alias 
+[root@A ~]#  hn
+[root@A ~]# unalias hn                                              #取消别名hn
+[root@A ~]#  hn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

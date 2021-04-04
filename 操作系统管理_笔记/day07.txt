@@ -1,0 +1,97 @@
+重定向和管道练习（作业）：
+1、显示ifconfig命令的前2行内容
+
+            ifconfig | head  -2
+	
+2、显示/etc/passwd第九行内容
+                [root@localhost ~]# cat -n /etc/passwd | head -9 | tail -1
+   	  9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+	[root@localhost ~]# head -9 /etc/passwd | tail -1
+	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+	[root@localhost ~]# 
+
+3、将hostname命令的输出内容，覆盖写入到/opt/hn.txt
+4、利用echo命令，将”tmooc“ 内容追加写入到/opt/hn.txt
+	
+	[root@localhost ~]# hostname > /opt/hn.txt
+	[root@localhost ~]# cat /opt/hn.txt
+	localhost.localdomain
+	[root@localhost ~]# echo "tmooc"  >>  /opt/hn.txt 
+	[root@localhost ~]# cat /opt/hn.txt
+	localhost.localdomain
+	tmooc
+	[root@localhost ~]# 
+
+重定向练习
+1、将hostname命令的输出信息保存到文件/root/a.txt中
+	
+[root@localhost ~]#  hostname > /root/a.txt 
+[root@localhost ~]#  cat /root/a.txt
+
+2、将显示的内核版本信息保存到文件/root/b.txt中
+
+[root@localhost ~]#  uname -r > /root/b.txt
+[root@localhost ~]#  cat /root/b.txt
+
+3、将系统版本信息追加保存到文件/root/a.txt中
+
+[root@localhost ~]#  cat /etc/redhat-release >> /root/a.txt 
+[root@localhost ~]#  cat /root/a.txt
+
+4、将显示的cpu信息追加保存到文件/root/a.txt中
+
+[root@localhost ~]#  lscpu >> /root/a.txt 
+[root@localhost ~]#  cat /root/a.txt
+
+5、将显示的内存信息保存到文件/root/b.txt中
+
+[root@localhost ~]#  cat /proc/meminfo > /root/b.txt 
+[root@localhost ~]#  cat /root/b.txt
+
+6、利用echo命令将“tedu”追加写入到文件/root/b.txt中
+
+[root@localhost ~]#  echo tedu >> /root/b.txt 
+[root@localhost ~]#  cat /root/b.txt
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+vim高级使用（注：详情可见PDF）
+
+[root@localhost ~]#   cp    /etc/passwd   /opt
+[root@localhost ~]#   vim  /opt/passwd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

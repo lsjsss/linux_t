@@ -1,0 +1,114 @@
+重定向输出：将命令的输出，作为文本文件的内容写入一个文件中
+>  覆盖重定向
+>> 追加重定向
+	
+	[root@A ~]# ls --help >  /root/a.txt
+	[root@A ~]# cat /root/a.txt
+	[root@A ~]# cat /etc/redhat-release 
+	[root@A ~]# cat /etc/redhat-release > /root/a.txt
+	[root@A ~]#  cat /root/a.txt
+	[root@A ~]# hostname  >>  /root/a.txt
+	[root@A ~]#  cat /root/a.txt
+	[root@A ~]#  ls --help >>  /root/a.txt
+	[root@A ~]#   cat /root/a.txt
+	[root@A ~]# ifconfig >>  /root/a.txt
+	[root@A ~]#   cat /root/a.txt
+
+echo常与重定向连用
+	[root@A ~]# echo 123456
+	[root@A ~]# echo abc
+	[root@A ~]# echo 123456 > /root/b.txt
+	[root@A ~]# cat /root/b.txt 
+	[root@A ~]# echo aabbcc >> /root/b.txt 
+	[root@A ~]# cat /root/b.txt
+	[root@A ~]# echo abc > /root/b.txt
+	[root@A ~]# cat /root/b.txt
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+cat  -n   文本文件           //查看时显示行号
+        
+     [root@A ~]# cat   -n    /etc/passwd
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+管道操作：把前面命令输出结果，交由后面命令处理，作为后面命令的参数
+
+                     [root@A ~]# ifconfig ens33
+                     [root@A ~]#  ifconfig ens33 | head -2
+                     [root@A ~]#  grep -v '^$' /etc/login.defs 
+                     [root@A ~]#  grep -v '^#' /etc/login.defs 
+                     [root@A ~]#  grep -v '^#' /etc/login.defs | grep -v '^$'
+                     [root@A ~]#  ls   --help   | less
+
+
+显示/etc/passwd 文件8至12行内容
+             
+ 
+重定向和管道练习（作业）：
+1、显示ifconfig命令的前2行内容
+	
+2、显示/etc/passwd第九行内容
+	
+3、将hostname命令的输出内容，覆盖写入到/opt/hn.txt
+4、利用echo命令，将”tmooc“ 内容追加写入到/opt/hn.txt
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

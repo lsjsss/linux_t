@@ -1,0 +1,96 @@
+修改用户属性（usermod命令）
+--格式：usermod  [选项]...  用户名
+
+常用命令选项
+-l：更改用户帐号的登录名称
+-u：用户id
+-d：家目录路径
+-s：登录解释器
+-G：附加组     //重置附加组
+
+	[root@A ~]# useradd nsd01
+	[root@A ~]#  useradd nsd02
+	[root@A ~]#  useradd nsd03
+	[root@A ~]# grep nsd /etc/passwd
+	[root@A ~]#  usermod -u 1234 nsd01
+	[root@A ~]#  grep nsd01 /etc/passwd
+	[root@A ~]#  usermod -d /opt/nsd02 -s /sbin/nologin nsd02      #-d 修改家目录，只修改了对应的字段值，/opt下面并没有这个目录
+	[root@A ~]#  grep nsd02 /etc/passwd
+	[root@A ~]#  ls /opt/
+	[root@A ~]#  id nsd03
+	[root@A ~]#  groupadd tarena
+	[root@A ~]#  usermod -G tarena nsd03                          #修改用户nsd03的附加组，有则重置，没有则添加
+	[root@A ~]# usermod -G tarena nsd03
+	[root@A ~]#  id nsd03
+	[root@A ~]#  groupadd abc
+	[root@A ~]#  usermod -G abc nsd03
+	[root@A ~]#  id nsd03
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+用户初始配置文件
+配置文件来源：
+--新建用户时，根据/etc/skel模板目录复制
+主要的初始配置文件：
+-- ~/.bash_profile：每次登录时执行
+-- ~/.bashrc：每次进入新的Bash环境时执行
+-- ~/.bash_logout：每次退出登录时执行
+
+[root@localhost ~]# useradd nsd09
+[root@localhost ~]# ls -A /home/nsd09/                   #查看nsd09用户家目录下的所有文件
+[root@localhost ~]# ls -A /etc/skel/                      #查看/etc/skel/目录下的所有文件.bash_logout .bash_profile .bashrc .mozilla
+[root@localhost ~]# ls --help > /etc/skel/ls.txt
+[root@localhost ~]# ls -A /etc/skel/
+[root@localhost ~]# useradd nsd10
+[root@localhost ~]# ls -A /home/nsd10/          #新创建出来的用户有ls.txt文件
+[root@localhost ~]# useradd nsd11
+[root@localhost ~]# ls -A /home/nsd11
+
+设置别名
+[root@A ~]# vim  /root/.bashrc
+alias  hn='hostname'
+[root@A ~]# hn                                 #失败
+bash: hn: 未找到命令...
+新开启一个终端验证：
+[root@A ~]# hn                      #验证定义别名是否生效
+
+使用普通用户测试
+[root@A ~]# su - nsd05
+[nsd05@A ~]$ hn                                     #失败，.bashrc只会对自己的用户生效
+bash: hn: 未找到命令...
+
+全局配置（所有用户都有效），配置文件/etc/bashrc
+[root@A ~]# vim  /etc/bashrc
+alias haha='echo haha'
+新开启一个终端验证
+[root@A ~]# haha
+haha
+使用普通用户测试
+[root@A ~]# su - nsd05
+[nsd05@A ~]$ haha                                
+haha
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

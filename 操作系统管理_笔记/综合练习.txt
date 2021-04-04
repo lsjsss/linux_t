@@ -1,0 +1,51 @@
+案例1： 配置网络参数，要求如下：
+1. 设置主机名为student.tedu.cn
+2. 配置静态IP地址为192.168.4.xx/24 (xx为学号后2位)
+
+案例2：复制，拷贝，移动要求如下：
+1. 新建目录结构/student/test/nsd
+2. 将文件夹/boot/grub2/复制到目录/student/test/nsd下
+3. 在目录/student/test/nsd创建文件testa.txt并写入内容 NSD  Student（利用echo方式）
+4. 将/student/test/nsd/testa.txt文件复制到/root目录下，同时 改名为 tedu.txt
+5. 将/etc/passwd 、/etc/resolv.conf、/etc/hosts 同时拷贝到/student/test/nsd目录下
+6. 将文件/root/tedu.txt移动到/student/test/nsd目录下
+7. 将文件 student/test/nsd 重改名为 hs.txt 
+8. 删除/student/test/nsd目录下的grub2子目录
+
+
+案例3:查找并提取文件内容
+    1.在文件 /usr/share/dict/words 中查找到所有包含字符串 seismic 的行,将输出信息,写入到/opt/nsd1.txt
+    2.查看内核版本，将显示结果重定向到/root/version.txt
+    3.查看红帽系统版本，将显示结果追加到/root/version.txt
+    4.查看主机名将显示结果追加到/root/version.txt
+    5.将/etc/fstab文件中以UUID开头的信息，写入到/root/fstab.txt
+    6.提取/etc/passwd以bash结尾的行，将其信息写入/opt/pass.txt
+    7.复制/etc/login.defs文件到当前目录下，改名为init.txt
+    8.提取init.txt文件里的有效配置（去除以#号开头，去除空行），保存为init2.txt
+    
+案例4：设置别名
+1. 为root用户设置别名为hn='hostname’
+
+案例5：vim效率操作
+1.将文件 /etc/passwd 复制为 /opt/nsd.txt
+2. 打开 /opt/nsd.txt 文件
+3. 练习命令模式下的光标切换/复制/删除/查找操作
+4. 将文件 /etc/man_db.conf 复制到 /opt 目录下
+5. 打开 /opt/man_db.conf 文件
+6. 将第50~100行内的“man”替换为“MAN”
+7. 在 vim 中设置显示行号
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

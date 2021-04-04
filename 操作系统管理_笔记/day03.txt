@@ -1,0 +1,102 @@
+Linux的目录结构
+
+/(根目录)： Linux的起点（存放所有数据）
+/dev:    存放所有设备（键盘、鼠标、显示器、硬盘.....）的文件
+
+磁盘表示方法：设备所在目录+磁盘名
+
+/dev/hde5:  第五块IDE设备第5个分区
+/dev/hdd4:  第四块IDE设备第4个分区
+/dev/sdb3:  第二块SCSI设备第3个分区
+/dev/sde2:  第五块SCSI设备第2个分区
+
+第三块IDE设备第4个分区表示方式：/dev/hdc4
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+蓝色：目录
+黑色：文本文件
+绿色：可执行程序
+
+查看文本文件内容：cat
+格式：cat    文件名
+
+[root@localhost /]# cat /etc/passwd
+
+less：分屏阅读工具
+格式： less    文件名
+支持上下键翻页，查看完按  q  键  退出
+ 
+[root@localhost /]#  less  /etc/passwd
+
+查看系统版本信息：
+[root@localhost /]# cat /etc/redhat-release 
+CentOS Linux release 7.5.1804 (Core) 
+[root@localhost /]# 
+
+查看CPU信息：
+ [root@localhost /]# cat /proc/cpuinfo 
+ [root@localhost /]# lscpu
+
+查看内存信息：
+ [root@localhost /]# cat /proc/meminfo
+
+查看主机名：
+[root@localhost /]# hostname
+localhost.localdomain
+[root@localhost /]# hostname A.tedu.cn                     #新开一个终端验证
+[root@localhost /]# hostname
+[root@localhost /]#        
+ 
+查看IP地址：
+[root@localhost /]# ifconfig 
+[root@localhost /]#  ifconfig  ens33
+[root@localhost /]#  ifconfig  ens33 192.168.4.1/24              #临时设置IP地址为192.168.4.1
+[root@localhost /]#  ifconfig  ens33
+
+创建文档
+
+创建目录：mkdir ---------Make   Directory  
+格式：mkdir     [/路径/]目录名
+  
+[root@A ~]# mkdir abc
+[root@A ~]# ls /root/
+[root@A ~]# mkdir /opt/abc
+[root@A ~]# ls /opt/
+[root@A ~]# ls /opt/abc/
+[root@A ~]# 
+
+创建文本文件（新建空文件）：touch   
+格式：touch     [/路径/]文件名
+
+[root@A ~]# touch a.txt
+[root@A ~]# touch /opt/b.txt
+[root@A ~]# cat /opt/b.txt
+[root@A ~]# 
+
+文本内容操作：
+格式： head   -n  数字   文件名                                    #查看文件的前n行内容
+            tail   -n  数字   文件名                                       # 查看文件的后n行内容
+注：1）-n  数字可以简写为 -数字
+       2）不加数字默认查看的是前10行内容和后10行内容
+
+[root@A ~]# head -2 /etc/passwd                       #查看 /etc/passwd文件前2行内容
+[root@A ~]# tail -2 /etc/passwd                          #查看/etc/passwd文件后2行内容
+
+grep工具：
+用途：输出包含指定字符串的行
+格式：grep     '查找条件'         文件名
+
+[root@A ~]# grep 'root'  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@A ~]# 
+
+关机和重启
+[root@A ~]#  poweroff
+[root@A ~]#  reboot
+
+
+
+
+
+
+
