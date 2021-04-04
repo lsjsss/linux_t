@@ -6,25 +6,26 @@
 
 ## 目录说明
 
-	根目录 **/** :Linux系统起点
-	**/dev** ：存放设备（键盘、鼠标、显示器、硬盘）
-	**/dev/hda** ：第一块IDE设备
-	**/dev/sda** ： 第一块SCSI设备
-	![Alt](https://img-blog.csdnimg.cn/img_convert/9443f1de6401cbeb91d4f060ebf055a5.png)
-	
-	绝对路径：以根（**/**）开始的路径
-	相对路径：不以根（**/**）开始的路径
+​	根目录 **/** :Linux系统起点
+​	**/dev** ：存放设备（键盘、鼠标、显示器、硬盘）
+​	**/dev/hda** ：第一块IDE设备
+​	**/dev/sda** ： 第一块SCSI设备
+​	![Alt](https://img-blog.csdnimg.cn/img_convert/9443f1de6401cbeb91d4f060ebf055a5.png)
+
+​	绝对路径：以根（**/**）开始的路径
+​	相对路径：不以根（**/**）开始的路径
+
+
 
 ## 用户
 
 ### 用户标志
 
-	root 标志：**#**
-	普通用户标志：**$**
-	创建用户tom ：
+root 标志：**#**
+普通用户标志：**$**
 
 ```shell
-useradd tom
+useradd tom	#创建用户tom
 ```
 
 
@@ -70,8 +71,8 @@ userdel -r admin
 
 ### 目录的查看、切换
 
-	`pwd`：查看当前工作目录
-	`cd`：切换工作目录
+`pwd`：查看当前工作目录
+`cd`：切换工作目录
 
 > ```shell
 > cd ～user	#用户的家目录
@@ -81,7 +82,7 @@ userdel -r admin
 
 
 
-	`ls`：显示当前目录的内容
+`ls`：显示当前目录的内容
 
 > **青色**：快捷方式
 > **蓝色**：目录
@@ -322,7 +323,7 @@ vim ~/.bashrc	#为当前用户添加别名（永久）
 
 ![Alt](https://img-blog.csdnimg.cn/img_convert/ca493c7bcf4cf6a789555d16f4e1e333.png)
 
-	：o为另起一行插入
+​	：o为另起一行插入
 
 
 
@@ -543,7 +544,7 @@ yum clean all
 
 ## 计划任务（周期性任务）
 
-### cron任务
+### cron 任务
 
 > 用途：按照设置的时间间隔为用户反复执行某一项固定的系统任务
 >
@@ -553,12 +554,11 @@ yum clean all
 >
 > * 日志文件：/var/log/cron
 
-	```shell
-	tail /var/log/cron    # 了解cron执行消息
-	crontab -e -u root #为root用户添加日志文件
-	crontab -r #清空当前用户计划任务
-	```
-
+```shell
+tail /var/log/cron    # 了解cron执行消息
+crontab -e -u root #为root用户添加日志文件
+crontab -r #清空当前用户计划任务
+```
 > 编辑：crontab -e [-u 用户名]
 >
 > 查看：crontab -l [-u 用户名]
@@ -625,16 +625,13 @@ yum clean all
 
 6. 利用vim建立文件/tedu/stu.txt并写入内容“I Love Goddess”
 
+   ```shell
+   vim /tedu/stu.txt
+   	I Love Goddess
+   :wq
+   ```
 
-
-    ```shell
-    vim /tedu/stu.txt
-    I Love Goddess
-    :wq
-    ```
-
-   
-
+  
 
 ## 复制、删除、移动命令的使用
 
