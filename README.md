@@ -1043,40 +1043,39 @@ crontab -r #清空当前用户计划任务
 1. 将此配置为虚拟机默认软件仓库
 
 	```shell
-	rm -rf /var/run/yum.pid
-	yum repolist
+	mkdir /dvd
+	mount /dev/cdrom /dvd
 	```
 
 2. 确认可用的仓库列表
 
 	```shell
-	rm -rf /etc/yum.repos.d/C*
-	ls /etc/yum.repos.d/
+	ls /mnt
 	```
 
 3. 利用yum仓库安装httpd与vsftpd
 
 	```shell
 	vim /etc/yum.repos.d/mnt.repo
-	
 	    [mnt]
 	    name=Centos
-	    baseurl=file:///dvd
+	    baseurl=file:///mnt
 	    enabled=1
 	    gpgcheck=0
-	    
+	:wq
+	rm -rf /etc/yum.repos.d/Centos-*
+	ls /etc/yum.repos.d/
+	yum repolist
+	rm -rf /var/run/yum.pid
+	
 	cat /etc/yum.repos.d/mnt.repo
-	mkdir /dvd
-	mount /dev/cdrom /dvd
-	yum install httpd
-	yum install vsftpd
+	yum install -y httpd vsftpd
 	```
 
 4. 利用rpm命令检测是否安装成功
 
 	```shell
-	rpm -q httpd
-	rpm -q vsftpd
+	rpm -q httpd vsftpd
 	```
 
 ### 案例2:查找并处理文件
@@ -1091,8 +1090,10 @@ crontab -r #清空当前用户计划任务
  2. 利用find查找所有用户 lisi 拥有的必须是文件,把它们拷贝到 /root/findfiles/ 文件夹中
 
 	```shell
-	find / -user lisi -a -type f
+	find / -user lisi -a -type f -exec cp {} /root/findfiles/ \;
 	```
+
+	`-user`：按照文件的所有者来查找
 
  3. 利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
 
@@ -1103,19 +1104,24 @@ crontab -r #清空当前用户计划任务
  4. 将目录 /boot内容中以 vm 开头的数据, 复制到/boot/kernel目录下
 
 	```shell
-	find /boot -name "vm*" -exec cp {} /boot/kernel/ \;
+	mkdir /boot/kernel
+	find /boot/ -name "vm*" -exec cp {} /boot/kernel/ \;
+	ls /boot/kernel/
 	```
 
  5. 利用find查找/boot/ 目录下为快捷方式
 
 	```shell
-	find /boot -type l
+	find /boot/ -type l
 	```
 
  6. 利用find查找/etc 目录下，以 tab 作为结尾的 必须是文件，将其拷贝到/opt/tab/文件夹下
 
 	```shell
-	find /etc -type "$tab" -type f -exec cp {} /opt/tab/ \;
+	ls /opt/
+	rm -rf /opt/tab
+	mkdir /opt/tab
+	find /etc/ -name "*tab" -type f -exec cp {} /opt/tab/ \;
 	```
 
 ### 案例3:查找并提取文件内容
@@ -1123,44 +1129,48 @@ crontab -r #清空当前用户计划任务
 1. 在文件 /usr/share/dict/words 中查找到所有包含字符串 seismic 的行,将输出信息,写入到/opt/nsd18.txt
 
 	```shell
-	grep "seismic" /usr/share/dict/words >> /optnsd18.txt
-	cat /optnsd18.txt
+	grep "seismic" /usr/share/dict/words >> /opt/nsd18.txt
+	cat /opt/nsd18.txt
 	```
 
 2. 查看内核版本，将显示结果重定向到/root/version.txt
 
 	```shell
 	uname -r > /root/version.txt
+	cat /root/version.txt
 	```
 
 3. 查看红帽系统版本，将显示结果追加到/root/version.txt
 
 	```shell
-	cat /red hat-release > /root/version.txt
+	cat /etc/red hat-release > /root/version.txt
+	cat /root/version.txt
 	```
 
 4. 查看主机名将显示结果追加到/root/version.txt
 
 	```shell
-	hostname > /root/version.txt
+	hostname >> /root/version.txt
 	```
 
 5. 将/etc/fstab文件中以UUID开头的信息，写入到/root/fstab.txt
 
 	```shell
 	grep '^UUID' /etc/fstab > /root/fastab.txt
+	cat /root/fastab.txt
 	```
 
 6. 提取/etc/passwd以bash结尾的行，将其信息写入/opt/pass.txt
 
 	```shell
 	grep 'bash$' /etc/passwd  > /opt/pass.txt
+	cat /opt/pass.txt
 	```
 
 7. 复制/etc/login.defs文件到当前目录下，改名为init.txt
 
 	```shell
-	cp /etc/login.defs ./init.txt
+	cp -r /etc/login.defs ./init.txt
 	```
 
 8. 提取init.txt文件里的有效配置（去除以#号开头，去除空行），保存为init2.txt
@@ -1191,7 +1201,7 @@ crontab -r #清空当前用户计划任务
 3. 将boothome.tar.gz释放到文件夹/root/boothome/下
 
 	```shell
-	tar -xf /boothome.tar.gz -c /root/boothome/
+	tar -xf /boothome.tar.gz -C /root/boothome/
 	```
 
 4. 备份/usr/sbin目录，保存为usrsbin.tar.bz2文件
@@ -1215,7 +1225,7 @@ crontab -r #清空当前用户计划任务
 7. 创建一个名为 /root/backup.tar.bz2 的归档文件，其中包含 /usr/local 目录中的内容，tar 归档必须使用 bzip2 进行压缩
 
 	```shell
-	tar -jcf /root/backup.tar.bz2 /usr/local
+	tar -jcf /root/backup.tar.bz2 /usr/local/
 	tar -xf /root/backup.tar.bz2
 	```
 
@@ -1224,22 +1234,27 @@ crontab -r #清空当前用户计划任务
 1. 新建一个用户nsd03，将宿主目录设为/opt/home03，并设置密码为redhat
 
 	```shell
-	useradd -d /opt/home03 nsd03
+	useradd -d /opt/nsd03 nsd03
 	id nsd03
 	ls /opt
+	grep nsd03 /etc/passwd
 	echo redhat | passwd --stdin nsd03
 	```
 
 2. 将用户nsd03的宿主目录改为/home/nsd03
 
 	```shell
-	usermod -d /home/nsd03
+	usermod -d /home/nsd03 nsd03
+	grep nsd03 /etc/passwd
+	ls /home
 	```
 
 3. 将用户sys01的登录Shell改为/bin/bash
 
 	```shell
-	usermod -s /bin/bash
+	useradd  -s /sbin/nologin sys01
+	usermod -s /bin/bash sys01
+	grep sys01 /etc/passwd
 	```
 
 ### 案例6：创建用户
@@ -1248,7 +1263,8 @@ crontab -r #清空当前用户计划任务
 
 	```shell
 	useradd -u 3456 alex
-	echo 3456 | passwd --stdin alex
+	grep alex /etc/passwd
+	echo flectrag | passwd --stdin alex
 	id alex
 	```
 	
@@ -1264,22 +1280,22 @@ crontab -r #清空当前用户计划任务
 2. 一个名为natasha的用户，其属于adminuser，这个组是该用户的从属组
 
 	```shell
-	useradd natasha -G adminuser
-	id natasha
+	useradd -G adminuser natasha
+	grep natasha /etc/group
 	```
 
 3. 一个名为harry的用户，属于adminuser，这个组是该用户的从属组
 
 	```shell
-	useradd harry -G adminuser
-	id harry
+	useradd -G adminuser harry
+	grep harryr /etc/group
 	```
 
 4. 一个名为sarah的用户，其在系统中没有可交互的shell，并且不是adminuser组的成员用户
 
 	```shell
-	useradd sarah -s /sbin/nologin
-	id sarah
+	useradd -s /sbin/nologin sarah
+	grep sarah /etc/group
 	```
 
 5. natasha、harry、和sarah的密码都要设置为flectrag
@@ -1299,6 +1315,10 @@ crontab -r #清空当前用户计划任务
 	crontab -e
 	```
 
+	```shell
+	crontab -e -u natasha
+	```
+
 2. 每天在本地时间 23:30 执行
 3. 需要完成的任务操作为 /bin/echo  hiya
 
@@ -1308,19 +1328,26 @@ crontab -r #清空当前用户计划任务
 
 ### 案例9：设置别名
 
-1. 为root用户永久设置别名为hn=‘hostname’
+1. 为root用户永久设置别名为hn='hostname'
 
 	```shell
 	su root
 	vim ~/.bashrc
-	alias hn='hostname'
+		alias hn='hostname'
 	```
+
+	```shell
+	vim /root/.bashrc
+		alias hn='hostname'
+	```
+	
+
 
 2. 为所有用户设置别名为 qstat='/bin/ps -Ao pid,tt,user,fname,rsz' 
 
 	```shell
 	vim /etc/bashrc
-	qstat='/bin/ps -Ao pid,tt,user,fname,rsz'
+		qstat='/bin/ps -Ao pid,tt,user,fname,rsz'
 	```
 
 
