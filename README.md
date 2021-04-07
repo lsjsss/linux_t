@@ -150,7 +150,7 @@ grep 要查找的组 /etc/group
 #### 组成员管理
 
 ```shell
-gpasswd [选项]... 组名
+gpasswd [选项]... 要操作的用户 组名
 ```
 
 命令常用选项：
