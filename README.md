@@ -131,22 +131,47 @@ groupadd [-g GID组ID] 组名
 
 
 
-#### 查看已存在的组
+#### 组查看
+
+记录组的基本信息文件：**/etc/group**
 
 ```shell
 grep 要查找的组 /etc/group
 ```
 
-> 查找组的结果格式：**组账号名称  : 密码占位符x : 组的GID号 : 本组的成员用户列表**
+> 组基本信息文件**/etc/group**格式：**组账号名称  : 密码占位符x : 组的GID号 : 本组的成员用户列表**
 
 
+记录组的管理信息文件：**/etc/gshadow**
+
+> 组管理信息**/etc/gshadow**文件格式：**组账号名称 : 加密后的密码字符串 : 组的管理员列表 : 组成员列表 **
+
+
+#### 组成员管理
+
+```shell
+gpasswd [选项]... 组名
+```
+
+命令常用选项：
+> **gpasswd -A**：定义组管理员列表
+> **gpasswd -M **：定义组成员用户列表，可设置多个（用逗号分隔）
+> **gpasswd -a 要添加的用户 组名**：添加组成员，每次只能加一个
+> **gpasswd -d 要删除的用户 组名**：删除组成员，每次只能删一个
+
+
+```shell
+gpasswd -A nsd01 stugrp	#定义stugrp管理员列表是nsd01
+gpasswd -M nsd04,nsd05,nsd01 stugrp	#定义组成员列表为nsd04,nsd05,nsd01
+gpasswd -a nsd02 stugrp	#将nsd02用户加入到stugrp组里
+gpasswd -d nsd03 stugrp	#将nsd03用户从stugrp组里移除
+```
 
 #### 删除组
 
 ```shell
 groupdel 要删除的组名
 ```
-
 
 
 
