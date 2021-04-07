@@ -25,6 +25,13 @@ root 标志：**#**
 普通用户标志：**$**
 
 
+### 用户类型
+
+普通用户
+系统管理员用户
+超级用户（root）
+
+
 
 ### 账号控制（ID）
 
@@ -154,9 +161,13 @@ gpasswd [选项]... 要操作的用户 组名
 ```
 
 命令常用选项：
+
 > **gpasswd -A**：定义组管理员列表
+>
 > **gpasswd -M **：定义组成员用户列表，可设置多个（用逗号分隔）
+>
 > **gpasswd -a 要添加的用户 组名**：添加组成员，每次只能加一个
+>
 > **gpasswd -d 要删除的用户 组名**：删除组成员，每次只能删一个
 
 
@@ -1457,6 +1468,58 @@ crontab -r #清空当前用户计划任务
 	vim /etc/bashrc
 		qstat='/bin/ps -Ao pid,tt,user,fname,rsz'
 	```
+
+
+## 练习 4.7
+### 案例3：配置用户和组账号
+1. 新建用户alex，其用户ID 为3456，密码是flectrag
+
+	```shell
+	useradd -u 3456 alex
+	grep alex /etc/passwd
+	echo flectrag | passwd --stdin alex
+	```
+
+2. 创建下列用户、组及组成员的关系：
+2.1 一个名为adminuser的组
+
+	```shell
+	groupadd adminuser
+	grep adminuser /etc/group
+	```
+
+2.2 一个名为natasha的用户，其属于adminuser组，这个组是该用户的从属组
+
+	```shell
+	useradd -G adminuser natasha
+	id natasha
+	```
+
+
+2.3 一个名为harry的用户，其属于adminuser组，这个组是该用户的从属组
+
+	```shell
+	useradd -G adminuser harry
+	id harry
+	```
+
+2.4 一个名为sarah的用户，其在系统中没有可交互的Shell，并且不是adminuser组的成员
+
+	```shell
+	useradd -s /sbin/nologin sarah
+	grep sarah /etc/passwd
+	```
+
+2.5 natasha、harry、sarah的密码都要设置为flectrag
+
+	```shell
+	echo flectrag | passwd --stdin natasha
+	echo flectrag | passwd --stdin harry
+	echo flectrag | passwd --stdin sarah
+	```
+
+
+
 
 
 > 如有侵权，请联系作者删除
