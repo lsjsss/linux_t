@@ -1583,14 +1583,16 @@ chmod -R o=--- /opt/aa/	#递归修改权限，目录本身及此目录中的权�
 	```
 
 2. 创建下列用户、组及组成员的关系：
-2.1 一个名为adminuser的组
+    2.1 一个名为adminuser的组
 
 	```shell
 	groupadd adminuser
 	grep adminuser /etc/group
 	```
-
-2.2 一个名为natasha的用户，其属于adminuser组，这个组是该用户的从属组
+	
+	2.2 一个名为natasha的用户，其属于adminuser组，这个组是该用户的从属组
+	
+	```shell
 
 	```shell
 	useradd -G adminuser natasha
@@ -1598,21 +1600,21 @@ chmod -R o=--- /opt/aa/	#递归修改权限，目录本身及此目录中的权�
 	```
 
 
-2.3 一个名为harry的用户，其属于adminuser组，这个组是该用户的从属组
+    2.3 一个名为harry的用户，其属于adminuser组，这个组是该用户的从属组
 
 	```shell
 	useradd -G adminuser harry
 	id harry
 	```
 
-2.4 一个名为sarah的用户，其在系统中没有可交互的Shell，并且不是adminuser组的成员
+    2.4 一个名为sarah的用户，其在系统中没有可交互的Shell，并且不是adminuser组的成员
 
 	```shell
 	useradd -s /sbin/nologin sarah
 	grep sarah /etc/passwd
 	```
 
-2.5 natasha、harry、sarah的密码都要设置为flectrag
+    2.5 natasha、harry、sarah的密码都要设置为flectrag
 
 	```shell
 	echo flectrag | passwd --stdin natasha
