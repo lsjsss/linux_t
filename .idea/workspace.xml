@@ -129,14 +129,14 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="648" y="395" key="Github.ShareDialog/0.0.1552.996@0.0.1552.996" timestamp="1617777903682" />
-    <state x="245" y="82" key="MergeDialog" timestamp="1617806794538">
+    <state x="245" y="82" width="1258" height="833" key="MergeDialog" timestamp="1617850455547">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="245" y="82" key="MergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617806794538" />
-    <state x="661" y="364" width="424" height="268" key="MultipleFileMergeDialog" timestamp="1617806800189">
+    <state x="245" y="82" width="1258" height="833" key="MergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617850455547" />
+    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog" timestamp="1617850466339">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="661" y="364" width="424" height="268" key="MultipleFileMergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617806800189" />
+    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617850466339" />
     <state x="85" y="75" width="1368" height="812" key="ShowDiffWithBranchDialog" timestamp="1617806815030">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
@@ -145,10 +145,14 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="622" y="410" key="VCS.ChangelistChooser/0.0.1552.996@0.0.1552.996" timestamp="1617807924650" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1617808099078">
+    <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key" timestamp="1617850453926">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1617808099078" />
+    <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1617850295907">
+      <screen x="0" y="0" width="1552" height="996" />
+    </state>
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1617850295907" />
     <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1617806684329">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
