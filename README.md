@@ -1663,21 +1663,21 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 ### 练习4.8
 #### 案例2：文件/目录的默认权限
 1. 以root用户登录，测试umask掩码值
-1.1. 查看当前umask值
+    1.1. 查看当前umask值
 
     ```shell
     umask
     ```
 
-1.2. 新建目录udir1，文件ufile1，查看默认权限
+    1.2. 新建目录udir1，文件ufile1，查看默认权限
 
     ```shell
     mkdir /udir1 /ufile1
     ls -ld /udir1
     ls -ld /ufile1
     ```
-
-1.3. 将umask设为077，再新建目录udir2、文件ufile2,查看默认权限
+    
+    1.3. 将umask设为077，再新建目录udir2、文件ufile2,查看默认权限
 
     ```shell
     umask 077
@@ -1687,7 +1687,7 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
     ls -l /ufile2
     ```
 
-1.4. umask值重新设置为022
+    1.4. umask值重新设置为022
 
     ```shell
     umask 022
