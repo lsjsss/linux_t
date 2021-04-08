@@ -1651,6 +1651,57 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 	```
 
 
+## 练习4.8 
+### 案例3：设置归属关系
+
+0. 新建/tarena1目录，并进一步完成下列操作
+
+    ```shell
+    mkdir /tarena1
+    ls -ld /tarena1
+    ```
+
+1. 将属主设为gelin01，属主设为tarena组
+
+    ```shell
+    id gelin01
+    grep tarena
+    
+    useradd gelin01
+    groupadd tarena
+    chown gelin01:tarena /tarena1/
+    ```
+
+2. 使用户gelin01对此目录具有rwx权限，其他人对此目录无任何权限
+
+    ```shell
+    ls -ld /tarena1/
+    chmod o=/tarena1/
+    ```
+
+3. 使用户gelin02能进入，查看此目录
+
+    ```shell
+    id gelin02
+    useradd gelin02
+    
+    gpasswd -a gelin02 tarena
+    su gelin02
+    ls -ld /tarena1/
+    ```
+
+4. 将gelin01加入tarena组，将tarena1目录的权限设为450，再测试gelin01童虎能否进入此目录
+
+    ```shell
+    gpasswd -a gelin01 tarena
+    chmod 450 /tarena1/
+    ls -ld /tarena1/
+    
+    su - gelin01
+    cd /tarena1/
+    ```
+
+    `否`
 
 
 
