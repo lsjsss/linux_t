@@ -226,6 +226,7 @@ groupdel 要删除的组名
 ```shell
 mkdir /要创建的目录	#创建目录
 mkdir -p /要创建的目录	#连同父目录一起创建
+mkdir -m 要创建的目录    #创建文件夹时直接设置权限，默认权限umask值为022，创建文件夹时的权限为777-022=755
 ```
 
 
@@ -806,6 +807,13 @@ chmod 725 /nsd01
 chmod -R o=--- /opt/aa/	#递归修改权限，目录本身及此目录中的权限都会发生变化
 ```
 
+### 修改默认权限
+
+```shell
+umask    #查看默认权限值
+umask 022    #修改默认权限值为022（创建文件夹时的权限为777-022=755，创建文件时的权限为644）
+```
+
 ### 设置归属关系
 
 ```shell
@@ -825,6 +833,81 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 
 1. 判断用户的身份	所有者>所属组>其他人
 2. 查看对应身份的权限
+
+
+### 附加权限
+
+#### Set GID
+
+> 1. 占用属组的x位（`g+x`，`g-x`）
+> 
+> 2. 显示为s或S，取决于属组是否有x权限（s：有x执行权限，S：没有x执行权限）
+> 
+> 3. 对目录有效
+> 
+> 4. 在一个具有SGID权限的目录下，新建的文档会自动继承此目录的属组身份
+
+
+#### Set UID（适用于攻击方）
+
+> 1. 占用属主（User）的x位（`u+x`，`u-x`）
+> 
+> 2. 显示为s或S，取决于属组是否有x权限（s：有x执行权限，S：没有x执行权限）
+> 
+> 3. 对对可执行的程序有意义
+> 
+> 4. 在一个具有SUID标记的程序下，具有此程序属主的身份和相应的权限
+
+
+
+#### Sticky Bit 粘滞位（t权限，如公共目录 /tmp）（`o+t`，`o-t`）
+
+> 占用其他人权限（Other）的x位
+> 
+> 显示为t或T，取决于其他人是否有x权限
+> 
+> 适用于目录，用来限制用户滥用写入权
+> 
+> 在设置了粘滞位的文件夹下，即使用户有写入权限，也不能删除或改名其他用户文档
+
+
+
+### ACL策略管理
+
+#### ACL访问策略
+
+> 能够对个别用户、个别组设置独立的权限
+> 大多数挂载的ECT3/4、XFS文件系统默认已支持
+
+
+#### 设置ACL权限
+
+```shell
+setfacl -m u:要设置的用户:要给此用户的权限rwx 要设置的目录或文件
+setfacl -m g:要设置的用组:要给此组的权限rwx 要设置的目录或文件
+```
+
+常用命令选项：
+> **-m**：定义一条ACL策略
+>
+> **-x**：清除指定的ACL策略
+>
+> **-b**：清除**所有**已设置的ACL策略
+>
+> **-R**：递归设置ACL策略
+
+
+```shell
+setfacl -m u:root:4 /a    #在a目录下为root用户设置读权限
+
+setfacl -m u:root:--- /a    #设置拒绝权限
+```
+
+#### 查看ACL权限
+
+```shell
+getfacl 要查看的目录或文件
+```
 
 
 
@@ -1650,6 +1733,138 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 	echo flectrag | passwd --stdin sarah
 	```
 
+### 练习4.8
+#### 案例2：文件/目录的默认权限
+1. 以root用户登录，测试umask掩码值
+    1.1. 查看当前umask值
+
+    ```shell
+    umask
+    ```
+
+    1.2. 新建目录udir1，文件ufile1，查看默认权限
+
+    ```shell
+    mkdir /udir1 /ufile1
+    ls -ld /udir1
+    ls -ld /ufile1
+    ```
+    
+    1.3. 将umask设为077，再新建目录udir2、文件ufile2,查看默认权限
+
+    ```shell
+    umask 077
+    umask
+    mkdir /udir2 /ufile2
+    ls -l /udir2
+    ls -l /ufile2
+    ```
+
+    1.4. umask值重新设置为022
+
+    ```shell
+    umask 022
+    umask
+    ```
+
+2. 以用户zhangsan登入，查看当前的umask值
+
+    ```shell
+    useradd zhangsan
+    su zhangsan
+    umask
+    ```
+
+
+## 练习4.8 
+### 案例3：设置归属关系
+
+0. 新建/tarena1目录，并进一步完成下列操作
+
+    ```shell
+    mkdir /tarena1
+    ls -ld /tarena1
+    ```
+
+1. 将属主设为gelin01，属主设为tarena组
+
+    ```shell
+    id gelin01
+    grep tarena
+    
+    useradd gelin01
+    groupadd tarena
+    chown gelin01:tarena /tarena1/
+    ```
+
+2. 使用户gelin01对此目录具有rwx权限，其他人对此目录无任何权限
+
+    ```shell
+    ls -ld /tarena1/
+    chmod o=/tarena1/
+    ```
+
+3. 使用户gelin02能进入，查看此目录
+
+    ```shell
+    id gelin02
+    useradd gelin02
+    
+    gpasswd -a gelin02 tarena
+    su gelin02
+    ls -ld /tarena1/
+    ```
+
+4. 将gelin01加入tarena组，将tarena1目录的权限设为450，再测试gelin01童虎能否进入此目录
+
+    ```shell
+    gpasswd -a gelin01 tarena
+    chmod 450 /tarena1/
+    ls -ld /tarena1/
+    
+    su - gelin01
+    cd /tarena1/
+    ```
+
+    `否`
+
+
+
+## 练习4.9 
+### 案例：SGID练习
+
+1. 创建/nsdpublic目录，将属组改为tarena，进一步完成下列操作：
+
+    ```shell
+    mkdir /nsdpublic
+    ls -ld /nsdpublic
+    groupadd tarena
+    chown :tarena /nsdpublic
+    ```
+
+2. 新建子目录nsd01，子文件test01.txt，查看两者的权限及归属
+
+    ```shell
+    mkdir /nsdpublic/nsd01
+    touch /nsdpublic/nsd01/test01.txt
+    ```
+
+3. 为此目录添加SGID权限，再新建子目录nsd02，子文件test02.txt
+
+    ```shell
+    chmod g+s /nsdpublic
+    ls -ld /nsdpublic/
+    
+    mkdir /nsdpublic/nsd02
+    touch /nsdpublic/nsd02/test02.txt
+    ```
+
+4. 查看上述子目录及文件的权限及归属
+
+    ```shell
+    ls -ld /nsdpublic/nsd02
+    ls -ld /nsdpublic/nsd02/test02.txt
+    ```
 
 
 
