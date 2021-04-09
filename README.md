@@ -848,7 +848,7 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 > 4. 在一个具有SGID权限的目录下，新建的文档会自动继承此目录的属组身份
 
 
-#### Set UID
+#### Set UID（适用于攻击方）
 
 > 1. 占用属主（User）的x位（`u+x`，`u-x`）
 > 
