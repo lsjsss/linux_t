@@ -880,7 +880,7 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 > 大多数挂载的ECT3/4、XFS文件系统默认已支持
 
 
-#### 设置acl权限
+#### 设置ACL权限
 
 ```shell
 setfacl -m u:要设置的用户:要给此用户的权限rwx 要设置的目录或文件
@@ -898,7 +898,7 @@ setfacl -m g:要设置的用组:要给此组的权限rwx 要设置的目录或�
 
 
 
-#### 查看acl权限
+#### 查看ACL权限
 
 ```shell
 getfacl 要查看的目录或文件
