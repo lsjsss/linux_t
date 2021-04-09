@@ -897,6 +897,11 @@ setfacl -m g:要设置的用组:要给此组的权限rwx 要设置的目录或�
 > **-R**：递归设置ACL策略
 
 
+```shell
+setfacl -m u:root:4 /a    #在a目录下为root用户设置读权限
+
+setfacl -m u:root:--- /a    #设置拒绝权限
+```
 
 #### 查看ACL权限
 
