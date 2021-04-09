@@ -860,9 +860,9 @@ chown a:root /opt	#为opt文件夹设置所属用户a，所属组root
 
 
 
-#### Sticky Bit 粘滞位（t权限，如公共目录 /tmp）（`o+t`，`o-t`）
+#### Sticky Bit 粘滞位（t权限，如公共目录 /tmp）
 
-> 占用其他人权限（Other）的x位
+> 占用其他人权限（Other）的x位（`o+t`，`o-t`）
 > 
 > 显示为t或T，取决于其他人是否有x权限
 > 
@@ -896,12 +896,14 @@ setfacl -m g:要设置的用组:要给此组的权限rwx 要设置的目录或�
 >
 > **-R**：递归设置ACL策略
 
+##### 设置ACL权限示例
 
 ```shell
 setfacl -m u:root:4 /a    #在a目录下为root用户设置读权限
 
 setfacl -m u:root:--- /a    #设置拒绝权限
 ```
+
 
 #### 查看ACL权限
 
