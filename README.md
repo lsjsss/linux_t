@@ -1765,6 +1765,43 @@ Set GID
 
 
 
+## 练习4.9 
+### 案例：SGID练习
+
+1. 创建/nsdpublic目录，将属组改为tarena，进一步完成下列操作：
+
+    ```shell
+    mkdir /nsdpublic
+    ls -ld /nsdpublic
+    groupadd tarena
+    chown :tarena /nsdpublic
+    ```
+
+2. 新建子目录nsd01，子文件test01.txt，查看两者的权限及归属
+
+    ```shell
+    mkdir /nsdpublic/nsd01
+    touch /nsdpublic/nsd01/test01.txt
+    ```
+
+3. 为此目录添加SGID权限，再新建子目录nsd02，子文件test02.txt
+
+    ```shell
+    chmod g+s /nsdpublic
+    ls -ld /nsdpublic/
+    
+    mkdir /nsdpublic/nsd02
+    touch /nsdpublic/nsd02/test02.txt
+    ```
+
+4. 查看上述子目录及文件的权限及归属
+
+    ```shell
+    ls -ld /nsdpublic/nsd02
+    ls -ld /nsdpublic/nsd02/test02.txt
+    ```
+
+
 
 
 > 如有侵权，请联系作者删除
