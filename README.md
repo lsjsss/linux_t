@@ -1869,6 +1869,178 @@ getfacl 要查看的目录或文件
     ```
 
 
+## 练习 4.12
+### 权限简答
+1. 权限的分类是什么？
+
+> 基本权限、附加权限、ACL权限
+
+2. 基本权限的分类是什么？
+
+> 读取r、写入w、可执行x
+
+3. 归属关系都有哪些？
+
+> 所有者、所属组、其他用户
+
+4. 用户的分类？组账号的分类？
+
+>用户分类：普通用户、系统用户、超级用户
+>
+>组账号分类：基本组，附加组
+
+5. 唯一标识用户身份的是什么？
+
+>UID
+
+6. 保存用户信息的配置文件是？里面的字段值都是什么意思？
+
+>/etc/passwd
+>
+> 用户名 : 密码占位符 : UID : GID(基本组) : 用户描述 : 用户家目录(宿主目录) : 用户所使用的shell解释器程序
+
+7. 保存组账号基本信息的配置文件是？里面的字段值是什么意思？
+
+>/etc/group
+>
+> 组账号名称 : 密码占位符x : 组的GID号 : 本组的成员用户列表
+
+8. 保存组账号管理信息的配置文件是？里面的字段值是什么意思？
+
+> /etc/gshadow
+>
+> 组账号名称 : 加密后的密码字符串 : 组的管理员列表 : 组成员列表
+
+
+9. 如何创建用户？如何修改用户的属性？分别说出下列选项意思-d  -G  -s   -u
+
+> Useradd
+>
+> usermod
+>
+> -d：指定要创建用户的家目录，不使用则默认用户的家目录为 /home/创建的用户名
+>
+> -G：指定用户的附加组（从属组）
+>
+> -s：指定用户的shell解释器
+>
+> -u：指定 UID
+
+
+10. 如何修改权限？如何修改归属关系？
+
+> chmod [ugoa][+-=], ... 要设置权限的文件夹
+>
+> chown 属主[:属组] 文件
+
+
+
+11. 文件/目录默认的权限是？
+
+> 644/755
+>
+> 取决于umask设置
+
+12. 用户的初始配置文件来自于哪个模板目录
+
+> /etc/skel
+
+
+13. 如何创建组？如何删除组？如何往组里添加成员？如何删除组成员？
+
+> groupadd [-g GID组ID] 组名
+>
+> groupdel 要删除的组名
+>
+> gpasswd -a 要添加的用户 组名
+>
+> gpasswd -d 要删除的用户 组名
+
+
+
+### 案例1：创建用户和组
+
+1. 一个名为tarena的组
+
+    ```shell
+    groupadd tarena
+    grep tarena /etc/group
+    ```
+
+2. 一个名为natasha的用户，其属于tarena组，这个组是该用户的从属组
+
+    ```shell
+    useradd -g tarena natasha
+    id natasha
+    ```
+
+3. 一个名为harry的用户，其属于tarena组，这个组是该用户的从属组
+
+    ```shell
+    useradd -g tarena harry
+    id harry
+    ```
+
+
+4. 一个名为sarah的用户，其在系统中没有可交互的shell，并且不是tarena这个组的成员用户
+
+    ```shell
+    useradd -s /sbin/nologin sarach
+    id sarach
+    su sarach
+    ```
+
+
+5. 为natasga、harry、sarah设置密码为redhat
+
+    ```shell
+    echo redhat | passwd nataha
+    echo redhat | passwd harry
+    echo redhat | passwd sarah
+    ```
+
+
+### 案例2：配置文件/var/tmp/fstab的权限
+拷贝文件/etc/fstab到/var/tmp/fstab，配置文/var/tmp/fstab的权限
+
+```shell
+cp /etc/fstab /var/tmp/fstab
+```
+
+1. 文件/var/tmp/fstab的拥有着是root用户
+2. 文件/var/tmp/fstab属于root组
+
+    ```shell
+    chown root:root /var/tmp/fstab 
+    ls -ld /var/tmp/fstab 
+    ```
+
+3. 文件/var/tmp/fstab对任何人都不可执行
+
+    ```shell
+    chmod -x /var/tmp/fstab
+    ```
+
+4. 用户natasha能够对文件/var/tmp/fstab执行读和写操作
+
+    ```shell    
+    setfacl -m u:natasha:rw /var/tmp/fstab
+    setfacl /var/tmp/fstab
+    ```
+
+5. 用户harry对文件/var/tmp/fstab既不能读，也不能写
+
+    ```shell
+    setfacl -m u:harry:x /var/tmp/fstab
+    setfacl /var/tmp/fstab
+    ```
+
+6. 所有其他用户（当前的和将来的）能够对文件/var/tmp/fstab进行读操作
+
+    ```shell
+    chmod o=r /var/tmp/fstab
+    ```
+
 
 
 > 如有侵权，请联系作者删除
