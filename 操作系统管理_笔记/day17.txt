@@ -1,0 +1,156 @@
+案例：设置基本权限
+新建/nsddir1/目录，在此目录下新建readme.txt文件，并进一步完成下列操作：
+1）使用户zhangsan能够在此目录下创建/删除子目录
+2）使用户zhangsan能够修改readme.txt文件
+3）调整此目录的权限，使任何用户都不能进入，然后测试用户zhangsan是否还能修改readme.txt
+4）为此目录及其下所有文档设置权限为rwxr-x---
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+权限位的8进制表示
+r，w，x分别对应4,2,1   然后3组分别求和
+
+7：rwx   6：rw-  5：r-x   4：r--  3：-wx   2：-w-   1：--x   0：---   
+
+	[root@A ~]# mkdir /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod 700 /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod 644 /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod 750 /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u=7,g=5 /nsd01                                    #不支持这样写法，报语法错误
+	chmod: 无效模式："u=7,g=5"
+	Try 'chmod --help' for more information.
+	[root@A ~]# chmod u=rwx,g=rx /nsd01
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+修改归属关系
+使用chown命令，-R递归设置
+--chown   [-R]   属主    文件
+--chown   [-R]   :属组   文件
+--chown   [-R]   属主:属组   文件
+
+	[root@A ~]# mkdir /nsd02
+	[root@A ~]# ls -ld /nsd02
+	[root@A ~]#  useradd dc
+	[root@A ~]#  groupadd stugrp
+	[root@A ~]#  chown dc:stugrp /nsd02                         #同时修改属主和属组
+	[root@A ~]#  ls -ld /nsd02
+	[root@A ~]#  chown zhangsan /nsd02/                      #仅修改属主
+	[root@A ~]#  ls -ld /nsd02
+	[root@A ~]#  chown :root /nsd02                               #仅修改属组
+	[root@A ~]#  ls -ld /nsd02
+	[root@A ~]#  mkdir -p /opt/aa/bb/cc
+	[root@A ~]#  chown dc /opt/aa/
+	[root@A ~]#  ls -ld /opt/aa/
+	[root@A ~]#  ls -ld /opt/aa/bb/
+	[root@A ~]#  chown -R  dc /opt/aa/                          #递归修改所有者
+	[root@A ~]#  ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/
+	[root@A ~]#  ls -ld /opt/aa/bb/cc/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+实验：
+	[root@A ~]# mkdir /nsd03
+	[root@A ~]#  ls -ld /nsd03
+	[root@A ~]#  chmod o=--- /nsd03/
+	[root@A ~]#  ls -ld /nsd03
+	[root@A ~]#  chown zhangsan:stugrp /nsd03/
+	[root@A ~]#  ls -ld /nsd03
+
+使用zhangsan用户和lisi用户测试，zhangsan用户有读写执行的权限，其他用户没有权限
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ mkdir /nsd03/aa
+	[zhangsan@A ~]$ touch /nsd03/abc01.txt
+	[zhangsan@A ~]$ ls /nsd03/
+	aa  abc01.txt
+	[zhangsan@A ~]$ cd /nsd03/
+	[root@A ~]# su - lisi
+	[lisi@A ~]$ mkdir /nsd03/aa
+	mkdir: 无法创建目录"/nsd03/aa": 权限不够
+	[lisi@A ~]$ cd /nsd03/
+	-bash: cd: /nsd03/: 权限不够
+	[lisi@A ~]$ 
+
+把lisi加入到stugrp这个组里，继承组的权限
+	[root@A ~]#  gpasswd -a lisi stugrp
+	[root@A ~]#  id lisi
+	[root@A ~]#  ls -ld /nsd03/
+	[root@A ~]# su - lisi
+	[lisi@A ~]$ cd /nsd03/
+
+去掉所有者的执行权限，zhangsan添加到stugrp组里，虽然组里有执行权限，但是依然不能cd	
+	[root@A ~]#  chmod u-x /nsd03
+	[root@A ~]#  ls -ld /nsd03/
+	[root@A ~]#  gpasswd -a zhangsan stugrp
+	[root@A ~]#  ls -ld /nsd03/
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ cd /nsd03/
+	-bash: cd: /nsd02/: 权限不够
+
+如何判断一个用户对某目录所具备的权限是什么？
+
+1、判断用户身份              所有者>所属组>其他人                  匹配即停止
+2、查看对应身份的权限
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+文件/目录的默认权限
+--一般文件默认均不给x执行权限
+--其他取决于umask设置
+
+	[root@A ~]# mkdir /nsd02
+	[root@A ~]# touch /a.txt
+	[root@A ~]# ls -ld /nsd02/
+	drwxr-xr-x. 2 root root 6 4月   8 14:03 /nsd02/
+	[root@A ~]# ls -l /a.txt 
+	-rw-r--r--. 1 root root 0 4月   8 14:03 /a.txt
+	[root@A ~]# umask                                               #查看uamsk值
+	0022
+	[root@A ~]# umask -S                                           #-S 直接显示默认权限
+	u=rwx,g=rx,o=rx
+	[root@A ~]# umask 222
+	[root@A ~]# umask 
+	[root@A ~]# mkdir /nsd03
+	[root@A ~]# ls -ld /nsd03
+	[root@A ~]# mkdir -m 700 /nsd04                        #创建目录时指定权限
+	[root@A ~]# ls -ld /nsd04
+	[root@A ~]# umask 022
+	[root@A ~]# umask 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Set  GID
+--占用属组的x位
+--显示为s或S，取决于属组是否有x权限（s：有x执行权限，S：没有x执行权限）
+--对目录有效
+--在一个具有SGID权限的目录下，新建的文档会自动继承此目录的属组身份
+	
+	[root@A ~]# mkdir  /nsd02
+	[root@A ~]# groupadd stugrp
+	[root@A ~]# chown :stugrp  /nsd02
+	[root@A ~]# ls -ld /nsd02	
+	[root@A ~]# mkdir /nsd02/abc01
+	[root@A ~]# ls -ld /nsd02/abc01
+	[root@A ~]# ls -ld /nsd02/
+	[root@A ~]# chmod g+s /nsd02/
+	[root@A ~]# mkdir /nsd02/abc02
+	[root@A ~]# ls -ld /nsd02/abc02
+	[root@A ~]# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1741 @@
+day2
+
+Linux系统简介
+
+Linux是一种操作系统!!
+
+操作系统:一堆软件的集合,让计算机的硬件正常工作
+
+Unix/Linux发展史
+
+• UNIX诞生,1970-1-1                                     
+
+• Linux之父,Linus Torwalds
+– 1991年10月,发布0.02版(第一个公开版)内核
+– 1994年03月,发布1.0版内核
+– 标准读音: 哩呐科斯
+
+     内核:合理控制众多硬件
+
+    用户------>内核-------->硬件
+    版本号:主版本.次版本.修订号
+
+Linux发行版本
+• 发行版的名称/版本由发行方决定
+– Red Hat Enterprise Linux 5/6/7
+– Suse Linux Enterprise 12
+– Debian Linux 7.8
+– Ubuntu Linux 14.10/15.04
+
+Red Hat系列版本
+• 红帽 Linux 企业版
+– 简称RHEL(Red Hat Enterprise Linux)
+– http://www.redhat.com/
+
+• Fedora Core 社区版
+– http://fedoraproject.org/
+
+• CentOS,社区企业操作系统
+– Community Enterprise Operating System
+– http://www.centos.org/
+
+#################################################
+利用虚拟机安装Linux系统
+1.建立一台全新的虚拟机
+  Ctrl+ALT=鼠标回到真机
+
+2.Linux目录结构    树型结构                   
+
+    根目录(/):Linux系统起点(所有数据都在此目录下)
+    /dev:存放设备(键盘 鼠标  显示器 硬盘......)相关的数据
+    
+磁盘表示方式
+目录名+磁盘名字
+
+		
+
+hd,表示IDE设备
+sd,表示SCSI设备
+
+  /dev/hda:第一块IDE设备         /dev/hdb:第二块IDE设备
+  /dev/sda:第一块SCSI设备       /dev/sdb:第二块SCSI设备
+
+##################################################
+利用root管理员进行登录虚拟机CentOS7
+
+获取命令行界面
+• 虚拟控制台切换( Ctrl + Alt + Fn 组合键)
+– tty1:图形桌面
+– tty2~tty6:字符控制台
+
+图形获取命令行界面:鼠标右击空白处---->打开终端
+
+#####################################################
+• 命令行提示标识的含义
+– [当前用户@主机名    当前所在的目录]$
+
+
+
+– 若当前用户是root,则最后一个字符为 #
+[root@svr7 桌面]#
+– 否则,最后一个字符为 $
+[teacher@svr7 桌面]$
+
+快捷键：
+放大字体：Ctrl+Shift+
+缩小字体：Ctrl- 
+
+
+##################################################
+ 
+
+查看及切换目录
+• pwd — Print Working Directory
+– 用途:查看当前工作目录
+
+• cd — Change Directory
+– 用途:切换工作目录
+– 格式:cd [目标文件夹位置]
+
+• ls — List
+– 格式:ls [选项]... [目录或文件名]...
+蓝色:目录    黑色:文本文件
+
+	[root@localhost ~]# pwd             #显示当前所在位置
+	[root@localhost ~]# cd   /          #切换到根目录
+	[root@localhost /]# pwd 
+	[root@localhost /]# ls              #显示当前目录下内容
+	[root@localhost /]# cd    /root     #切换到root目录
+	[root@localhost ~]# pwd
+	[root@localhost ~]# ls
+	[root@localhost ~]# cd /home
+	[root@localhost home]# pwd
+	[root@localhost home]# ls
+	[root@localhost home]# cd /boot
+	[root@localhost boot]# pwd
+	[root@localhost boot]# ls
+	[root@localhost /]# ls  /home
+	[root@localhost /]# ls  /abc
+	[root@localhost /]# ls  /root
+	[root@localhost /]# ls /root/anaconda-ks.cfg
+
+		
+查看文本文件内容:
+
+cat   
+格式：cat    [目标文件]
+		
+		# cat /root/anaconda-ks.cfg
+
+
+	查看系统版本信息
+	# cat   /etc/redhat-release 
+	CentOS Linux release 7.5.1804 (Core) 
+
+	快捷键：TAB键：自动补齐命令
+	
+	查看CPU信息，查看内存
+	# lscpu 
+	# cat   /proc/cpuinfo
+	# cat   /proc/meminfo
+
+
+
+
+
+
+查看主机名和IP地址	
+	# hostname
+	 # hostname A.tedu.cn                  #修改主机名为A.tedu.cn(临时设置)
+   	# hostname
+  	# exit
+	注：新开一个终端验证
+
+	 # ifconfig
+  	 # ifconfig ens33 192.168.4.2/24     #修改ens33IP地址为192.168.4.2(临时设置)
+	# ifconfig
+
+
+
+创建目录和文本文件
+mkdir--Make   Directory
+格式：mkdir    [/路径/目录名]
+
+
+[root@A ~]# pwd
+[root@A ~]# mkdir abc              #创建abc目录
+[root@A ~]# ls
+[root@A ~]# ls /root
+[root@A ~]# mkdir /def
+[root@A ~]# ls def
+[root@A ~]#  ls /def
+[root@A ~]#  ls /
+[root@A ~]# touch a.txt                  #创建a.txt文件
+[root@A ~]#  ls
+[root@A ~]#   touch /b.txt
+[root@A ~]#  ls /b.txt 
+[root@A ~]# cat /b.txt
+[root@A ~]# 
+
+
+关机与重启：
+ # poweroff               #关机
+ # reboot                 #重启
+
+
+Day3
+Linux的目录结构
+
+/(根目录)： Linux的起点（存放所有数据）
+/dev:    存放所有设备（键盘、鼠标、显示器、硬盘.....）的文件
+
+磁盘表示方法：设备所在目录+磁盘名
+
+/dev/hde5:  第五块IDE设备第5个分区
+/dev/hdd4:  第四块IDE设备第4个分区
+/dev/sdb3:  第二块SCSI设备第3个分区
+/dev/sde2:  第五块SCSI设备第2个分区
+
+第三块IDE设备第4个分区表示方式：/dev/hdc4
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+蓝色：目录
+黑色：文本文件
+绿色：可执行程序
+
+查看文本文件内容：cat
+格式：cat    文件名
+
+[root@localhost /]# cat /etc/passwd
+
+less：分屏阅读工具
+格式： less    文件名
+支持上下键翻页，查看完按  q  键  退出
+ 
+[root@localhost /]#  less  /etc/passwd
+
+查看系统版本信息：
+[root@localhost /]# cat /etc/redhat-release 
+CentOS Linux release 7.5.1804 (Core) 
+[root@localhost /]# 
+
+查看CPU信息：
+ [root@localhost /]# cat /proc/cpuinfo 
+ [root@localhost /]# lscpu
+
+查看内存信息：
+ [root@localhost /]# cat /proc/meminfo
+
+查看主机名：
+[root@localhost /]# hostname
+localhost.localdomain
+[root@localhost /]# hostname A.tedu.cn                     #新开一个终端验证
+[root@localhost /]# hostname
+[root@localhost /]#        
+ 
+查看IP地址：
+[root@localhost /]# ifconfig 
+[root@localhost /]#  ifconfig  ens33
+[root@localhost /]#  ifconfig  ens33 192.168.4.1/24              #临时设置IP地址为192.168.4.1
+[root@localhost /]#  ifconfig  ens33
+
+创建文档
+
+创建目录：mkdir ---------Make   Directory  
+格式：mkdir     [/路径/]目录名
+  
+[root@A ~]# mkdir abc
+[root@A ~]# ls /root/
+[root@A ~]# mkdir /opt/abc
+[root@A ~]# ls /opt/
+[root@A ~]# ls /opt/abc/
+[root@A ~]# 
+
+创建文本文件（新建空文件）：touch   
+格式：touch     [/路径/]文件名
+
+[root@A ~]# touch a.txt
+[root@A ~]# touch /opt/b.txt
+[root@A ~]# cat /opt/b.txt
+[root@A ~]# 
+
+文本内容操作：
+格式： head   -n  数字   文件名                                    #查看文件的前n行内容
+            tail   -n  数字   文件名                                       # 查看文件的后n行内容
+注：1）-n  数字可以简写为 -数字
+       2）不加数字默认查看的是前10行内容和后10行内容
+
+[root@A ~]# head -2 /etc/passwd                       #查看 /etc/passwd文件前2行内容
+[root@A ~]# tail -2 /etc/passwd                          #查看/etc/passwd文件后2行内容
+
+grep工具：
+用途：输出包含指定字符串的行
+格式：grep     '查找条件'         文件名
+
+[root@A ~]# grep 'root'  /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+[root@A ~]# 
+
+关机和重启
+[root@A ~]#  poweroff
+[root@A ~]#  reboot
+
+
+
+Day4
+Linux命令：
+--用来实现某一功能的指令或程序
+--命令的执行依赖于解释器（/bin/bash)
+	用户----->解释器----->内核------->硬件
+
+[root@A ~]# cat /etc/shells                  #查看系统自带的解释器
+[root@A ~]# 
+
+命令行的一般格式：
+基本用法：
+   
+           命令字           [选项]       [参数1]      [参数2]      .....
+	
+              打                 工具            朋友
+
+短选项：-A   -l    -d ....
+复合选项：-ld    -la  ....
+长选项： --help
+
+ [root@A ~]#  cat /etc/shells 
+ [root@A ~]#  ls --help
+ [root@A ~]#   ls -a /root/
+ [root@A ~]#  ls -l /root
+ [root@A ~]#   ls -ld /root
+ [root@A ~]#   ls -ldh /root
+++++++++++++++++++++++++++++++++++++++++++++++++++
+快速编辑技巧：
+
+Tab键自动补齐
+ -可补齐命令字、选项、参数、文件路径、软件名、服务名
+ 注：一下tab键是补齐；两下tab键是查找
+
+快捷键：
+-Ctrl +l：清空整个屏幕
+-Ctrl +u：清空至行首
+-Ctrl +w：往回删除一个单词（以空格界定）
+-Ctrl +c：废弃当前编辑的命令行
+-Esc+ .  或Alt+ . ：粘贴上一个命令的参数 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cd--Change Directory
+用途：切换工作目录
+格式： cd     [目标文件夹位置]
+
+. : 当前目录
+.. : 父目录（上一层）
+~user:  用户user的家目录
+
+/root:   管理员用户的家目录
+/home:  普通用户的家目录
+
+绝对路径：以 / 开始的路径
+相对路径：以当前为参照的路径（不以 / 开始的路径）
+
+ [root@A ~]#  cd /etc/pki/CA/
+ [root@A ~]#   pwd
+  [root@A ~]#   cd ..
+ [root@A ~]#   cd ~root
+ [root@A ~]#  cd ~lisi                                     #切换到普通用户lisi的家目录
+  [root@A ~]#   useradd zhangsan                 #创建用户zhangsan
+ [root@A ~]#   cd ~zhangsan                         #切换到普通用户zhangsan的家目录
+ [root@A ~]#  cd /etc/pki/CA                          #绝对路径
+  [root@A ~]#   pwd
+  [root@A ~]# cd  /
+ [root@A  /]#   cd etc/                                #相对路径
+ [root@A etc]#  cd pki/
+ [root@A pki]#   cd CA
+ [root@A CA]#   pwd
+
+++++++++++++++++++++++++++++++++++++++++++++++
+ls -- list
+格式： ls    [选项]    [目录或文件名]
+常用命令选项
+-l：以长格式显示（显示详细属性信息）
+-A：显示所有内容包含隐藏数据（不包含. 和.. 两个文件）
+-d：显示目录本身（而不是内容）的属性
+-h：提供易读的容量单位（K、M等）
+-R：递归显示内容
+-a：显示所有文件（包含. 和.. 两个文件）
+
+  [root@A ~]# ls -l /etc
+  [root@A ~]# ls -l /root
+  [root@A ~]# ls -lh /etc/
+  [root@A ~]#  ls -ld /etc/
+  [root@A ~]#  ls -A /root
+  [root@A ~]#  ls /root
+  [root@A ~]#  ls -a /root
+  [root@A ~]#  ls -R /var
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+使用通配符
+针对不确定的文档名称，以特殊字符表示
+*：任意多个任意字符
+?：单个字符
+[a-z]：多个字符或连续范围中的一个，若无则忽略
+{a,min,xy}：多组不同的字符串，全匹配
+
+[root@A ~]# ls /m*                                       #查看以m开头的文件
+[root@A ~]#  ls /etc/re*                                #查看etc下以re开头的文件
+[root@A ~]#  ls /etc/*.conf                            #查看etc下以.conf结尾的文件
+[root@A ~]#  ls /dev/tty?                         
+[root@A ~]#  ls /dev/tty??
+[root@A ~]#  ls /dev/tty[0-9]                         
+[root@A ~]#  ls /dev/tty{1,5,7}
+++++++++++++++++++++++++++++++++++++++++++++++
+ 创建目录
+
+mkdir  --- Make   Dircetory          
+格式： mkdir   [选项]    [/路径/]目录名
+ 
+-p： 连父目录一起创建
+
+[root@A ~]# mkdir  -p /aa/bb/cc/dd/ee
+[root@A ~]# ls  -R  /aa
+[root@A ~]# mkdir -p /abc/bcd/cde/def/
+[root@A ~]# ls -R /abc/
+++++++++++++++++++++++++++++++++++++++++++++++++++
+别名的定义：简化复杂的命令
+定义别名：
+格式： alias   别名名称='实际执行的命令'
+
+查看别名：alias
+
+取消别名: unalias   别名名称
+
+[root@A ~]# alias                                                            #显示当前系统有效的别名
+[root@A ~]# hostname
+[root@A ~]# alias hn='hostname'                                #定义别名hn
+[root@A ~]#  alias 
+[root@A ~]#  hn
+[root@A ~]# unalias hn                                              #取消别名hn
+[root@A ~]#  hn
+
+
+Day6
+重定向输出：将命令的输出，作为文本文件的内容写入一个文件中
+>  覆盖重定向
+>> 追加重定向
+	
+	[root@A ~]# ls --help >  /root/a.txt
+	[root@A ~]# cat /root/a.txt
+	[root@A ~]# cat /etc/redhat-release 
+	[root@A ~]# cat /etc/redhat-release > /root/a.txt
+	[root@A ~]#  cat /root/a.txt
+	[root@A ~]# hostname  >>  /root/a.txt
+	[root@A ~]#  cat /root/a.txt
+	[root@A ~]#  ls --help >>  /root/a.txt
+	[root@A ~]#   cat /root/a.txt
+	[root@A ~]# ifconfig >>  /root/a.txt
+	[root@A ~]#   cat /root/a.txt
+
+echo常与重定向连用
+	[root@A ~]# echo 123456
+	[root@A ~]# echo abc
+	[root@A ~]# echo 123456 > /root/b.txt
+	[root@A ~]# cat /root/b.txt 
+	[root@A ~]# echo aabbcc >> /root/b.txt 
+	[root@A ~]# cat /root/b.txt
+	[root@A ~]# echo abc > /root/b.txt
+	[root@A ~]# cat /root/b.txt
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+cat  -n   文本文件           //查看时显示行号
+        
+     [root@A ~]# cat   -n    /etc/passwd
+
++++++++++++++++++++++++++++++++++++++++++++++++++
+管道操作：把前面命令输出结果，交由后面命令处理，作为后面命令的参数
+
+                     [root@A ~]# ifconfig ens33
+                     [root@A ~]#  ifconfig ens33 | head -2
+                     [root@A ~]#  grep -v '^$' /etc/login.defs 
+                     [root@A ~]#  grep -v '^#' /etc/login.defs 
+                     [root@A ~]#  grep -v '^#' /etc/login.defs | grep -v '^$'
+                     [root@A ~]#  ls   --help   | less
+
+
+显示/etc/passwd 文件8至12行内容
+             
+ 
+重定向和管道练习（作业）：
+1、显示ifconfig命令的前2行内容
+	
+2、显示/etc/passwd第九行内容
+	
+3、将hostname命令的输出内容，覆盖写入到/opt/hn.txt
+4、利用echo命令，将”tmooc“ 内容追加写入到/opt/hn.txt
+	
+
+Day7
+重定向和管道练习（作业）：
+1、显示ifconfig命令的前2行内容
+
+            ifconfig | head  -2
+	
+2、显示/etc/passwd第九行内容
+                [root@localhost ~]# cat -n /etc/passwd | head -9 | tail -1
+   	  9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+	[root@localhost ~]# head -9 /etc/passwd | tail -1
+	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+	[root@localhost ~]# 
+
+3、将hostname命令的输出内容，覆盖写入到/opt/hn.txt
+4、利用echo命令，将”tmooc“ 内容追加写入到/opt/hn.txt
+	
+	[root@localhost ~]# hostname > /opt/hn.txt
+	[root@localhost ~]# cat /opt/hn.txt
+	localhost.localdomain
+	[root@localhost ~]# echo "tmooc"  >>  /opt/hn.txt 
+	[root@localhost ~]# cat /opt/hn.txt
+	localhost.localdomain
+	tmooc
+	[root@localhost ~]# 
+
+重定向练习
+1、将hostname命令的输出信息保存到文件/root/a.txt中
+	
+[root@localhost ~]#  hostname > /root/a.txt 
+[root@localhost ~]#  cat /root/a.txt
+
+2、将显示的内核版本信息保存到文件/root/b.txt中
+
+[root@localhost ~]#  uname -r > /root/b.txt
+[root@localhost ~]#  cat /root/b.txt
+
+3、将系统版本信息追加保存到文件/root/a.txt中
+
+[root@localhost ~]#  cat /etc/redhat-release >> /root/a.txt 
+[root@localhost ~]#  cat /root/a.txt
+
+4、将显示的cpu信息追加保存到文件/root/a.txt中
+
+[root@localhost ~]#  lscpu >> /root/a.txt 
+[root@localhost ~]#  cat /root/a.txt
+
+5、将显示的内存信息保存到文件/root/b.txt中
+
+[root@localhost ~]#  cat /proc/meminfo > /root/b.txt 
+[root@localhost ~]#  cat /root/b.txt
+
+6、利用echo命令将“tedu”追加写入到文件/root/b.txt中
+
+[root@localhost ~]#  echo tedu >> /root/b.txt 
+[root@localhost ~]#  cat /root/b.txt
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+vim高级使用（注：详情可见PDF）
+
+[root@localhost ~]#   cp    /etc/passwd   /opt
+[root@localhost ~]#   vim  /opt/passwd
+
+
+Day8
+
+Linux目录结构
+
+[root@A ~]# man hier
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+查看命令的帮助信息
+--help：查看命令的简要说明
+
+ [root@A ~]#   ls     --help
+
+使用man手册
+     一种集中的手册页文档机制
+    --大多数程序/配置文件/库函数都提供man手册页
+man，格式化手册阅读工具
+--按 上键、下键、PgUP、PgDn键滚动及翻页
+--按q键退出
+--按/ 键向后查找关键词（n、N切换）
+               [root@A ~]#  man  ls
+               [root@A ~]#  man  5  passwd
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+历史命令
+--管理/调用曾经执行过的命令
+  -history: 查看历史命令列表
+  -history -c：清空历史命令
+  -!n：执行历史命令中的第n条命令
+  -!str：执行最近一次以str开头的历史命令
+
+调整历史命令的数量：修改/etc/profile文件里HISTSIZE字段值，默认是1000条
+
++++++++++++++++++++++++++++++++++++++++++++++
+统计文件占用空间
+du,统计文件的占用空间
+
+格式：du   [选项]    目录或文件
+
+常用命令选项：
+-s：只统计每个参数所占用的总空间大小
+-h：提供易读单位（k，M等）
+
+[root@A ~]#  du  -s  /root
+[root@A ~]#  du  -sh  /root
+[root@A ~]#  du  -sh   /
+
+
+Day9
+系统时间：
+date--查看/调整系统日期时间
+修改时间格式：date  -s  "yyyy-mm-dd HH:MM:SS"
+
+[root@A ~]# date                                           #查看时间
+[root@A ~]# date +%F                                   #查看年月日
+[root@A ~]# date +%R                                  #查看时间
+[root@A ~]#  date +%Y
+[root@A ~]#  date +%m
+[root@A ~]#  date +%d
+[root@A ~]#  date +%H
+[root@A ~]#  date +%M
+[root@A ~]#  date +%S
+[root@A ~]#  date -s "2020-10-1 08:00:00"                    #设置时间为2020年10月1日
+[root@A ~]#  date
+[root@A ~]#  hwclock -s                                  #重设系统时间
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+制作连接文件
+ln, 创建软连接
+--软连接---->原始文档---->文档数据
+--ln  -s   原始文件或目录    软连接文件
+--若原始文件或目录被删除，连接文件将失效
+--软连接可以存放在不同的分区/文件系统
+
+ln，创建硬链接
+--硬链接---->文档数据
+--ln   原始文件   硬链接文件
+--若原始文件被删除，链接文件仍可用
+--硬链接与原始文件必须在同一分区/文件系统
+
+青色：快捷方式
+
+[root@A ~]# ln -s /etc/shells /opt/
+[root@A ~]#  ls /opt/
+[root@A ~]#  cat /opt/shells 
+[root@A ~]#  rm -rf /opt/*
+[root@A ~]#  ls /opt/
+[root@A ~]#  echo AAAA > /opt/A.txt
+[root@A ~]#  ln -s /opt/A.txt /opt/B.txt
+[root@A ~]#  ls   /opt
+[root@A ~]#  ln /opt/A.txt /opt/C.txt
+[root@A ~]#  ls /opt/
+[root@A ~]#  cat /opt/A.txt 
+[root@A ~]#  cat /opt/B.txt 
+[root@A ~]#  cat /opt/C.txt 
+[root@A ~]#  rm -rf /opt/A.txt 
+[root@A ~]#  ls /opt/
+[root@A ~]#  cat /opt/B.txt 
+[root@A ~]#  cat /opt/C.txt 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++
+重定向补充：
+类型                                     操作符                              用途
+覆盖重定向输出		>                  	将命令行的正常执行输出覆盖保存到文件
+追加重定向输出		>>                  	将命令行的正常执行输出追加保存到文件
+覆盖重定向错误输出		2>                  	将命令行的错误执行输出覆盖保存到文件
+追加重定向错误输出		2>>                  	将命令行的错误执行输出追加保存到文件
+混合重定向                              &>                           将正确和错误的输出都覆盖到同一个文件
+混合重定向                              &>>                         将正确和错误的输出都追加到同一个文件
+
+[root@A ~]# ls   /hahah 
+[root@A ~]#  ls   /hahah > /opt/a.txt
+[root@A ~]#  ls   /root > /opt/a.txt 
+[root@A ~]#  ls   /hahah 2> /opt/a.txt
+[root@A ~]#  ls   /root  /hhaa > /opt/a.txt 
+[root@A ~]#  ls   /root /hhaa 2> /opt/a.txt 
+[root@A ~]#  ls  /root /hhaa 2>> /opt/a.txt 
+[root@A ~]#  ls  /root /hhaa &> /opt/a.txt 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+别名：简化复杂的命令
+
+定义别名：
+    alias     别名名称='实际执行的命令'
+
+查看别名：
+   alias    [别名名称]
+
+取消别名：
+   unalias   别名名称
+
+永久设置别名：
+
+所有用户都有效：
+/etc/bashrc：
+
+	[root@student ~]# vim /etc/bashrc 
+	alias hn='hostname'
+	:wq
+	新开一个终端验证别名
+	[root@student ~]# hn
+	[root@student ~]# su  -  lisi                             #切换到lisi用户
+	[lisi@student ~]$ hn
+
+只对当前用户有效：
+~/.bashrc
+
+	[lisi@student ~]$  vim  ~/.bashrc
+	alias  ic='ifconfig | head -2'
+	:wq
+	用lisi用户新开一个终端验证
+	[lisi@student ~]$ exit
+	[root@student ~]# su  - lisi                             #切换到lisi用户
+	[lisi@student ~]$ ic
+	[root@student ~]# ic
+快捷键：
+Ctrl+Shift+t                #一个终端上开多个窗口
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+归档和压缩
+归档的含义：
+--将许多零散的文件整理问一个文件
+--文件总的大小基本不变
+
+压缩的含义：
+--按某种算法减小文件所占用空间的大小
+--恢复时按对应的逆向算法解压
+
+常见的压缩格式及命令工具：
+.gz --->gzip、gunzip
+.bz2--->bzip2、bunzip2
+.xz---> xz、unxz
+
+tar工具的常用选项
+
+-c：创建归档
+-x：释放归档
+-f：指定归档文件名称
+-z、-j、-J：调用 .gz、.bz2、.xz 格式的工具进行处理
+-t：显示归档中的文件清单
+-C：指定释放路径
+
+制作tar包：
+格式：tar   选项     /路径/压缩包的名字            被压缩的源数据
+
+[root@A ~]#  tar -zcf   /opt/abc.tar.gz /boot/ /home/
+[root@A ~]#   ls  /opt/
+[root@A ~]#  tar -jcf  /opt/abc.tar.bz2 /home/ /root/
+[root@A ~]#  ls  /opt/
+[root@A ~]#  tar -Jcf  /opt/abc.tar.xz /boot /root /home/
+[root@A ~]#  ls  /opt/
+
+从tar备份包恢复文档：
+格式：   tar    选项         /路径/压缩包的名字        [-C  解压的路径]
+
+[root@A ~]#  mkdir  /abc   /dvd
+[root@A ~]# tar -xf /opt/abc.tar.gz 
+[root@A ~]#  ls 
+[root@A ~]#  tar -xf /opt/abc.tar.bz2 -C /abc
+[root@A ~]#  ls /abc/
+[root@A ~]#  tar -xf /opt/abc.tar.xz -C /dvd/
+[root@A ~]#  ls /dvd
+[root@A ~]#  ls /dvd/etc/
+[root@A ~]#  ls /opt/
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+zip归档工具
+归档+压缩操作
+zip  [-r]  备份文件.zip  被归档的文档... 
+
+释放归档+解压操作
+unzip  备份文件.zip  [-d 目标文件夹]  
+
+[root@localhost ~]# zip -r /opt/abc.zip /etc/passwd /home/
+[root@localhost ~]# ls /opt/
+[root@localhost ~]# mkdir /abcd
+[root@localhost ~]# ls /opt/
+[root@localhost ~]# unzip /opt/abc.zip -d  /abcd
+[root@localhost ~]# ls /abc
+[root@localhost ~]#  ls /abc/etc/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+find精确查找
+--根据预设的条件递归查找对应的文件
+格式：  find     [目录]    [条件1]
+常用条件表示：
+           -type：类型（f：文本文件；d：目录，l：快捷方式）	
+
+	[root@A ~]# find  /boot   -type   f
+	[root@A ~]# find  /boot   -type  d
+	[root@A ~]# find  /dev   -type  l
+                 [root@A ~]#  
+
+           -name “文档名称”
+
+	[root@A ~]# find /etc/ -name "passwd"
+	[root@A ~]#  find /etc/ -name "*tab"
+	[root@A ~]#  find /etc/ -name "*.conf"
+	[root@A ~]#  ls /etc/*.conf
+	[root@A ~]#  find /etc/ -name "re*"
+
+        -size     + 或 -  文件大小（k，M，G）
+
+	[root@A ~]# find /boot/ -size -10M
+	[root@A ~]#  find /boot/ -size +3000k
+	[root@A ~]# find  /boot/  -size  +10M
+
+       -user   用户名       #按照所有者进行查找 （所有者：文件的创建者）
+
+	[root@A ~]# useradd tom
+	[root@A ~]# useradd zhangsan
+	[root@A ~]#  ls -l /home/
+	[root@A ~]#  find /home/ -user tom
+	[root@A ~]#  find / -user tom
+
+     -mtime    根据文件修改时间（所有的时间都是过去时间）
+       -10：最近10天之内的
+       +10：10天之前的
+
+	[root@A ~]# find /root -mtime +10
+	[root@A ~]#  find /root -mtime -10
+
+Day10
+find高级使用
+与wc连用
+
+	[root@A ~]# wc /etc/passwd
+	  44     85     2276       /etc/passwd
+	   行数 单词  文件大小   文件名
+	[root@A ~]#  wc -l /etc/passwd                            #查看这个文件有多少行
+	[root@A ~]#  find /etc/ -name "*tab"
+	[root@A ~]#  find /etc/ -name "*tab" | wc -l
+	[root@A ~]# find /etc/ -name "*.conf"
+	[root@A ~]#  find /etc/ -name "*.conf" | wc -l
+	[root@A ~]#  rm -rf /opt/*
+	[root@A ~]#  mkdir /opt/nsd01
+	[root@A ~]#  touch /opt/nsd02.txt
+	[root@A ~]#  touch /opt/nsd03.txt
+	[root@A ~]#  find /opt/ -type f
+	[root@A ~]# find /opt/ -type d
+	[root@A ~]#  find /opt/ -name "nsd*"
+
+-a 并且（都满足，默认是-a） -o 或者（满足其一即可）
+
+	[root@A ~]#  find /opt/ -name "nsd*" -a -type f
+	[root@A ~]#  find /opt/ -name "nsd*" -o -type f
+	[root@A ~]#  find /opt/ -name "nsd*"  -type d
+
+查找并处理文件
+
+使用find命令的-exec操作
+--find   [目录]  条件  -exec   处理命令   {}   \;
+--根据条件查找并处理结果
+
+注：-exec是额外操作
+       {}：替代每一个查找结果
+       \;   处理操作结束
+
+[root@A ~]# find /boot/ -name "vm*" -exec cp {} /opt \;                 #查找/boot目录中以vm开头的所有文件拷贝到/opt下
+[root@A ~]# ls /opt/
+[root@A ~]#  find /boot/ -size +10M -type f -exec cp {} /opt/ \;
+[root@A ~]#  ls /opt/
+
+
+
+
+
+案例：查找并处理文件
+1、利用find查找所有用户student拥有的必须是文件，把他们拷贝到/root/findfiles文件夹中
+
+	[root@A ~]# useradd student
+	[root@A ~]#  mkdir /root/findfiles
+	[root@A ~]#  find / -user student -type f
+	[root@A ~]#  find / -user student -type f -exec cp {} /root/findfiles/ \;
+	[root@A ~]#  ls -A /root/findfiles/
+
+2、利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
+
+[root@A ~]# find /boot/ -size +10M -a -type f
+[root@A ~]# find /boot/ -size +10M -a -type f -exec cp {} /opt/  \;
+[root@A ~]# ls /opt/
+initramfs-0-rescue-cb8e00417ae6496ea70331268908d159.img
+initramfs-3.10.0-862.el7.x86_64.img
+initramfs-3.10.0-862.el7.x86_64kdump.img
+
+
+3、利用find查找/boot/目录下以vm开头且必须是文件，拷贝到/opt
+
+[root@A ~]# find /boot -name "vm*" -type f
+/boot/vmlinuz-3.10.0-862.el7.x86_64
+/boot/vmlinuz-0-rescue-cb8e00417ae6496ea70331268908d159
+[root@A ~]# find /boot -name "vm*" -type f -exec cp {} /opt/ \;
+[root@A ~]# ls /opt/
+
+4、利用find查找/boot/目录下为快捷方式
+
+	[root@A ~]# find /boot/ -type l
+
+5、利用find查找/etc目录下，以tab作为结尾的必须是文件
+	
+	[root@A ~]# find /etc/ -name "*tab" -type f
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+mount挂载操作：可以让目录成为设备的访问点
+
+显示光盘内容：
+         windows：   光盘文件------》光驱设备-------》cd驱动器（图标） 访问点
+
+         Linux：   光盘文件------》光驱设备--------》访问点（目录）   
+                                                    /dev/hdc：表示光驱设备是IDE接口类型
+			    /dev/sr0：表示光驱设备是SCSI接口类型
+
+1、图形将光盘文件放入设备
+2、查看光驱设备
+[root@A ~]#  ls  /dev/hdc
+[root@A ~]#  ls  /dev/sr0
+[root@A ~]#  ls  -l  /dev/cdrom
+
+3、挂载设备
+[root@A ~]#  mkdir  /dvd
+[root@A ~]#  ls   /dvd
+
+使用mount命令
+格式： mount   设备路径    挂载点目录
+
+[root@A ~]#  mount   /dev/cdrom   /dvd
+[root@A ~]#  ls  /dvd
+
+4、卸载
+
+使用umount命令
+格式：umount   挂载点目录
+
+[root@A ~]# umount /dvd
+[root@A ~]# ls /dvd
+
+注意事项：
+1、卸载时当前目录不要再挂载点目录下
+
+[root@A dvd]# umount /dvd
+umount: /dvd：目标忙。
+        (有些情况下通过 lsof(8) 或 fuser(1) 可以
+         找到有关使用该设备的进程的有用信息)
+[root@A dvd]# 
+
+2、一个设备可以有多个挂载点
+3、不允许一个挂载点有多个设备
+4、建议挂载点目录的选择，最好自己创建
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+RPM的含义
+RPM Package  Manager
+--由红帽公司提出，Redhat、SUSE等系列采用
+--建立集中数据库，记录软件包安装/卸载等变化信息，分析软件包依赖关系
+
+RPM包文件名特征
+--软件名-版本信息.操作系统.硬件架构.rpm
+
+查询已安装的RPM软件包的信息
+格式：rpm  -q[子选项]   [软件名称]
+
+常用的子选项：
+-a：列出已安装的所有软件包
+-i：查看指定软件的详细信息
+-l：查看指定软件的文件安装清单
+
+[root@A /]# rpm -q firefox
+[root@A /]#  rpm -q haha
+[root@A /]#  rpm -qi firefox
+[root@A /]#  rpm -ql firefox
+[root@A /]#  rpm -qa
+[root@A /]#  rpm -qa | wc -l
+[root@A /]#  rpm  -qa  |  grep  vim
+
+
+Day12
+
+练习：
+1、列出当前主机以安装的所有RPM软件
+
+	[root@A ~]# rpm -qa 
+
+2、查看firefox软件包的安装清单
+
+	[root@A ~]# rpm -ql firefox
+
+3、查看firefox软件包的用途
+
+	[root@A ~]# rpm -qi firefox
+
+4、查询光盘中的lynx软件包的用途，安装清单
+
+	[root@A ~]# rpm -qpi /mnt/Packages/lynx-2.8.8-0.3.dev15.el7.x86_64.rpm 
+	[root@A ~]# rpm -qpl /mnt/Packages/lynx-2.8.8-0.3.dev15.el7.x86_64.rpm 
+	
+5、利用rpm安装vsftpd这个软件包
+	
+	[root@A ~]# rpm -ivh /mnt/Packages/vsftpd-3.0.2-22.el7.x86_64.rpm 
+	[root@A ~]# rpm -q vsftpd
+	vsftpd-3.0.2-22.el7.x86_64
+	
+6、删除vim、vi、hostname命令程序
+	
+	[root@A ~]# which vim vi hostname
+	/usr/bin/vim
+	/usr/bin/vi
+	/usr/bin/hostname
+	[root@A ~]# rm -rf /usr/bin/vim /usr/bin/vi /usr/bin/hostname
+	[root@A ~]# 
+
+7、修复vim、vi、hostname
+
+	[root@A ~]# rpm -qf /usr/bin/vim
+	vim-enhanced-7.4.160-4.el7.x86_64
+	[root@A ~]# rpm -ivh --force /mnt/Packages/vim-enhanced-7.4.160-4.el7.x86_64.rpm 
+	警告：/mnt/Packages/vim-enhanced-7.4.160-4.el7.x86_64.rpm: 头V3 RSA/SHA256 Signature, 密钥 ID f4a80eb5: NOKEY
+	准备中...                                                  ################################# [100%]
+	正在升级/安装...
+	   1:vim-enhanced-2:7.4.160-4.el7                          ################################# [100%]
+	[root@A ~]# ls /usr/bin/vim
+	/usr/bin/vim
+
+8、安装bind-chroot包，体验依赖关系
+	
+	[root@A ~]# rpm -ivh /mnt/Packages/bind-chroot-9.9.4-61.el7.x86_64.rpm 
+	警告：/mnt/Packages/bind-chroot-9.9.4-61.el7.x86_64.rpm: 头V3 RSA/SHA256 Signature, 密钥 ID f4a80eb5: NOKEY
+	错误：依赖检测失败：
+	bind = 32:9.9.4-61.el7 被 bind-chroot-32:9.9.4-61.el7.x86_64 需要
+	[root@A ~]# 
+
+	[root@A ~]# rpm -ivh /mnt/Packages/bind-9.9.4-61.el7.x86_64.rpm 
+	[root@A ~]# rpm -ivh /mnt/Packages/bind-chroot-9.9.4-61.el7.x86_64.rpm 
+
+9、卸载vsftpd软件
+
+	[root@A ~]# rpm -e vsftpd
+	[root@A ~]# rpm -q vsftpd
+	未安装软件包 vsftpd 
+	[root@A ~]# 
+
+注：which命令可以查找到命令可执行程序所在位置
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Yum机制概述
+--YUM，Yellowdog Updater Modified
+--基于RPM包构建的软件更新机制
+--自动解决软件包依赖关系
+--所有软件包由集中的YUM软件仓库提供
+
+软件仓库的提供方式
+--本地目录：file://...
+--FTP或HTTP服务：ftp://... 、http://...
+
+服务端配置：
+[root@A ~]#  mount /dev/cdrom /dvd/
+[root@A ~]#   ls /dvd/
+
+客户端配置：
+
+--仓库配置：/etc/yum.repos.d/*.repo
+注：客户端文件路径：/etc/yum.repos.d/*.repo，在此路径下，错误的配置文件会影响正确的配置文件
+
+.repo 基本配置项
+--[源名称] ：自定义名称，具有唯一性
+--name：本软件源的描述字串
+--baseurl：指定YUM服务端的URL地址 
+--enabled：是否启用此频道
+--gpgcheck：是否验证待安装的RPM包
+--gpgkey：用于RPM软件包验证的密钥文件 
+
+创建mnt.repo配置文件，添加本地仓库
+
+[root@A ~]#  vim /etc/yum.repos.d/mnt.repo
+[root@A ~]#  cat /etc/yum.repos.d/mnt.repo
+[mnt]
+name=Centos7.5
+baseurl=file:///dvd
+enabled=1
+gpgcheck=0
+
+[root@A ~]#   rm -rf /etc/yum.repos.d/CentOS-*
+[root@A ~]#   yum repolist             #列出仓库信息
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Day13
+
+案例：yum练习
+
+1、将光盘文件挂载到/mnt目录下，查看/mnt下内容
+2、搭建本地yum仓库
+
+	[root@A ~]# mount /dev/cdrom /mnt/
+	mount: /dev/sr0 写保护，将以只读方式挂载
+	[root@A ~]# ls /mnt/
+	root@A ~]# vim /etc/yum.repos.d/mnt.repo
+	[root@A ~]# cat /etc/yum.repos.d/mnt.repo 
+	[mnt]
+	name=Centos7.5
+	baseurl=file:///mnt
+	enabled=1
+	gpgcheck=0
+	[root@A ~]# 
+	[root@A ~]# ls /etc/yum.repos.d/
+	[root@A ~]# mkdir /etc/yum.repos.d/bind
+	[root@A ~]# mv /etc/yum.repos.d/CentOS-* /etc/yum.repos.d/bind
+	[root@A ~]# ls /etc/yum.repos.d/
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+yum命令工具
+
+查看软件列表：
+格式：  yum  list   软件名
+
+[root@A ~]# yum list firefox
+[root@A ~]# yum list vsftpd
+
+
+检索软件及相关信息
+用法：yum  search  关键词
+        yum  info  [软件名]...
+        yum  provides  文档路径...
+
+[root@A ~]#  yum search ftp                          #查找包含ftp和ftp相关的包（查找关键词ftp）
+[root@A ~]#  yum info firefox                         #查看firefox软件的描述信息
+[root@A ~]#  yum provides /etc/passwd         #查看/etc/passwd文件是由哪个软件产生的
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+安装/卸载软件包
+
+软件包基本操作
+格式：yum  [-y]  指令  [软件名]…
+常用指令:
+install：安装指定软件包，类似于rpm -i
+remove：卸载指定软件包，类似于rpm -e
+
+[root@A ~]# yum install gcc
+[root@A ~]#  rpm -q gcc
+[root@A ~]#  rpm -q httpd
+[root@A ~]#  yum -y install httpd
+[root@A ~]#  rpm -q httpd
+[root@A ~]#  yum  remove gcc                         #卸载软件包，不建议加-y选项
+[root@A ~]#  rpm -q gcc
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+清空本地yum缓存
+--适用于yum缓存存在错误时
+--再次查询或更新时，会自动重建缓存
+
+[root@A ~]# yum   clean   all
+[root@A ~]# yum  repolist
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+计划任务（周期性任务）
+用途：按照设置的时间间隔为用户反复执行某一项固定的系统任务
+软件包：cronie、crontabs
+系统服务：crond
+日志文件：/var/log/cron
+
+[root@A ~]#tail   /var/log/cron    # 查看计划任务日志文件
+
+管理计划任务策略
+使用 crontab 命令
+编辑：crontab  -e  [-u  用户名]
+查看：crontab  -l  [-u  用户名]
+清除：crontab  -r  [-u  用户名]
+
+编写计划任务配置格式：
+
+分  时  日  月  周      任务命令行（绝对路径）
+
+*：匹配范围内任意时间
+,：分隔多个不连续的时间点
+-：指定连续时间范围
+/n：指定时间频率，每n ...
+
+
+Day15
+
+修改用户属性（usermod命令）
+--格式：usermod  [选项]...  用户名
+
+常用命令选项
+-l：更改用户帐号的登录名称
+-u：用户id
+-d：家目录路径
+-s：登录解释器
+-G：附加组     //重置附加组
+
+	[root@A ~]# useradd nsd01
+	[root@A ~]#  useradd nsd02
+	[root@A ~]#  useradd nsd03
+	[root@A ~]# grep nsd /etc/passwd
+	[root@A ~]#  usermod -u 1234 nsd01
+	[root@A ~]#  grep nsd01 /etc/passwd
+	[root@A ~]#  usermod -d /opt/nsd02 -s /sbin/nologin nsd02      #-d 修改家目录，只修改了对应的字段值，/opt下面并没有这个目录
+	[root@A ~]#  grep nsd02 /etc/passwd
+	[root@A ~]#  ls /opt/
+	[root@A ~]#  id nsd03
+	[root@A ~]#  groupadd tarena
+	[root@A ~]#  usermod -G tarena nsd03                          #修改用户nsd03的附加组，有则重置，没有则添加
+	[root@A ~]# usermod -G tarena nsd03
+	[root@A ~]#  id nsd03
+	[root@A ~]#  groupadd abc
+	[root@A ~]#  usermod -G abc nsd03
+	[root@A ~]#  id nsd03
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+用户初始配置文件
+配置文件来源：
+--新建用户时，根据/etc/skel模板目录复制
+主要的初始配置文件：
+-- ~/.bash_profile：每次登录时执行
+-- ~/.bashrc：每次进入新的Bash环境时执行
+-- ~/.bash_logout：每次退出登录时执行
+
+[root@localhost ~]# useradd nsd09
+[root@localhost ~]# ls -A /home/nsd09/                   #查看nsd09用户家目录下的所有文件
+[root@localhost ~]# ls -A /etc/skel/                      #查看/etc/skel/目录下的所有文件.bash_logout .bash_profile .bashrc .mozilla
+[root@localhost ~]# ls --help > /etc/skel/ls.txt
+[root@localhost ~]# ls -A /etc/skel/
+[root@localhost ~]# useradd nsd10
+[root@localhost ~]# ls -A /home/nsd10/          #新创建出来的用户有ls.txt文件
+[root@localhost ~]# useradd nsd11
+[root@localhost ~]# ls -A /home/nsd11
+
+设置别名
+[root@A ~]# vim  /root/.bashrc
+alias  hn='hostname'
+[root@A ~]# hn                                 #失败
+bash: hn: 未找到命令...
+新开启一个终端验证：
+[root@A ~]# hn                      #验证定义别名是否生效
+
+使用普通用户测试
+[root@A ~]# su - nsd05
+[nsd05@A ~]$ hn                                     #失败，.bashrc只会对自己的用户生效
+bash: hn: 未找到命令...
+
+全局配置（所有用户都有效），配置文件/etc/bashrc
+[root@A ~]# vim  /etc/bashrc
+alias haha='echo haha'
+新开启一个终端验证
+[root@A ~]# haha
+haha
+使用普通用户测试
+[root@A ~]# su - nsd05
+[nsd05@A ~]$ haha                                
+haha
+
+
+
+Day16
+组账号基本操作
+解析组账号文件
+--/etc/group，保存组账号的基本信息
+--每个组记录一行，以：分割为4个字段
+字段1：组账号的名称
+字段2：密码占位符x
+字段3：组账号的GID号
+字段4：本组的成员用户列表
+
+/etc/gshadow：保存组账号的管理信息
+--每个组记录一行，以：分割为4个字段
+字段1：组账号的名称
+字段2：加密后的密码字符串
+字段3：本组的管理员列表
+字段4：本组的成员用户列表
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+添加组账号（groupadd命令）
+--格式：groupadd  [-g GID]  组名
+
+[root@A ~]# groupadd adminuser
+[root@A ~]#   grep adminuser /etc/group
+
+gpasswd管理组成员
+--格式：gpasswd  [选项]....   组名
+常用命令选项：
+-A：定义组管理员列表
+-a：添加组成员，每次只能加一个
+-d：删除组成员，每次只能删一个
+-M：定义组成员用户列表，可设置多个
+
+	[root@A ~]# groupadd stugrp
+	[root@A ~]# grep stugrp /etc/group
+	stugrp:x:1001:
+	[root@A ~]# useradd nsd01
+	[root@A ~]# useradd nsd02
+	[root@A ~]# useradd nsd03
+	[root@A ~]# useradd nsd04
+	[root@A ~]# grep nsd /etc/passwd
+	[root@A ~]# gpasswd -A nsd01 stugrp                                   #定义stugrp管理员列表是nsd01
+	[root@A ~]# grep stugrp /etc/gshadow
+	[root@A ~]# gpasswd -a nsd02 stugrp                                   #将nsd02用户加入到stugrp组里
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# gpasswd -a nsd03 stugrp
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# gpasswd -M nsd04,nsd05,nsd01 stugrp             #定义组成员列表为nsd04,nsd05,nsd01
+	[root@A ~]# grep stugrp /etc/group 
+	[root@A ~]# gpasswd -a nsd03 stugrp
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# gpasswd -d nsd03 stugrp                                  #将nsd03用户从stugrp组里移除
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+组的删除（groupdel）
+格式：groupdel  组名
+--删除的目标组不能是用户的基本组
+
+	[root@A ~]# groupdel stugrp                                     
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# groupdel nsd01
+	groupdel：不能移除用户“nsd01”的主组
+	[root@A ~]# 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+基本权限的类别
+访问方式（权限）
+--读取：允许查看内容-read             r
+--写入：允许修改内容-write           w
+--可执行：允许运行和切换-excute   x
+
+权限适用对象（归属）
+--所有者：拥有此文件/目录的用户-user                u
+--所属组：拥有此文件/目录的组-group                g
+--其他用户：除所有者、所属组以外的用户-other   o
+
+查看权限：
+使用ls  -l  命令
+--ls  -ld   文件或目录
+   以- 开头：文本文件
+   以d 开头：目录
+   以l 开头：快捷方式
+
+	[root@A ~]# ls -l /dev/cdrom 
+	lrwxrwxrwx. 1 root root 3 4月   1 07:38 /dev/cdrom -> sr0
+	[root@A ~]# ls -ld /nsd01/
+	drwxr-xr-x. 2 root root 6 4月   1 16:25 /nsd01/
+	[root@A ~]# ls -l /etc/passwd
+	-rw-r--r--. 1 root root 2667 4月   1 15:06 /etc/passwd
+	[root@A ~]#
+	注：输出信息包括7个字段
+                权限位       硬连接数      属主      属组     大小     最后修改时间    文件/目录名称
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+修改权限
+使用chmod命令
+--格式：chmod  [-R]  归属关系+-=权限类别    文件/目录
+-R：递归修改
+	
+	[root@A ~]# mkdir /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u-w /nsd01/                                   #所有者取消w权限
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u+w /nsd01                                   #所有者添加w权限
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod g=r /nsd01                                     #所属组只读权限
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod o=--- /nsd01                                   #其他人没有任何权限
+	[root@A ~]# ls -ld /nsd01
+
+同时设置权限
+	
+	[root@A ~]# chmod u=rwx,o=rx /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u=rwx,g=rx,o=rwx /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod ugo=rwx /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u=rwx,g=rwx,o=rwx /nsd01
+	[root@A ~]# mkdir -p /opt/aa/bb/cc
+	[root@A ~]# ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/
+	[root@A ~]# chmod o=--- /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/
+
+-R：递归修改权限，目录本身包括此目录里面的都会发生变化
+
+	[root@A ~]# chmod -R o=--- /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/cc
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+实验不同用户写入文件
+	[root@A ~]# mkdir /nsd02
+	[root@A ~]# echo 123 > /nsd02/a.txt
+	[root@A ~]# ls /nsd02/
+	[root@A ~]# cat /nsd02/a.txt 
+	[root@A ~]# ls -l /nsd02/a.txt
+	[root@A ~]# useradd zhangsan
+	[root@A ~]# id zhangsan
+
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ cat /nsd02/a.txt                                        #可以查看
+	[zhangsan@A ~]$ vim /nsd02/a.txt                                         #写入失败
+	[zhangsan@A ~]$ echo aaa > /nsd02/a.txt 
+	-bash: /nsd02/a.txt: 权限不够
+
+其他人赋予w权限
+
+	[root@A ~]# chmod o+w /nsd02/a.txt
+	[root@A ~]# ls -l /nsd02/a.txt
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ echo aaa > /nsd02/a.txt                            #写入成功
+
+对于文本文件：
+r：读取权限   cat    less   head   tail等
+w：写入权限    vim   >   >> 
+x：可执行权限   Shell脚本编写时可以赋予，默认文本文件每有可执行权限
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+实验不同用户操作目录：
+
+	[root@A ~]# ls -ld /nsd02/
+	[root@A ~]# id zhangsan
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ cd /nsd02/
+	[zhangsan@A nsd02]$ ls
+	a.txt
+	[zhangsan@A nsd02]$ exit
+
+其他人取消x权限
+
+	[root@A ~]# chmod o-x /nsd02/                 
+	[root@A ~]# ls -ld /nsd02/
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ cd /nsd02/                                 #失败
+	-bash: cd: /nsd02/: 权限不够
+	[zhangsan@A ~]$ ls /nsd02/                                  #查看虽然显示，但是异常
+	ls: 无法访问/nsd02/a.txt: 权限不够
+	a.txt
+	[zhangsan@A ~]$ ls -l /nsd02/                            
+		
+其他人赋予rwx权限，在目录下写入内容，但是修改的是目录里面的内容，对目录本身没有修改权限
+
+	[root@A ~]# chmod o=rwx /nsd02/
+	[root@A ~]# ls -ld /nsd02/
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ mkdir /nsd02/abc
+	[zhangsan@A ~]$ touch /nsd02/a.txt
+	[zhangsan@A ~]$ mv /nsd02/ /stu02                              #失败
+	mv: 无法将"/nsd02/" 移动至"/stu02": 权限不够
+	[zhangsan@A ~]$ 
+如果想对目录本身有修改的权限，找此目录的父目录即可
+
+	[root@A ~]# ls -ld /
+	[root@A ~]# chmod o=rwx /
+	[root@A ~]# ls -ld /
+
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ mv /nsd02/ /stu02                         #成功
+
+将/目录其他人权限改为rx
+
+	[root@A ~]# chmod o=rx /
+	[root@A ~]# ls -ld /
+
+其他人只给x权限，没有意义
+	[root@A ~]# chmod o=x /stu02
+	[root@A ~]# ls -ld /stu02
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ cd /stu02/
+	[zhangsan@A stu02]$ ls
+	ls: 无法打开目录.: 权限不够
+	[zhangsan@A stu02]$ mkdir aaa
+	mkdir: 无法创建目录"aaa": 权限不够
+	[zhangsan@A stu02]$ 
+
+其他人赋予rx权限
+
+	[root@A ~]# chmod o=rx /stu02/
+	[root@A ~]# ls -ld /stu02
+
+
+目录的r权限：能够ls浏览此目录内容
+目录的w权限：能够执行rm/cp/mv/mkdir/touch等更改目录内容的操作
+目录的x权限：能够cd切换到此目录
+
+
+
+Day17
+
+案例：设置基本权限
+新建/nsddir1/目录，在此目录下新建readme.txt文件，并进一步完成下列操作：
+1）使用户zhangsan能够在此目录下创建/删除子目录
+2）使用户zhangsan能够修改readme.txt文件
+3）调整此目录的权限，使任何用户都不能进入，然后测试用户zhangsan是否还能修改readme.txt
+4）为此目录及其下所有文档设置权限为rwxr-x---
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+权限位的8进制表示
+r，w，x分别对应4,2,1   然后3组分别求和
+
+7：rwx   6：rw-  5：r-x   4：r--  3：-wx   2：-w-   1：--x   0：---   
+
+	[root@A ~]# mkdir /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod 700 /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod 644 /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod 750 /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u=7,g=5 /nsd01                                    #不支持这样写法，报语法错误
+	chmod: 无效模式："u=7,g=5"
+	Try 'chmod --help' for more information.
+	[root@A ~]# chmod u=rwx,g=rx /nsd01
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+修改归属关系
+使用chown命令，-R递归设置
+--chown   [-R]   属主    文件
+--chown   [-R]   :属组   文件
+--chown   [-R]   属主:属组   文件
+
+	[root@A ~]# mkdir /nsd02
+	[root@A ~]# ls -ld /nsd02
+	[root@A ~]#  useradd dc
+	[root@A ~]#  groupadd stugrp
+	[root@A ~]#  chown dc:stugrp /nsd02                         #同时修改属主和属组
+	[root@A ~]#  ls -ld /nsd02
+	[root@A ~]#  chown zhangsan /nsd02/                      #仅修改属主
+	[root@A ~]#  ls -ld /nsd02
+	[root@A ~]#  chown :root /nsd02                               #仅修改属组
+	[root@A ~]#  ls -ld /nsd02
+	[root@A ~]#  mkdir -p /opt/aa/bb/cc
+	[root@A ~]#  chown dc /opt/aa/
+	[root@A ~]#  ls -ld /opt/aa/
+	[root@A ~]#  ls -ld /opt/aa/bb/
+	[root@A ~]#  chown -R  dc /opt/aa/                          #递归修改所有者
+	[root@A ~]#  ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/
+	[root@A ~]#  ls -ld /opt/aa/bb/cc/
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+实验：
+	[root@A ~]# mkdir /nsd03
+	[root@A ~]#  ls -ld /nsd03
+	[root@A ~]#  chmod o=--- /nsd03/
+	[root@A ~]#  ls -ld /nsd03
+	[root@A ~]#  chown zhangsan:stugrp /nsd03/
+	[root@A ~]#  ls -ld /nsd03
+
+使用zhangsan用户和lisi用户测试，zhangsan用户有读写执行的权限，其他用户没有权限
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ mkdir /nsd03/aa
+	[zhangsan@A ~]$ touch /nsd03/abc01.txt
+	[zhangsan@A ~]$ ls /nsd03/
+	aa  abc01.txt
+	[zhangsan@A ~]$ cd /nsd03/
+	[root@A ~]# su - lisi
+	[lisi@A ~]$ mkdir /nsd03/aa
+	mkdir: 无法创建目录"/nsd03/aa": 权限不够
+	[lisi@A ~]$ cd /nsd03/
+	-bash: cd: /nsd03/: 权限不够
+	[lisi@A ~]$ 
+
+把lisi加入到stugrp这个组里，继承组的权限
+	[root@A ~]#  gpasswd -a lisi stugrp
+	[root@A ~]#  id lisi
+	[root@A ~]#  ls -ld /nsd03/
+	[root@A ~]# su - lisi
+	[lisi@A ~]$ cd /nsd03/
+
+去掉所有者的执行权限，zhangsan添加到stugrp组里，虽然组里有执行权限，但是依然不能cd	
+	[root@A ~]#  chmod u-x /nsd03
+	[root@A ~]#  ls -ld /nsd03/
+	[root@A ~]#  gpasswd -a zhangsan stugrp
+	[root@A ~]#  ls -ld /nsd03/
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ cd /nsd03/
+	-bash: cd: /nsd02/: 权限不够
+
+如何判断一个用户对某目录所具备的权限是什么？
+
+1、判断用户身份              所有者>所属组>其他人                  匹配即停止
+2、查看对应身份的权限
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+文件/目录的默认权限
+--一般文件默认均不给x执行权限
+--其他取决于umask设置
+
+	[root@A ~]# mkdir /nsd02
+	[root@A ~]# touch /a.txt
+	[root@A ~]# ls -ld /nsd02/
+	drwxr-xr-x. 2 root root 6 4月   8 14:03 /nsd02/
+	[root@A ~]# ls -l /a.txt 
+	-rw-r--r--. 1 root root 0 4月   8 14:03 /a.txt
+	[root@A ~]# umask                                               #查看uamsk值
+	0022
+	[root@A ~]# umask -S                                           #-S 直接显示默认权限
+	u=rwx,g=rx,o=rx
+	[root@A ~]# umask 222
+	[root@A ~]# umask 
+	[root@A ~]# mkdir /nsd03
+	[root@A ~]# ls -ld /nsd03
+	[root@A ~]# mkdir -m 700 /nsd04                        #创建目录时指定权限
+	[root@A ~]# ls -ld /nsd04
+	[root@A ~]# umask 022
+	[root@A ~]# umask 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Set  GID
+--占用属组的x位
+--显示为s或S，取决于属组是否有x权限（s：有x执行权限，S：没有x执行权限）
+--对目录有效
+--在一个具有SGID权限的目录下，新建的文档会自动继承此目录的属组身份
+	
+	[root@A ~]# mkdir  /nsd02
+	[root@A ~]# groupadd stugrp
+	[root@A ~]# chown :stugrp  /nsd02
+	[root@A ~]# ls -ld /nsd02	
+	[root@A ~]# mkdir /nsd02/abc01
+	[root@A ~]# ls -ld /nsd02/abc01
+	[root@A ~]# ls -ld /nsd02/
+	[root@A ~]# chmod g+s /nsd02/
+	[root@A ~]# mkdir /nsd02/abc02
+	[root@A ~]# ls -ld /nsd02/abc02
+	[root@A ~]# 
+
+
+Day18
+案例：SGID练习
+1. 创建/nsdpublic目录，将属组改为tarena，进一步完成下列操作：
+1）新建子目录nsd01、子文件test01.txt，查看两者的权限及归属
+2）为此目录添加SGID权限，再新建子目录nsd02、子文件test02.txt
+3）查看上述子目录及文件的权限及归属
+
+	[root@A ~]# mkdir /nsdpublic
+	[root@A ~]# ls -ld /nsdpublic
+	[root@A ~]# grep tarena /etc/group
+	[root@A ~]# groupadd tarena
+	[root@A ~]# chown :tarena /nsdpublic
+	[root@A ~]# mkdir /nsdpublic/nsd01
+	[root@A ~]# touch /nsdpublic/test01.txt
+	[root@A ~]# ls -ld /nsdpublic/
+	[root@A ~]# ls -l /nsdpublic/test01.txt
+	[root@A ~]# ls -ld /nsdpublic/nsd01/
+	[root@A ~]# chmod g+s /nsdpublic/
+	[root@A ~]# ls -ld /nsdpublic/
+	[root@A ~]# touch /nsdpublic/test02.txt
+	[root@A ~]# mkdir /nsdpublic/nsd02
+	[root@A ~]# ls -ld /nsdpublic/nsd02
+	[root@A ~]# ls -l /nsdpublic/test02.txt
+	[root@A ~]# ls -ld /nsdpublic/nsd01/
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Sticky Bit权限（粘滞位，t权限）
+--占用其他人（Other）的x位
+--显示为t或T，取决于其他人是否有x权限（t：有x执行权限，T：没有x执行权限）
+--使用于目录，用来限制用户滥用写入权
+--在设置了粘滞位的文件夹下，即使用户有写入权限，也不能删除或改名其他用户文档
+
+	[root@A ~]#  mkdir  /home/public
+	[root@A ~]#  chmod 777 /home/public
+
+模拟zhangsan和lisi用户创建文件，此时创建的文件是任何人可以删除的
+
+	[root@A ~]#  su - zhangsan
+	[zhangsan@A ~]$ touch /home/public/zhangsan.txt
+	[zhangsan@A ~]$ exit
+	[root@A ~]#  su - lisi
+	[lisi@A ~]$ touch /home/public/lisi.txt
+	[lisi@A ~]$ rm -rf /home/public/zhangsan.txt                                #可以删除成功
+
+加上t权限
+	[root@A ~]#  chmod  o+t  /home/public
+	[root@A ~]#  su - zhangsan
+	[zhangsan@A ~]$ touch /home/public/zhangsan.txt
+	[zhangsan@A ~]$ rm -rf /home/public/lisi.txt                     #删除失败
+	
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+附加知识（扩展）
+Set  UID权限
+--占用属主（User）的x位
+--显示为s或S，取决于属主是否有x权限（s：有x执行权限，S：没有x执行权限）
+--仅对可执行的程序有意义
+--当其他用户执行带SUID标记的程序时，具有此程序属主的身份和相应权限
+
+	[root@A ~]# mkdir /abc
+	[root@A ~]# /usr/bin/mkdir /abc1
+	[root@A ~]# ls  /
+	[root@A ~]# cp /usr/bin/mkdir /usr/bin/mydir
+	[root@A ~]# /usr/bin/mydir /abc2
+
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ /usr/bin/mydir /abc4                      #创建失败
+	/usr/bin/mydir: 无法创建目录"/abc4": 权限不够
+
+加上SUID权限
+	[root@A ~]# chmod u+s /usr/bin/mydir
+	[root@A ~]# ls -ld /usr/bin/mydir
+	
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ /usr/bin/mydir /abc4                      #创建成功
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ACL策略简介
+文档的局限性
+--任何人只属于三种角色：属主、属组、其他人
+--无法实现更精细的控制
+
+acl访问策略
+--能够对个别用户、个别组设置独立的权限
+--大多数挂载的EXT3/4、XFS文件系统默认支持
+
+设置ACL访问控制策略
+使用getfacl、setfacl命令
+--getfacl  文档                         查看ACL权限
+--setfacl  [-R]  -m  u:用户名:权限     文档                          #-m  定义ACL策略
+--setfacl  [-R]  -m  g:组名:权限     文档     
+--setfacl  [-R]  -x  u:用户名     文档                                 #-x 删除指定的ACL策略
+--setfacl  [-R] -b     文档                                                #-b  删除所有的ACL策略
+
+	[root@A ~]# mkdir /nsd01
+	[root@A ~]#  setfacl -m u:lisi:rwx /nsd01
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]#  setfacl -m u:dc:rx /nsd01
+	[root@A ~]#  useradd dc
+	[root@A ~]# setfacl -m u:dc:rx /nsd01
+	[root@A ~]#  setfacl -m u:zhangsan:rx /nsd01
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]#  setfacl -x u:lisi /nsd01/
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]#  setfacl -b /nsd01/
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]# mkdir -p /opt/aa/bb/
+	[root@A ~]# setfacl -Rm  u:dc:rx /opt/aa/                                  #递归设置权限
+	[root@A ~]# getfacl /opt/aa/
+	[root@A ~]# getfacl /opt/aa/bb/
+
+设置拒绝权限
+	[root@A ~]# setfacl -m u:lisi:--- /nsd01/
+	[root@A ~]# getfacl /nsd01/
+	[root@A ~]# su - lisi
+	[lisi@A ~]$ cd /nsd01
+	-bash: cd: /nsd01: 权限不够
+
+总结：
+1、权限的分类是什么？
+2、基本权限的分类是什么？
+3、归属关系都有哪些？
+4、用户的分类？组账号的分类？
+5、唯一标识用户身份的是什么？
+6、保存用户信息的配置文件是？里面的字段值都是什么意思？
+7、保存组账号基本信息的配置文件是？里面的字段值是什么意思？
+8、保存组账号管理信息的配置文件是？里面的字段值是什么意思？
+9、如何创建用户？如何修改用户的属性？分别说出下列选项意思-d  -G  -s   -u
+10、如何修改权限？如何修改归属关系？
+11、文件/目录默认的权限是？
+12、用户的初始配置文件来自于哪个模板目录
+13、如何创建组？如何删除组？如何往组里添加成员？如何删除组成员？
+
+
+
+
+
+
+
