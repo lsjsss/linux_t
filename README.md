@@ -1970,14 +1970,14 @@ getfacl 要查看的目录或文件
 2. 一个名为natasha的用户，其属于tarena组，这个组是该用户的从属组
 
     ```shell
-    useradd -g tarena natasha
+    useradd -G tarena natasha
     id natasha
     ```
 
 3. 一个名为harry的用户，其属于tarena组，这个组是该用户的从属组
 
     ```shell
-    useradd -g tarena harry
+    useradd -G tarena harry
     id harry
     ```
 
@@ -1985,27 +1985,27 @@ getfacl 要查看的目录或文件
 4. 一个名为sarah的用户，其在系统中没有可交互的shell，并且不是tarena这个组的成员用户
 
     ```shell
-    useradd -s /sbin/nologin sarach
-    id sarach
-    su sarach
+    useradd -s /sbin/nologin sarah
+    grep sarah /etc/passwd
     ```
 
 
 5. 为natasga、harry、sarah设置密码为redhat
 
     ```shell
-    echo redhat | passwd nataha
-    echo redhat | passwd harry
-    echo redhat | passwd sarah
+    echo redhat | passwd --stdin nataha
+    echo redhat | passwd --stdin harry
+    echo redhat | passwd --stdin sarah
     ```
 
 
 ### 案例2：配置文件/var/tmp/fstab的权限
-拷贝文件/etc/fstab到/var/tmp/fstab，配置文/var/tmp/fstab的权限
 
-```shell
-cp /etc/fstab /var/tmp/fstab
-```
+0. 拷贝文件/etc/fstab到/var/tmp/fstab，配置文/var/tmp/fstab的权限
+
+    ```shell
+    cp /etc/fstab /var/tmp/fstab
+    ```
 
 1. 文件/var/tmp/fstab的拥有着是root用户
 2. 文件/var/tmp/fstab属于root组
