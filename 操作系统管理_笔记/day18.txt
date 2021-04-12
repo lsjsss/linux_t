@@ -1,0 +1,174 @@
+案例：SGID练习
+1. 创建/nsdpublic目录，将属组改为tarena，进一步完成下列操作：
+1）新建子目录nsd01、子文件test01.txt，查看两者的权限及归属
+2）为此目录添加SGID权限，再新建子目录nsd02、子文件test02.txt
+3）查看上述子目录及文件的权限及归属
+
+	[root@A ~]# mkdir /nsdpublic
+	[root@A ~]# ls -ld /nsdpublic
+	[root@A ~]# grep tarena /etc/group
+	[root@A ~]# groupadd tarena
+	[root@A ~]# chown :tarena /nsdpublic
+	[root@A ~]# mkdir /nsdpublic/nsd01
+	[root@A ~]# touch /nsdpublic/test01.txt
+	[root@A ~]# ls -ld /nsdpublic/
+	[root@A ~]# ls -l /nsdpublic/test01.txt
+	[root@A ~]# ls -ld /nsdpublic/nsd01/
+	[root@A ~]# chmod g+s /nsdpublic/
+	[root@A ~]# ls -ld /nsdpublic/
+	[root@A ~]# touch /nsdpublic/test02.txt
+	[root@A ~]# mkdir /nsdpublic/nsd02
+	[root@A ~]# ls -ld /nsdpublic/nsd02
+	[root@A ~]# ls -l /nsdpublic/test02.txt
+	[root@A ~]# ls -ld /nsdpublic/nsd01/
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Sticky Bit权限（粘滞位，t权限）
+--占用其他人（Other）的x位
+--显示为t或T，取决于其他人是否有x权限（t：有x执行权限，T：没有x执行权限）
+--使用于目录，用来限制用户滥用写入权
+--在设置了粘滞位的文件夹下，即使用户有写入权限，也不能删除或改名其他用户文档
+
+	[root@A ~]#  mkdir  /home/public
+	[root@A ~]#  chmod 777 /home/public
+
+模拟zhangsan和lisi用户创建文件，此时创建的文件是任何人可以删除的
+
+	[root@A ~]#  su - zhangsan
+	[zhangsan@A ~]$ touch /home/public/zhangsan.txt
+	[zhangsan@A ~]$ exit
+	[root@A ~]#  su - lisi
+	[lisi@A ~]$ touch /home/public/lisi.txt
+	[lisi@A ~]$ rm -rf /home/public/zhangsan.txt                                #可以删除成功
+
+加上t权限
+	[root@A ~]#  chmod  o+t  /home/public
+	[root@A ~]#  su - zhangsan
+	[zhangsan@A ~]$ touch /home/public/zhangsan.txt
+	[zhangsan@A ~]$ rm -rf /home/public/lisi.txt                     #删除失败
+	
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+附加知识（扩展）
+Set  UID权限
+--占用属主（User）的x位
+--显示为s或S，取决于属主是否有x权限（s：有x执行权限，S：没有x执行权限）
+--仅对可执行的程序有意义
+--当其他用户执行带SUID标记的程序时，具有此程序属主的身份和相应权限
+
+	[root@A ~]# mkdir /abc
+	[root@A ~]# /usr/bin/mkdir /abc1
+	[root@A ~]# ls  /
+	[root@A ~]# cp /usr/bin/mkdir /usr/bin/mydir
+	[root@A ~]# /usr/bin/mydir /abc2
+
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ /usr/bin/mydir /abc4                      #创建失败
+	/usr/bin/mydir: 无法创建目录"/abc4": 权限不够
+
+加上SUID权限
+	[root@A ~]# chmod u+s /usr/bin/mydir
+	[root@A ~]# ls -ld /usr/bin/mydir
+	
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ /usr/bin/mydir /abc4                      #创建成功
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ACL策略简介
+文档的局限性
+--任何人只属于三种角色：属主、属组、其他人
+--无法实现更精细的控制
+
+acl访问策略
+--能够对个别用户、个别组设置独立的权限
+--大多数挂载的EXT3/4、XFS文件系统默认支持
+
+设置ACL访问控制策略
+使用getfacl、setfacl命令
+--getfacl  文档                         查看ACL权限
+--setfacl  [-R]  -m  u:用户名:权限     文档                          #-m  定义ACL策略
+--setfacl  [-R]  -m  g:组名:权限     文档     
+--setfacl  [-R]  -x  u:用户名     文档                                 #-x 删除指定的ACL策略
+--setfacl  [-R] -b     文档                                                #-b  删除所有的ACL策略
+
+	[root@A ~]# mkdir /nsd01
+	[root@A ~]#  setfacl -m u:lisi:rwx /nsd01
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]#  setfacl -m u:dc:rx /nsd01
+	[root@A ~]#  useradd dc
+	[root@A ~]# setfacl -m u:dc:rx /nsd01
+	[root@A ~]#  setfacl -m u:zhangsan:rx /nsd01
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]#  setfacl -x u:lisi /nsd01/
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]#  setfacl -b /nsd01/
+	[root@A ~]#  getfacl /nsd01
+	[root@A ~]# mkdir -p /opt/aa/bb/
+	[root@A ~]# setfacl -Rm  u:dc:rx /opt/aa/                                  #递归设置权限
+	[root@A ~]# getfacl /opt/aa/
+	[root@A ~]# getfacl /opt/aa/bb/
+
+设置拒绝权限
+	[root@A ~]# setfacl -m u:lisi:--- /nsd01/
+	[root@A ~]# getfacl /nsd01/
+	[root@A ~]# su - lisi
+	[lisi@A ~]$ cd /nsd01
+	-bash: cd: /nsd01: 权限不够
+
+总结：
+1、权限的分类是什么？
+2、基本权限的分类是什么？
+3、归属关系都有哪些？
+4、用户的分类？组账号的分类？
+5、唯一标识用户身份的是什么？
+6、保存用户信息的配置文件是？里面的字段值都是什么意思？
+7、保存组账号基本信息的配置文件是？里面的字段值是什么意思？
+8、保存组账号管理信息的配置文件是？里面的字段值是什么意思？
+9、如何创建用户？如何修改用户的属性？分别说出下列选项意思-d  -G  -s   -u
+10、如何修改权限？如何修改归属关系？
+11、文件/目录默认的权限是？
+12、用户的初始配置文件来自于哪个模板目录
+13、如何创建组？如何删除组？如何往组里添加成员？如何删除组成员？
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

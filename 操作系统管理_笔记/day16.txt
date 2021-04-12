@@ -1,0 +1,258 @@
+组账号基本操作
+解析组账号文件
+--/etc/group，保存组账号的基本信息
+--每个组记录一行，以：分割为4个字段
+字段1：组账号的名称
+字段2：密码占位符x
+字段3：组账号的GID号
+字段4：本组的成员用户列表
+
+/etc/gshadow：保存组账号的管理信息
+--每个组记录一行，以：分割为4个字段
+字段1：组账号的名称
+字段2：加密后的密码字符串
+字段3：本组的管理员列表
+字段4：本组的成员用户列表
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+添加组账号（groupadd命令）
+--格式：groupadd  [-g GID]  组名
+
+[root@A ~]# groupadd adminuser
+[root@A ~]#   grep adminuser /etc/group
+
+gpasswd管理组成员
+--格式：gpasswd  [选项]....   组名
+常用命令选项：
+-A：定义组管理员列表
+-a：添加组成员，每次只能加一个
+-d：删除组成员，每次只能删一个
+-M：定义组成员用户列表，可设置多个
+
+	[root@A ~]# groupadd stugrp
+	[root@A ~]# grep stugrp /etc/group
+	stugrp:x:1001:
+	[root@A ~]# useradd nsd01
+	[root@A ~]# useradd nsd02
+	[root@A ~]# useradd nsd03
+	[root@A ~]# useradd nsd04
+	[root@A ~]# grep nsd /etc/passwd
+	[root@A ~]# gpasswd -A nsd01 stugrp                                   #定义stugrp管理员列表是nsd01
+	[root@A ~]# grep stugrp /etc/gshadow
+	[root@A ~]# gpasswd -a nsd02 stugrp                                   #将nsd02用户加入到stugrp组里
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# gpasswd -a nsd03 stugrp
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# gpasswd -M nsd04,nsd05,nsd01 stugrp             #定义组成员列表为nsd04,nsd05,nsd01
+	[root@A ~]# grep stugrp /etc/group 
+	[root@A ~]# gpasswd -a nsd03 stugrp
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# gpasswd -d nsd03 stugrp                                  #将nsd03用户从stugrp组里移除
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+组的删除（groupdel）
+格式：groupdel  组名
+--删除的目标组不能是用户的基本组
+
+	[root@A ~]# groupdel stugrp                                     
+	[root@A ~]# grep stugrp /etc/group
+	[root@A ~]# groupdel nsd01
+	groupdel：不能移除用户“nsd01”的主组
+	[root@A ~]# 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+基本权限的类别
+访问方式（权限）
+--读取：允许查看内容-read             r
+--写入：允许修改内容-write           w
+--可执行：允许运行和切换-excute   x
+
+权限适用对象（归属）
+--所有者：拥有此文件/目录的用户-user                u
+--所属组：拥有此文件/目录的组-group                g
+--其他用户：除所有者、所属组以外的用户-other   o
+
+查看权限：
+使用ls  -l  命令
+--ls  -ld   文件或目录
+   以- 开头：文本文件
+   以d 开头：目录
+   以l 开头：快捷方式
+
+	[root@A ~]# ls -l /dev/cdrom 
+	lrwxrwxrwx. 1 root root 3 4月   1 07:38 /dev/cdrom -> sr0
+	[root@A ~]# ls -ld /nsd01/
+	drwxr-xr-x. 2 root root 6 4月   1 16:25 /nsd01/
+	[root@A ~]# ls -l /etc/passwd
+	-rw-r--r--. 1 root root 2667 4月   1 15:06 /etc/passwd
+	[root@A ~]#
+	注：输出信息包括7个字段
+                权限位       硬连接数      属主      属组     大小     最后修改时间    文件/目录名称
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+修改权限
+使用chmod命令
+--格式：chmod  [-R]  归属关系+-=权限类别    文件/目录
+-R：递归修改
+	
+	[root@A ~]# mkdir /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u-w /nsd01/                                   #所有者取消w权限
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u+w /nsd01                                   #所有者添加w权限
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod g=r /nsd01                                     #所属组只读权限
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod o=--- /nsd01                                   #其他人没有任何权限
+	[root@A ~]# ls -ld /nsd01
+
+同时设置权限
+	
+	[root@A ~]# chmod u=rwx,o=rx /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u=rwx,g=rx,o=rwx /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod ugo=rwx /nsd01
+	[root@A ~]# ls -ld /nsd01
+	[root@A ~]# chmod u=rwx,g=rwx,o=rwx /nsd01
+	[root@A ~]# mkdir -p /opt/aa/bb/cc
+	[root@A ~]# ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/
+	[root@A ~]# chmod o=--- /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/
+
+-R：递归修改权限，目录本身包括此目录里面的都会发生变化
+
+	[root@A ~]# chmod -R o=--- /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/
+	[root@A ~]# ls -ld /opt/aa/bb/cc
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+实验不同用户写入文件
+	[root@A ~]# mkdir /nsd02
+	[root@A ~]# echo 123 > /nsd02/a.txt
+	[root@A ~]# ls /nsd02/
+	[root@A ~]# cat /nsd02/a.txt 
+	[root@A ~]# ls -l /nsd02/a.txt
+	[root@A ~]# useradd zhangsan
+	[root@A ~]# id zhangsan
+
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ cat /nsd02/a.txt                                        #可以查看
+	[zhangsan@A ~]$ vim /nsd02/a.txt                                         #写入失败
+	[zhangsan@A ~]$ echo aaa > /nsd02/a.txt 
+	-bash: /nsd02/a.txt: 权限不够
+
+其他人赋予w权限
+
+	[root@A ~]# chmod o+w /nsd02/a.txt
+	[root@A ~]# ls -l /nsd02/a.txt
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ echo aaa > /nsd02/a.txt                            #写入成功
+
+对于文本文件：
+r：读取权限   cat    less   head   tail等
+w：写入权限    vim   >   >> 
+x：可执行权限   Shell脚本编写时可以赋予，默认文本文件每有可执行权限
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+实验不同用户操作目录：
+
+	[root@A ~]# ls -ld /nsd02/
+	[root@A ~]# id zhangsan
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan
+	[zhangsan@A ~]$ cd /nsd02/
+	[zhangsan@A nsd02]$ ls
+	a.txt
+	[zhangsan@A nsd02]$ exit
+
+其他人取消x权限
+
+	[root@A ~]# chmod o-x /nsd02/                 
+	[root@A ~]# ls -ld /nsd02/
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ cd /nsd02/                                 #失败
+	-bash: cd: /nsd02/: 权限不够
+	[zhangsan@A ~]$ ls /nsd02/                                  #查看虽然显示，但是异常
+	ls: 无法访问/nsd02/a.txt: 权限不够
+	a.txt
+	[zhangsan@A ~]$ ls -l /nsd02/                            
+		
+其他人赋予rwx权限，在目录下写入内容，但是修改的是目录里面的内容，对目录本身没有修改权限
+
+	[root@A ~]# chmod o=rwx /nsd02/
+	[root@A ~]# ls -ld /nsd02/
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ mkdir /nsd02/abc
+	[zhangsan@A ~]$ touch /nsd02/a.txt
+	[zhangsan@A ~]$ mv /nsd02/ /stu02                              #失败
+	mv: 无法将"/nsd02/" 移动至"/stu02": 权限不够
+	[zhangsan@A ~]$ 
+如果想对目录本身有修改的权限，找此目录的父目录即可
+
+	[root@A ~]# ls -ld /
+	[root@A ~]# chmod o=rwx /
+	[root@A ~]# ls -ld /
+
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ mv /nsd02/ /stu02                         #成功
+
+将/目录其他人权限改为rx
+
+	[root@A ~]# chmod o=rx /
+	[root@A ~]# ls -ld /
+
+其他人只给x权限，没有意义
+	[root@A ~]# chmod o=x /stu02
+	[root@A ~]# ls -ld /stu02
+使用zhangsan用户测试
+	[root@A ~]# su - zhangsan 
+	[zhangsan@A ~]$ cd /stu02/
+	[zhangsan@A stu02]$ ls
+	ls: 无法打开目录.: 权限不够
+	[zhangsan@A stu02]$ mkdir aaa
+	mkdir: 无法创建目录"aaa": 权限不够
+	[zhangsan@A stu02]$ 
+
+其他人赋予rx权限
+
+	[root@A ~]# chmod o=rx /stu02/
+	[root@A ~]# ls -ld /stu02
+
+
+目录的r权限：能够ls浏览此目录内容
+目录的w权限：能够执行rm/cp/mv/mkdir/touch等更改目录内容的操作
+目录的x权限：能够cd切换到此目录
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
