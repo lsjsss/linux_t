@@ -2019,7 +2019,7 @@ getfacl 要查看的目录或文件
 
     ```shell
     chmod -x /var/tmp/fstab
-    ls -ld /var/tmp/fstab
+    ls -l /var/tmp/fstab
     ```
 
 4. 用户natasha能够对文件/var/tmp/fstab执行读和写操作
@@ -2032,14 +2032,14 @@ getfacl 要查看的目录或文件
 5. 用户harry对文件/var/tmp/fstab既不能读，也不能写
 
     ```shell
-    setfacl -m u:harry:--- /var/tmp/fstab
-    setfacl /var/tmp/fstab
+    setfacl -m u:harry:- /var/tmp/fstab
+    getfacl /var/tmp/fstab
     ```
 
 6. 所有其他用户（当前的和将来的）能够对文件/var/tmp/fstab进行读操作
 
     ```shell
-    chmod o=r /var/tmp/fstab
+    ls -l /var/tmp/fstab
     ```
 
 
