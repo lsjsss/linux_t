@@ -1696,6 +1696,45 @@ lsblk	#查看分区详细信息，识别分区
 	```
 
 
+### 案例10：设置基本权限
+
+0. 新建/nsddir1/目录，在此目录下新建readme.txt文件，并进一步完成下列操作：
+
+    ```shell
+    mkdir /nsddir1/
+    touch /nsddir1/readme.txt
+    ```
+
+1. 使用户zhangsan能够在此目录下创建/删除子目录
+
+    ```shell
+    useradd zhangsan
+    setfacl -m u:zhangsan:rwx /nsddir1/
+    ```
+
+2. 使用户zhangsan能够修改readme.txt文件
+
+    ```shell
+    setfacl -m u:zhangsan:rw /nsddir1/readme.txt
+    vim /nsddir1/readme.txt
+    ```
+
+3. 调整此目录的权限，使任何用户都不能进入，然后测试用户zhangsan是否还能修改readme.txt
+
+    ```shell
+    chmod -r /nsddir1/
+    ls -ld /nsddr1/readme.txt
+    vim /nsddr1/readme.txt
+    ```
+
+4. 为此目录及其下所有文档设置权限 rwxr-x---
+
+    ```shell
+    chmod -R 760 /nsddir1/
+    ls -ld /nsddr1/readme.txt
+    ```
+
+
 ## 练习 4.7
 ### 案例3：配置用户和组账号
 1. 新建用户alex，其用户ID 为3456，密码是flectrag
