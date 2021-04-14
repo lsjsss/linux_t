@@ -971,6 +971,39 @@ mkfs.xfs /dev/sdb2	#格式化分区为xfs文件系统类型
 ```
 
 
+### 挂载使用
+
+```shell
+mkdir /dvd/mdb
+mount /dev/sdb1 /dvd
+ls /dvd
+mkdir /dvd/abc	#验证写入数据
+mount /dev/sdb2 /mdb
+mkdir /mdb/abc01	#验证写入数据
+ls /mdb/
+df -h /mypart1	#查看挂载设备的使用情况
+```
+
+
+
+
+
+添加一块20G硬盘，采用MBR的方式进行分区，要求如下：
+1. 划分3个2G的主分区，一个扩展分区，2个1G的逻辑分区
+```shell
+fdisk /dev/sdb
+ n
+Enter
+Enter
++2G
++2G
++2G
+
++1G
++1G
+
+
+
 
 ---
 
