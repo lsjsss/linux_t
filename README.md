@@ -941,6 +941,7 @@ lsblk	#查看分区详细信息，查看识别硬盘
 
 最多支持128个主分区
 最大支持18EB的容量
+1EB=1024*1024TB
 
 ### 分区工具
 
@@ -954,6 +955,20 @@ fdisk /dev/sdb	#进入分区工具
 **q**：不保存退出
 
 
+
+### 格式化分区
+
+文件系统类型：
+> windows：NTFS FAT32
+>
+> Linux：ext4 xfs
+
+
+```shell
+mkfs.ext4 /deb/sdb1	#将sdb1格式化为ext4文件系统类型
+blkid /dev/sdb2	#查看分区文件系统类型，UUID是设备的唯一标识
+mkfs.xfs /dev/sdb2	#格式化分区为xfs文件系统类型
+```
 
 
 
