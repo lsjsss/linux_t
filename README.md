@@ -965,9 +965,9 @@ fdisk /dev/sdb	#进入分区工具
 
 
 ```shell
-mkfs.ext4 /deb/sdb1	#将sdb1格式化为ext4文件系统类型
-blkid /dev/sdb2	#查看分区文件系统类型，UUID是设备的唯一标识
-mkfs.xfs /dev/sdb2	#格式化分区为xfs文件系统类型
+mkfs.ext4 /deb/sdb1    #将sdb1格式化为ext4文件系统类型
+blkid /dev/sdb2    #查看分区文件系统类型，UUID是设备的唯一标识
+mkfs.xfs /dev/sdb2    #格式化分区为xfs文件系统类型
 ```
 
 
@@ -977,31 +977,13 @@ mkfs.xfs /dev/sdb2	#格式化分区为xfs文件系统类型
 mkdir /dvd/mdb
 mount /dev/sdb1 /dvd
 ls /dvd
-mkdir /dvd/abc	#验证写入数据
+mkdir /dvd/abc    #验证写入数据
 mount /dev/sdb2 /mdb
-mkdir /mdb/abc01	#验证写入数据
+mkdir /mdb/abc01    #验证写入数据
 ls /mdb/
-df -h /mypart1	#查看挂载设备的使用情况
+df -h /mypart1    #查看挂载设备的使用情况
 ```
 
-
-
-
-
-添加一块20G硬盘，采用MBR的方式进行分区，要求如下：
-1. 划分3个2G的主分区，一个扩展分区，2个1G的逻辑分区
-
-    ```shell
-    fdisk /dev/sdb
-     n
-    
-    +2G
-    +2G
-    +2G
-    
-    +1G
-    +1G
-    ```
 
 
 #### 开机自动挂载
@@ -1014,7 +996,7 @@ vim /etc/fstab
 > 配置文件/etc/fstab 的显示格式：**设备路径**  **挂载点**  **类型**  **参数**  **备份标记**[1:备份，0:不备份]  **检测顺序**[1:检测，0:不检测]
 
 ```shell
-mount -a	#作用1：检测etc/fstab下的问题，作用2：查看文件中的设备有没有挂载的会自动进行挂载
+mount -a    #作用1：检测etc/fstab下的问题，作用2：查看文件中的设备有没有挂载的会自动进行挂载
 ```
 
 > 示例：实现开机自动挂载
@@ -1025,7 +1007,7 @@ mount /mypt2
 vim /etc/fstab
 	/dev/sdb3 /mytp1 ext3 defaults 0 0
 	/dev/sdb7 /mytp1 xfs defaults 0 0
-	/dev/cdrom /mnt iso9660 defaults 0 0	#光盘的文件类型为 iso9660
+	/dev/cdrom /mnt iso9660 defaults 0 0    #光盘的文件类型为 iso9660
 tail -2 /etc/fstab
 mount -a
 df -h
@@ -1051,10 +1033,10 @@ df -h
 parted /dev/sdc
 
 #
-mktab gpt	#指定分区模式为 gpt
-print	#查看分区表
-mkpart	#交互式创建分区
-unit GB	#以GB单位显示分区表
+mktab gpt    #指定分区模式为 gpt
+print    #查看分区表
+mkpart    #交互式创建分区
+unit GB    #以 GB 单位显示分区表
 ```
 
 
