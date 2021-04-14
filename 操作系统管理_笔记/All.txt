@@ -1733,9 +1733,138 @@ acl访问策略
 12、用户的初始配置文件来自于哪个模板目录
 13、如何创建组？如何删除组？如何往组里添加成员？如何删除组成员？
 
+Day19
+1、权限的分类是什么？
+            基本权限，附加权限，ACL权限
+
+2、基本权限的分类是什么？
+	r   w    x
+
+3、归属关系都有哪些？
+	属主、属组、其他人
+
+4、用户的分类？组账号的分类？
+	超级管理root、系统用户、普通用户
+	组账号： 基本组、附加组
+
+5、唯一标识用户身份的是什么？     UID
+6、保存用户信息的配置文件是？里面的字段值都是什么意思？
+	/etc/passwd
+	用户名：密码占位符x：UID：GID：用户描述信息：用户家目录：登录shell解释器
+
+7、保存组账号基本信息的配置文件是？里面的字段值是什么意思？
+	/etc/group
+	组名称：密码占位符x：GID：组成员列表
+
+8、保存组账号管理信息的配置文件是？里面的字段值是什么意思？
+	 /etc/gshadow
+	组名称：加密后的密码字符串：管理员列表：组成员列表
+
+9、如何创建用户？如何修改用户的属性？分别说出下列选项意思-d  -G  -s   -u
+               useradd、usermod
+
+10、如何修改权限？如何修改归属关系？
+	chmod、chown
+
+11、文件/目录默认的权限是？
+	文件：644    目录：755
+	取决于umask设置
+
+12、用户的初始配置文件来自于哪个模板目录
+	/etc/skel
+
+13、如何创建组？如何删除组？如何往组里添加成员？如何删除组成员？
+	groupadd      组名、groupdel    组名     、gpasswd   -a   用户名   组名
 
 
+案例1：创建用户和组
+1、一个名为tarena的组
+2、一个名为natasha的用户，其属于tarena组，这个组是该用户的从属组
+3、一个名为harry的用户，其属于tarena组，这个组是该用户的从属组
+4、一个名为sarah的用户，其在系统中没有可交互的shell，并且不是tarena这个组的成员用户
+5、为natasha、harry、sarah设置密码为redhat
 
+	[root@A ~]# groupadd tarena
+	[root@A ~]# grep tarena /etc/group
+	[root@A ~]# useradd -G tarena natasha
+	[root@A ~]# id natasha
+	uid=1001(natasha) gid=1002(natasha) 组=1002(natasha),1001(tarena)
+	[root@A ~]# useradd -G tarena harry
+	[root@A ~]# id harry
+	uid=1002(harry) gid=1003(harry) 组=1003(harry),1001(tarena)
+	[root@A ~]# useradd -s /sbin/nologin sarah
+	[root@A ~]# grep sarah /etc/passwd
+	sarah:x:1004:1005::/home/sarah:/sbin/nologin
+	[root@A ~]# echo redhat | passwd --stdin natasha
+	[root@A ~]# echo redhat | passwd --stdin harry
+	[root@A ~]# echo redhat | passwd --stdin sarah
+
+案例2：配置文件/var/tmp/fstab的权限
+拷贝文件/etc/fstab到/var/tmp/fstab，配置文件/var/tmp/fstab的权限：
+1、文件/var/tmp/fstab的拥有者是root用户
+2、文件/var/tmp/fstab属于root组
+3、文件/var/tmp/fstab对任何人都不可执行
+4、用户natasha能够对文件/var/tmp/fstab执行读和写操作
+5、用户harry对文件/var/tmp/fstab既不能读，也不能写
+6、所有其他用户（当前的和将来的）能够对文件/var/tmp/fstab进行读操作
+
+	[root@A ~]# cp /etc/fstab /var/tmp/fstab
+	[root@A ~]# ls -l /var/tmp/fstab
+	-rw-r--r--. 1 root root 541 4月  12 08:35 /var/tmp/fstab
+	[root@A ~]# setfacl -m u:natasha:rw /var/tmp/fstab
+	[root@A ~]# setfacl -m u:harry:- /var/tmp/fstab
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Day20
+分区规划及使用
+一个扇区是512字节
+一块硬盘的“艺术”之旅
+? 识别硬盘 => 分区规划 => 格式化 => 挂载使用
+    毛坯楼层 => 打隔断 => 装修 => 入驻
+
+一、识别硬盘
+[root@A ~]# lsblk
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   80G  0 disk
+├─sda1            8:1    0    1G  0 part /boot
+└─sda2            8:2    0   79G  0 part
+  ├─centos-root 253:0    0   50G  0 lvm  /
+  ├─centos-swap 253:1    0    2G  0 lvm  [SWAP]
+  └─centos-home 253:2    0   27G  0 lvm  /home
+sdb               8:16   0   10G  0 disk
+sr0              11:0    1  8.8G  0 rom  /run/media/root/Ce
+[root@A ~]#
+
+二、分区规划
+分区模式：MBR    GPT
+
+MBR分区模式:
+分区类型：主分区、扩展分区、逻辑分区
+最多只能有4个主分区
+扩展分区最多只能有一个，空间不能直接存储数据
+逻辑分区可以有无限个，必须建立在扩展分区上
+最大空间支持：2T
+
+  3个主分区+1个扩展分区+n个逻辑分区（只限实验操作时）
+
+	[root@A ~]# fdisk    /dev/sdb
+	创建分区n--->回车--->回车--->回车---->Last 扇区+2G
+	创建分区n--->回车--->回车--->回车---->Last 扇区+2G
+	p                                //打印分区表
+	w		 //保存（将更改写入磁盘）
+	d    分区号                //删除分区
+	q                             //不保存退出
+	[root@A ~]#  lsblk
+	[root@A ~]#  ls /dev/sdb*
+	[root@A ~]# fdisk    /dev/sdb
+	创建分区n--->回车--->回车--->回车---->Last 扇区+2G
+	创建分区n--->回车--->回车--->回车---->Last 扇区 回车
+	创建分区n--->回车--->Last 扇区 +1G
+	创建分区n--->回车--->Last 扇区 +1G
+	w
+	[root@A ~]#  lsblk
 
 
 

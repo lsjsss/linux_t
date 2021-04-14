@@ -1,0 +1,129 @@
+1��Ȩ�޵ķ�����ʲô��   
+            ����Ȩ�ޣ�����Ȩ�ޣ�ACLȨ��
+
+2������Ȩ�޵ķ�����ʲô��
+	r   w    x
+      
+3��������ϵ������Щ��
+	���������顢������
+
+4���û��ķ��ࣿ���˺ŵķ��ࣿ
+	��������root��ϵͳ�û�����ͨ�û�
+	���˺ţ� �����顢������
+
+5��Ψһ��ʶ�û���ݵ���ʲô��     UID
+6�������û���Ϣ�������ļ��ǣ�������ֶ�ֵ����ʲô��˼��  
+	/etc/passwd
+	�û���������ռλ��x��UID��GID���û�������Ϣ���û���Ŀ¼����¼shell������
+
+7���������˺Ż�����Ϣ�������ļ��ǣ�������ֶ�ֵ��ʲô��˼��
+	/etc/group
+	�����ƣ�����ռλ��x��GID�����Ա�б�
+
+8���������˺Ź�����Ϣ�������ļ��ǣ�������ֶ�ֵ��ʲô��˼��
+	 /etc/gshadow
+	�����ƣ����ܺ�������ַ���������Ա�б����Ա�б�
+
+9����δ����û�������޸��û������ԣ��ֱ�˵������ѡ����˼-d  -G  -s   -u
+               useradd��usermod
+
+10������޸�Ȩ�ޣ�����޸Ĺ�����ϵ��
+	chmod��chown
+
+11���ļ�/Ŀ¼Ĭ�ϵ�Ȩ���ǣ�
+	�ļ���644    Ŀ¼��755
+	ȡ����umask����
+
+12���û��ĳ�ʼ�����ļ��������ĸ�ģ��Ŀ¼
+	/etc/skel
+
+13����δ����飿���ɾ���飿�����������ӳ�Ա�����ɾ�����Ա��
+	groupadd      ������groupdel    ����     ��gpasswd   -a   �û���   ����       
+
+
+����1�������û�����
+1��һ����Ϊtarena����
+2��һ����Ϊnatasha���û���������tarena�飬������Ǹ��û��Ĵ�����
+3��һ����Ϊharry���û���������tarena�飬������Ǹ��û��Ĵ�����
+4��һ����Ϊsarah���û�������ϵͳ��û�пɽ�����shell�����Ҳ���tarena�����ĳ�Ա�û�
+5��Ϊnatasha��harry��sarah��������Ϊredhat
+	
+	[root@A ~]# groupadd tarena
+	[root@A ~]# grep tarena /etc/group
+	[root@A ~]# useradd -G tarena natasha
+	[root@A ~]# id natasha
+	uid=1001(natasha) gid=1002(natasha) ��=1002(natasha),1001(tarena)
+	[root@A ~]# useradd -G tarena harry
+	[root@A ~]# id harry
+	uid=1002(harry) gid=1003(harry) ��=1003(harry),1001(tarena)
+	[root@A ~]# useradd -s /sbin/nologin sarah
+	[root@A ~]# grep sarah /etc/passwd
+	sarah:x:1004:1005::/home/sarah:/sbin/nologin
+	[root@A ~]# echo redhat | passwd --stdin natasha
+	[root@A ~]# echo redhat | passwd --stdin harry
+	[root@A ~]# echo redhat | passwd --stdin sarah
+
+����2�������ļ�/var/tmp/fstab��Ȩ��
+�����ļ�/etc/fstab��/var/tmp/fstab�������ļ�/var/tmp/fstab��Ȩ�ޣ�
+1���ļ�/var/tmp/fstab��ӵ������root�û�
+2���ļ�/var/tmp/fstab����root��
+3���ļ�/var/tmp/fstab���κ��˶�����ִ��
+4���û�natasha�ܹ����ļ�/var/tmp/fstabִ�ж���д����
+5���û�harry���ļ�/var/tmp/fstab�Ȳ��ܶ���Ҳ����д
+6�����������û�����ǰ�ĺͽ����ģ��ܹ����ļ�/var/tmp/fstab���ж�����
+	
+	[root@A ~]# cp /etc/fstab /var/tmp/fstab
+	[root@A ~]# ls -l /var/tmp/fstab 
+	-rw-r--r--. 1 root root 541 4��  12 08:35 /var/tmp/fstab
+	[root@A ~]# setfacl -m u:natasha:rw /var/tmp/fstab
+	[root@A ~]# setfacl -m u:harry:- /var/tmp/fstab	
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
