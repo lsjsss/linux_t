@@ -965,9 +965,9 @@ fdisk /dev/sdb	#进入分区工具
 
 
 ```shell
-mkfs.ext4 /deb/sdb1	#将sdb1格式化为ext4文件系统类型
-blkid /dev/sdb2	#查看分区文件系统类型，UUID是设备的唯一标识
-mkfs.xfs /dev/sdb2	#格式化分区为xfs文件系统类型
+mkfs.ext4 /deb/sdb1    #将sdb1格式化为ext4文件系统类型
+blkid /dev/sdb2    #查看分区文件系统类型，UUID是设备的唯一标识
+mkfs.xfs /dev/sdb2    #格式化分区为xfs文件系统类型
 ```
 
 
@@ -977,33 +977,67 @@ mkfs.xfs /dev/sdb2	#格式化分区为xfs文件系统类型
 mkdir /dvd/mdb
 mount /dev/sdb1 /dvd
 ls /dvd
-mkdir /dvd/abc	#验证写入数据
+mkdir /dvd/abc    #验证写入数据
 mount /dev/sdb2 /mdb
-mkdir /mdb/abc01	#验证写入数据
+mkdir /mdb/abc01    #验证写入数据
 ls /mdb/
-df -h /mypart1	#查看挂载设备的使用情况
+df -h /mypart1    #查看挂载设备的使用情况
 ```
 
 
 
-
-
-添加一块20G硬盘，采用MBR的方式进行分区，要求如下：
-1. 划分3个2G的主分区，一个扩展分区，2个1G的逻辑分区
+#### 开机自动挂载
+开机自动挂载配置文件：**/etc/fstab**
 
 ```shell
-fdisk /dev/sdb
- n
+vim /etc/fstab
+```
 
-+2G
-+2G
-+2G
+> 配置文件/etc/fstab 的显示格式：**设备路径**  **挂载点**  **类型**  **参数**  **备份标记**[1:备份，0:不备份]  **检测顺序**[1:检测，0:不检测]
 
-+1G
-+1G
+```shell
+mount -a    #作用1：检测etc/fstab下的问题，作用2：查看文件中的设备有没有挂载的会自动进行挂载
+```
+
+> 示例：实现开机自动挂载
+
+```shell
+mount /mypt1
+mount /mypt2
+vim /etc/fstab
+	/dev/sdb3 /mytp1 ext3 defaults 0 0
+	/dev/sdb7 /mytp1 xfs defaults 0 0
+	/dev/cdrom /mnt iso9660 defaults 0 0    #光盘的文件类型为 iso9660
+tail -2 /etc/fstab
+mount -a
+df -h
 ```
 
 
+### 交换空间
+
+> 相当于虚拟内存，
+>
+> 当物理内存不够用时，使用磁盘空间来模拟内存
+>
+> 在一定程度上缓解内存不足的问题
+> 
+> 交换分区：以空闲分区充当的交换空间
+>
+> 交换文件：以文件模拟的设备充当交换空间
+
+
+#### parted常用分区指令
+
+```shell
+parted /dev/sdc
+
+#
+mktab gpt    #指定分区模式为 gpt
+print    #查看分区表
+mkpart    #交互式创建分区
+unit GB    #以 GB 单位显示分区表
+```
 
 
 
@@ -2172,6 +2206,85 @@ fdisk /dev/sdb
     ```shell
     ls -l /var/tmp/fstab
     ```
+
+
+
+## 4.14练习
+划分3个2G的主分区，一个扩展分区，3个2G的逻辑分区
+1. 利用sdb硬盘划分2个1G的逻辑分区
+
+    ```shell
+    lsblk
+    fdisk /dev/sdb
+    n
+    p
+    
+    +2G
+    n
+    p
+    
+    +2G
+    n
+    p
+    
+    +2G
+    n
+    e
+    
+    
+    n
+    
+    +2G
+    n
+    
+    +2G
+    n
+    
+    +2G
+    ```
+
+2. 将/dev/sdb3格式化成ext3的文件系统类型，第一个逻辑分区格式化为xfs的文件系统类型，第3个逻辑分区格式化为ext4的文件系统类型
+
+    ```shell
+    mkfs.xfs /dev/sdb5
+    blkid /dev/sdb5
+    ```
+
+
+3. 分别查看几个分区的文件类型
+
+    ```shell
+    blkid /dev/sdb1
+    blkid /dev/sdb2
+    blkid /dev/sdb3
+    blkid /dev/sdb4
+    blkid /dev/sdb5
+    blkid /dev/sdb6
+    blkid /dev/sdb7
+    ```
+
+4. 将/dev/sdb3挂在到/mypt1文件夹下，第3个逻辑分区挂载到/mypt2
+
+    ```shell
+    mount /dev/sdb3 /mytp1
+    df -h /mypt1
+    
+    mkfs.xfs /dev/sdb7
+    mkdir /mypt2
+    mount /dev/sdb7 /mypt2
+    df -h /mypt2
+    ```
+
+> 刷新分区表
+
+    ```shell
+    partprobe /dev/sdb	#刷新分区表 或者reboot
+    ```
+
+
+
+
+
 
 
 

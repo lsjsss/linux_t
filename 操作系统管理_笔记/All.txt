@@ -1867,4 +1867,129 @@ MBR分区模式:
 	[root@A ~]#  lsblk
 
 
+添加一块20G硬盘，采用MBR的方式进行分区，要求如下：
+1、划分3个2G的主分区，一个扩展分区，2个1G的逻辑分区
+
+
+三、格式化分区
+
+格式化：赋予空间文件系统的过程
+文件系统：空间存储数据的规则
+
+常用的格式化工具集
+mkfs工具集
+--mkfs.ext3   分区设备路径
+--mkfs.ext4    分区设备路径
+--mkfs.xfs      分区设备路径
+--mkfs.vfat   -F 32   分区设备路径
+
+	[root@A ~]# mkfs.ext4 /dev/sdb1                                         #格式化分区为ext4文件系统类型
+	[root@A ~]# blkid /dev/sdb1                                                #查看分区文件系统类型
+	/dev/sdb1: UUID="8ded9d16-3bfc-4baa-903f-549e7b60715b" TYPE="ext4"              #UUID是设备的唯一标识
+	[root@A ~]# mkfs.xfs /dev/sdb2                                           #格式化分区为xfs文件系统类型
+	[root@A ~]# blkid /dev/sdb2
+	/dev/sdb2: UUID="6892ca0a-5052-4153-862b-13f54616097a" TYPE="xfs"
+
+四、挂载使用
+
+	[root@A ~]# mkdir /dvd /mdb
+	[root@A ~]# mount /dev/sdb1 /dvd
+	[root@A ~]# ls /dvd
+	[root@A ~]# mkdir /dvd/abc                                  #验证写入数据
+	[root@A ~]# mount /dev/sdb2 /mdb
+	[root@A ~]# mkdir /mdb/abc01                            #验证写入数据
+	[root@A ~]# ls /mdb/
+	[root@A ~]# df -h                             #查看正在挂载设备的使用情况
+	[root@A ~]# lsblk
+
+
+
+	[root@A ~]# partprobe /dev/sdb                    #刷新分区表 或者reboot
+
+练习：
+添加一块20G硬盘，采用MBR的方式进行分区，要求如下：
+1、划分3个2G的主分区，一个扩展分区，3个2G的逻辑分区
+2、将/dev/sdb3格式化成ext3的文件系统类型，第一个逻辑分区格式化为xfs的文件系统类型
+3、分别查看几个分区的文件类型
+4、将/dev/sdb3挂载到/mypt1文件夹下，第3个逻辑分区挂载到/mypt2文件夹下
+	[root@A ~]# lsblk
+	.......
+	sdb      8:16   0   20G  0 disk
+	├─sdb1   8:17   0    2G  0 part
+	├─sdb2   8:18   0    2G  0 part
+	├─sdb3   8:19   0    2G  0 part
+	├─sdb4   8:20   0    1K  0 part
+	├─sdb5   8:21   0    2G  0 part
+	├─sdb6   8:22   0    2G  0 part
+	└─sdb7   8:23   0    2G  0 part
+	[root@A ~]# mkfs.ext3 /dev/sdb3
+	[root@A ~]# blkid /dev/sdb3
+	[root@A ~]# mkfs.xfs /dev/sdb5
+	[root@A ~]# blkid /dev/sdb5
+	[root@A ~]# mkdir /mypt1
+	[root@A ~]# mount /dev/sdb3 /mypt1/
+	[root@A ~]# df -h /mypt1
+	[root@A ~]# mkfs.xfs /dev/sdb7
+	[root@A ~]# mkdir /mypt2
+	[root@A ~]# mount /dev/sdb7 /mypt2
+	[root@A ~]# df -h /mypt2
+
+实现开机自动挂载
+--配置/etc/fstab文件
+格式：
+   设备路径         挂载点        类型        参数      备份标记     检测顺序
+
+	[root@A ~]#  umount   /mypt1
+	[root@A ~]#  umount  /mypt2
+	[root@A ~]#  vim  /etc/fstab
+	[root@A ~]# tail -2 /etc/fstab
+	/dev/sdb3   /mypt1     ext3  defaults  0 0
+	/dev/sdb7   /mypt2     xfs   defaults  0 0
+	[root@A ~]# mount  -a
+	[root@A ~]#  df  -h
+	[root@A ~]#  vim  /etc/fstab
+	/dev/cdrom    /mnt   iso9660   defaults  0 0                            #将光盘设备设置为开机自动挂载
+	[root@A ~]#  mount -a
+	[root@A ~]#  ls   /mnt
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+GPT分区模式，使用parted工具进行分区
+parted常用分区指令
+--help  				//查看指令帮助
+--mktable  msdos|gpt		//建立指定模式分区表
+--mkpart
+--print 				//查看分区表
+--rm  序号  			//删除指定的分区
+--quit 				//退出交互环境
+
+关机添加一块10G硬盘，利用GPT分区模式进行分区
+
+	[root@A ~]# parted /dev/sdc
+	(parted) mktable gpt                                      #指定分区模式
+                (parted) print                                                  #查看分区表
+	(parted) mkpart                                              #创建分区
+                分区名称？  []? abc
+                文件系统类型？  [ext2]? ext4
+                起始点？ 0
+                结束点？ 2G
+              忽略/Ignore/放弃/Cancel? Ignore
+              (parted) print
+              (parted) mkpart
+              分区名称？  []? abc
+              文件系统类型？  [ext2]? ext4
+               起始点？ 2G
+               结束点？ 4G
+ 	(parted) print
+                (parted) unit GB
+                (parted) print
+	[root@A ~]# lsblk
+
+
+
+
+
+
+
+
 
