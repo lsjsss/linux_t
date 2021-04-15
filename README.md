@@ -2282,9 +2282,63 @@ unit GB    #以 GB 单位显示分区表
     ```
 
 
+## 练习4.15
+案例：硬盘分区练习
+添加一块10G硬盘，采用msdos（MBR）分区模式，完成如下操作
+1. 划分2个2G的主分区，一个1G的主分区，2个1G的逻辑分区
+
+    ```shell
+    lsblk
+    fdisk /dev/sdb
+        n
+        p
+        1
+        
+        +2G
+        n
+        p
+        2
+        
+        +2G
+        n
+        p
+        3
+        
+        +1G
+        n
+        e
+        
+        
+        n
+        
+        +2G
+        n
+        
+        +2G
+        p
+        w
+    ```
 
 
+2. 将/dev/sdb3格式化为ext4的文件系统类型。将第2个逻辑分区格式化为xfs的文件系统类型
 
+    ```shell
+    mkfs.ext4 /dev/sdb3
+    blkid /dev/sdb3
+    
+    mkfs.xfs /dev/sdb6
+    blkid /dev/sdb6
+    ```
+
+3. 实现开机自动挂/dev/sdb3，挂载到/mydb1目录
+
+    ```shell
+    vim /etc/fstab
+        /dev/sdb3 /mydb1 ext4 defaults 0 0
+    mount -a	#检测文件语法、自动挂载
+    mkdir /mydb1
+    df -h
+    ```
 
 
 
