@@ -2378,7 +2378,8 @@ lvs
 
 
 ## 练习4.15
-案例：硬盘分区练习
+
+### 案例：硬盘分区练习
 添加一块10G硬盘，采用msdos（MBR）分区模式，完成如下操作
 1. 划分2个2G的主分区，一个1G的主分区，2个1G的逻辑分区
 
@@ -2435,6 +2436,45 @@ lvs
     df -h
     ```
 
+
+### 练习：新建一个逻辑卷
+使用/dev/sdb3构建LVM存储
+1. 新建一个名为systemvg的卷组
+
+    ```shell
+    vgcreate systemvg /dev/sdc{3,5}
+    ```
+
+2. 在此卷组中创建名为vo的逻辑卷，大小为180M
+
+    ```shell
+    lvcreate -L 180M -n vo systemvg 
+    ```
+
+3. 将逻辑卷vo格式化为xfs的文件系统类型
+
+    ```shell
+    mkfs.xfs /dev/systemvg/vo
+    ```
+
+4. 将逻辑卷vo挂载到/myvo目录，并在此目录下建立一个测试文件votest.txt，内容为“I AM KING”
+
+    ```shell
+    mkdir /myvo
+    mount /dev/systemvg/vo /myvo
+    vim /myvo/votest.txt
+    "I AM KING"
+    cat /myvo/votest.txt
+    ```
+
+5. 将逻辑卷实现自动开机自动挂载到/myvo目录
+
+    ```shell
+    vim /etc/fstab 
+    /dev/systemvg/vo /myvo xfs defaults 0 0
+    umount /myvo
+    mount -a
+    ```
 
 
 > 如有侵权，请联系作者删除
