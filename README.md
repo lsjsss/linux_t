@@ -1039,24 +1039,41 @@ mkpart    #交互式创建分区
 unit GB    #以 GB 单位显示分区表
 ```
 
-
-#### 使用交换分区做交换空间
+#### 使用交换分区做交换空间（格式化交换文件）
 
 ```shell
-mkswap /dev/sdb1	#将分区 /dev/sdb1 格式化为交换分区
-free -m	#查看剩余内存的使用量及交换空间的大小（单位：MB）
-swapon /dev/sdb1	#启用交换分区 /dev/sdb1
-swapon -s	#查看交换分区
-swapoff /dev/sdb1	#停止交换分区 /dev/sdb1
+mkswap -f 要交换文件
+```
+选项
+> **f**：强制执行
 
-vim /etc/fstab	#将交换分区设置为开机自动挂载
-    /dev/sdb1 swap swap defaults 0 0
-    /dev/sdb2 swap swap defaults 0 0
+```shell
+mkswap /dev/sdb1    #将分区 /dev/sdb1 格式化为交换分区
+free -m	#查看剩余内存的使用量及交换空间的大小（单位：MB）
+
+swapon /dev/sdb1    #启用交换分区 /dev/sdb1
+swapon -s    #查看交换分区
+swapoff /dev/sdb1    #停用交换分区 /dev/sdb1
+
+vim /etc/fstab    #将交换分区设置为开机自动挂载
+/dev/sdb1 swap swap defaults 0 0
+/dev/sdb2 swap swap defaults 0 0
 tail -2 /etc/fstab
 swapon -a
 swapon -s
 ```
 
+
+#### 创建Swap文件
+
+利用文件创建Swap空间
+
+```shell
+dd if=源设备 of=目标设备 bs=块大小 count=块数
+
+dd if=dev/xero of=/opt/swap.db bs=1M    #示例
+ls -lh /opt/swap.db
+```
 
 
 ---
