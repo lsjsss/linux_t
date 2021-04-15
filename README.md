@@ -1089,6 +1089,51 @@ swapon -a
 swapon -s
 ```
     
+## 逻辑卷
+
+> 优势：
+>
+> 1. 可以整合分散的空间
+>
+> 2. 逻辑卷支持扩容（动态扩容）
+
+
+### LVM快速部署及使用
+#### 创建卷组
+格式：vgcreate 卷组名 设备路径
+
+零散空闲存储 -> 整合的虚拟磁盘 -> 虚拟的分区
+物理卷（PV）        卷组（VG）        逻辑卷（LV）
+
+| 功能 | 物理卷管理 | 卷组管理 | 逻辑卷管理 |
+| -- | -- | -- | -- |
+| Scan扫描 | pvscan | vgscan | lvscan |
+| Create创建 | pvcreate | vgcreate | lvcreate |
+| Display显示 | pvdisplay | vgdisplay | lvdisplay |
+| Remove删除 | pvremove | vgremove | lvremove |
+| Ectend扩展 | / | vgextend | lvextend |
+
+
+```shell
+pvcreate /dev/sdb1 /dev/sdb2	#创建物理卷，可以不用写，直接使用vgcreate创建也是可以的
+pvs	#查看物理卷信息
+vgcreate myvg /dev/sdb1 /dev/sdb2	#创建卷组
+vgs	#查看卷组信息
+```
+
+#### 创建逻辑卷
+
+格式：
+
+```shell
+lvcreate -L 逻辑卷大小 -n 逻辑卷名 卷组名
+```
+
+示例：
+```shell
+lvcreate -L 16G -n myvo myvg
+lvs
+```
 
 
 ---
@@ -2333,7 +2378,8 @@ swapon -s
 
 
 ## 练习4.15
-案例：硬盘分区练习
+
+### 案例：硬盘分区练习
 添加一块10G硬盘，采用msdos（MBR）分区模式，完成如下操作
 1. 划分2个2G的主分区，一个1G的主分区，2个1G的逻辑分区
 
@@ -2390,6 +2436,45 @@ swapon -s
     df -h
     ```
 
+
+### 练习：新建一个逻辑卷
+使用/dev/sdb3构建LVM存储
+1. 新建一个名为systemvg的卷组
+
+    ```shell
+    vgcreate systemvg /dev/sdc{3,5}
+    ```
+
+2. 在此卷组中创建名为vo的逻辑卷，大小为180M
+
+    ```shell
+    lvcreate -L 180M -n vo systemvg 
+    ```
+
+3. 将逻辑卷vo格式化为xfs的文件系统类型
+
+    ```shell
+    mkfs.xfs /dev/systemvg/vo
+    ```
+
+4. 将逻辑卷vo挂载到/myvo目录，并在此目录下建立一个测试文件votest.txt，内容为“I AM KING”
+
+    ```shell
+    mkdir /myvo
+    mount /dev/systemvg/vo /myvo
+    vim /myvo/votest.txt
+        "I AM KING"
+    cat /myvo/votest.txt
+    ```
+
+5. 将逻辑卷实现自动开机自动挂载到/myvo目录
+
+    ```shell
+    vim /etc/fstab 
+        /dev/systemvg/vo /myvo xfs defaults 0 0
+    umount /myvo
+    mount -a
+    ```
 
 
 > 如有侵权，请联系作者删除
