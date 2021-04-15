@@ -2463,7 +2463,7 @@ lvs
     mkdir /myvo
     mount /dev/systemvg/vo /myvo
     vim /myvo/votest.txt
-    "I AM KING"
+        "I AM KING"
     cat /myvo/votest.txt
     ```
 
@@ -2471,7 +2471,7 @@ lvs
 
     ```shell
     vim /etc/fstab 
-    /dev/systemvg/vo /myvo xfs defaults 0 0
+        /dev/systemvg/vo /myvo xfs defaults 0 0
     umount /myvo
     mount -a
     ```
