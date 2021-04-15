@@ -1039,6 +1039,56 @@ mkpart    #交互式创建分区
 unit GB    #以 GB 单位显示分区表
 ```
 
+#### 使用交换分区做交换空间（格式化交换文件）
+
+```shell
+mkswap -f 要交换文件
+```
+
+选项
+> **f**：强制执行
+
+```shell
+mkswap /dev/sdb1    #将分区 /dev/sdb1 格式化为交换分区
+free -m	#查看剩余内存的使用量及交换空间的大小（单位：MB）
+
+swapon /dev/sdb1    #启用交换分区 /dev/sdb1
+swapon -s    #查看交换分区
+swapoff /dev/sdb1    #停用交换分区 /dev/sdb1
+
+vim /etc/fstab    #将交换分区设置为开机自动挂载
+/dev/sdb1 swap swap defaults 0 0
+/dev/sdb2 swap swap defaults 0 0
+tail -2 /etc/fstab
+swapon -a
+swapon -s
+```
+
+
+#### 创建Swap文件
+
+利用文件创建Swap空间
+（生成大的文件用dd命令）
+
+```shell
+dd if=源设备 of=目标设备 bs=块大小 count=块数
+```
+
+```shell
+dd if=dev/xero of=/opt/swap.db bs=1M count=2048	#示例
+ls -lh /opt/swap.db
+mkswap /opt/swap.txt
+swapon /opt/swap.txt
+swapon -s
+free -m
+chmod 600 /opt/swap.txt
+swapoff /opt/swap.txt
+vim /etc/fstab
+    /opt/swap.txt swap swap defaults 0 0
+swapon -a
+swapon -s
+```
+    
 
 
 ---
@@ -2282,9 +2332,63 @@ unit GB    #以 GB 单位显示分区表
     ```
 
 
+## 练习4.15
+案例：硬盘分区练习
+添加一块10G硬盘，采用msdos（MBR）分区模式，完成如下操作
+1. 划分2个2G的主分区，一个1G的主分区，2个1G的逻辑分区
+
+    ```shell
+    lsblk
+    fdisk /dev/sdb
+        n
+        p
+        1
+        
+        +2G
+        n
+        p
+        2
+        
+        +2G
+        n
+        p
+        3
+        
+        +1G
+        n
+        e
+        
+        
+        n
+        
+        +2G
+        n
+        
+        +2G
+        p
+        w
+    ```
 
 
+2. 将/dev/sdb3格式化为ext4的文件系统类型。将第2个逻辑分区格式化为xfs的文件系统类型
 
+    ```shell
+    mkfs.ext4 /dev/sdb3
+    blkid /dev/sdb3
+    
+    mkfs.xfs /dev/sdb6
+    blkid /dev/sdb6
+    ```
+
+3. 实现开机自动挂/dev/sdb3，挂载到/mydb1目录
+
+    ```shell
+    vim /etc/fstab
+        /dev/sdb3 /mydb1 ext4 defaults 0 0
+    mount -a	#检测文件语法、自动挂载
+    mkdir /mydb1
+    df -h
+    ```
 
 
 
