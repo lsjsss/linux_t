@@ -1067,13 +1067,27 @@ swapon -s
 #### 创建Swap文件
 
 利用文件创建Swap空间
+（生成大的文件用dd命令）
 
-```shell
-dd if=源设备 of=目标设备 bs=块大小 count=块数
+    ```shell
+    dd if=源设备 of=目标设备 bs=块大小 count=块数
+    ```
 
-dd if=dev/xero of=/opt/swap.db bs=1M    #示例
-ls -lh /opt/swap.db
-```
+    ```shell
+    dd if=dev/xero of=/opt/swap.db bs=1M count=2048	#示例
+    ls -lh /opt/swap.db
+    mkswap /opt/swap.txt
+    swapon /opt/swap.txt
+    swapon -s
+    free -m
+    chmod 600 /opt/swap.txt
+    swapoff /opt/swap.txt
+    vim /etc/fstab
+        /opt/swap.txt swap swap defaults 0 0
+    swapon -a
+    swapon -s
+    ```
+    
 
 
 ---
