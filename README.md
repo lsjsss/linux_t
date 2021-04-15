@@ -1040,6 +1040,24 @@ unit GB    #以 GB 单位显示分区表
 ```
 
 
+#### 使用交换分区做交换空间
+
+```shell
+mkswap /dev/sdb1	#将分区 /dev/sdb1 格式化为交换分区
+free -m	#查看剩余内存的使用量及交换空间的大小（单位：MB）
+swapon /dev/sdb1	#启用交换分区 /dev/sdb1
+swapon -s	#查看交换分区
+swapoff /dev/sdb1	#停止交换分区 /dev/sdb1
+
+vim /etc/fstab	#将交换分区设置为开机自动挂载
+    /dev/sdb1 swap swap defaults 0 0
+    /dev/sdb2 swap swap defaults 0 0
+tail -2 /etc/fstab
+swapon -a
+swapon -s
+```
+
+
 
 ---
 
