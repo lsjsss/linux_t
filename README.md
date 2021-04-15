@@ -1089,7 +1089,45 @@ swapon -a
 swapon -s
 ```
     
+## 逻辑卷
 
+> 优势：
+>
+> 1. 可以整合分散的空间
+>
+> 2. 逻辑卷支持扩容（动态扩容）
+
+
+### LVM快速部署及使用
+#### 创建卷组
+格式：vgcreate 卷组名 设备路径
+
+零散空闲存储 -> 整合的虚拟磁盘 -> 虚拟的分区
+物理卷（PV）        卷组（VG）        逻辑卷（LV）
+
+| 功能 | 物理卷管理 | 卷组管理 | 逻辑卷管理 |
+| -- | -- | -- | -- |
+| Scan扫描 | pvscan | vgscan | lvscan |
+| Create创建 | pvcreate | vgcreate | lvcreate |
+| Display显示 | pvdisplay | vgdisplay | lvdisplay |
+| Remove删除 | pvremove | vgremove | lvremove |
+| Ectend扩展 | / | vgextend | lvextend |
+
+
+```shell
+pvcreate /dev/sdb1 /dev/sdb2	#创建物理卷，可以不用写，直接使用vgcreate创建也是可以的
+pvs	#查看物理卷信息
+vgcreate myvg /dev/sdb1 /dev/sdb2	#创建卷组
+vgs	#查看卷组信息
+```
+
+#### 创建逻辑卷
+
+格式：
+
+```shell
+lvcreate -L 逻辑卷大小 -n 逻辑卷名 卷组名
+```
 
 ---
 
