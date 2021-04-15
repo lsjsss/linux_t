@@ -1129,6 +1129,13 @@ vgs	#查看卷组信息
 lvcreate -L 逻辑卷大小 -n 逻辑卷名 卷组名
 ```
 
+示例：
+```shell
+lvcreate -L 16G -n myvo myvg
+lvs
+```
+
+
 ---
 
 ---
