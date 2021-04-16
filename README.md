@@ -2477,9 +2477,9 @@ lvs
     ```
 
 
-### 4.16练习
+### 4.16 案例LVM逻辑卷练习
 
-1. 添加一块80G硬盘，添加三个10G的主分区，2个10G的逻辑分区
+1. 添加一块80G硬盘，划分三个10G的主分区，2个10G的逻辑分区
     
     ```shell
     vgcreate system /dev/sdc{3,5}
@@ -2487,13 +2487,13 @@ lvs
     lsblk
     ```
 
-2. 利用第一个分区和第二个分区创建一个名为systemvg的卷组
+2. 利用/dev/sdb1和/dev/sdb2创建一个名为systemvg的卷组
 
     ```shell
     vgcreate systemvg /dev/sdb[1-2]
     ```
 
-3. 在这个卷组中创建一个名为vo的逻辑卷，大小16G
+3. 在此卷组中创建一个名为vo的逻辑卷，大小是16G
 
     ```shell
     lvcreate -L 16G -n vo systemvg1
@@ -2502,29 +2502,26 @@ lvs
 4. 将此逻辑卷格式化为xfs文件系统类型
 
     ```shell
-    mkfs.xfs /dev/systemvg1/vo
+    mkfs.xfs /dev/systemvg/vo
     ```
 
-5. 将该逻辑卷挂载到根下的vo文件夹下，并书写测试内容test.txt
+5. 将该逻辑卷挂载到根下的vo文件夹下，并写入测试文件为test.txt，内容为"I AM KING"
 
     ```shell
     mkdir /vo
-    mount /dev/systemvg1/vo /vo
-    ```
+    mount /dev/systemvg/vo /vo
 
-6. 内容为goodgoodstudydaydayup
-
-    ```shell
     vim /vo/test.txt
-    goodgoodstudydaydayup
+        goodgoodstudydaydayup
     cat /vo/test.txt 
     ```
 
-7. 将此逻辑卷实现开机自动化挂载
+6. 将此逻辑卷实现开机自动化挂载
 
     ```shell
     vim /etc/fstab 
-    /dev/systemvg1/vo /vo xfs defaults 0 0
+        /dev/systemvg/vo /vo xfs defaults 0 0
+
     umount /vo
     mount -a
     lsblk
