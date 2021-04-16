@@ -1157,6 +1157,30 @@ lvs
     df -h
     ```
 
+情况二：卷组没有足够的剩余空间
+
+1. 扩展卷组
+
+    ```shell
+    vgs
+    vgextend systemvg /dev/sdb3	#为逻辑卷systemvg扩展空间
+    ```
+
+2. 扩展逻辑卷大小
+
+    ```shell
+    vgs
+    lvextend -L 25G /dev/systemvg/vo
+    lvs
+    ```
+
+3. 扩展文件系统大小
+
+    ```shell
+    xfs_growfs /dev/systemvg/vo
+    df -h
+    ```
+
 ---
 
 ---
