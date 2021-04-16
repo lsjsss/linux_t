@@ -1136,6 +1136,27 @@ lvs
 ```
 
 
+#### 扩展逻辑卷
+情况一：卷组有足够的剩余空间
+
+1. 扩展逻辑卷大小
+
+    ```shell
+    vgs
+    lvextend -L 18GG /dev/systemvg/vo    #扩展到18G
+    df -h /vo    #查看使用情况
+    lvs
+    df -h
+    ```
+
+2. 扩展文件系统大小
+
+    ```shell
+    resize2fs    #扩展 ext3/ext4 文件系统类型
+    xfs_growfs /dev/systemvg/vo    #扩展 xfs 文件系统类型
+    df -h
+    ```
+
 ---
 
 ---
