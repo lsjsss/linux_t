@@ -2482,7 +2482,7 @@ lvs
 1. 添加一块80G硬盘，划分三个10G的主分区，2个10G的逻辑分区
     
     ```shell
-    LSBLK
+    lsblk
     fdisk /dev/sdb
     vgcreate system /dev/sdc{3,5}    
     lsblk
