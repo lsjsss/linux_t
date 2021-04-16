@@ -2477,4 +2477,59 @@ lvs
     ```
 
 
+### 4.16练习
+
+1. 添加一块80G硬盘，添加三个10G的主分区，2个10G的逻辑分区
+    
+    ```shell
+    vgcreate system /dev/sdc{3,5}
+    fdisk /dev/sdb
+    lsblk
+    ```
+
+2. 利用第一个分区和第二个分区创建一个名为systemvg的卷组
+
+    ```shell
+    vgcreate systemvg /dev/sdb[1-2]
+    ```
+
+3. 在这个卷组中创建一个名为vo的逻辑卷，大小16G
+
+    ```shell
+    lvcreate -L 16G -n vo systemvg1
+    ```
+
+4. 将此逻辑卷格式化为xfs文件系统类型
+
+    ```shell
+    mkfs.xfs /dev/systemvg1/vo
+    ```
+
+5. 将该逻辑卷挂载到根下的vo文件夹下，并书写测试内容test.txt
+
+    ```shell
+    mkdir /vo
+    mount /dev/systemvg1/vo /vo
+    ```
+
+6. 内容为goodgoodstudydaydayup
+
+    ```shell
+    vim /vo/test.txt
+    goodgoodstudydaydayup
+    cat /vo/test.txt 
+    ```
+
+7. 将此逻辑卷实现开机自动化挂载
+
+    ```shell
+    vim /etc/fstab 
+    /dev/systemvg1/vo /vo xfs defaults 0 0
+    umount /vo
+    mount -a
+    lsblk
+    ```
+
+
+
 > 如有侵权，请联系作者删除
