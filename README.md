@@ -2507,14 +2507,16 @@ lvs
     blkid /dev/systemvg/vo
     ```
 
-5. 将该逻辑卷挂载到根下的vo文件夹下，并写入测试文件为test.txt，内容为"I AM KING"
+5. 将该逻辑卷挂载到根下的vo文件夹下，并写入测试文件为test.txt，内容为"I AM KING."
 
     ```shell
     mkdir /vo
     mount /dev/systemvg/vo /vo
 
     vim /vo/test.txt
-        goodgoodstudydaydayup
+        I AM KING.
+    echo "I AM KING." > /vo/test.txt
+
     cat /vo/test.txt 
     ```
 
