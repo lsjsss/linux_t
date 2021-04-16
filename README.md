@@ -1136,6 +1136,51 @@ lvs
 ```
 
 
+#### 扩展逻辑卷
+情况一：卷组有足够的剩余空间
+
+1. 扩展逻辑卷大小
+
+    ```shell
+    vgs
+    lvextend -L 18GG /dev/systemvg/vo    #扩展到18G
+    df -h /vo    #查看使用情况
+    lvs
+    df -h
+    ```
+
+2. 扩展文件系统大小
+
+    ```shell
+    resize2fs    #扩展 ext3/ext4 文件系统类型
+    xfs_growfs /dev/systemvg/vo    #扩展 xfs 文件系统类型
+    df -h
+    ```
+
+情况二：卷组没有足够的剩余空间
+
+1. 扩展卷组
+
+    ```shell
+    vgs
+    vgextend systemvg /dev/sdb3	#为逻辑卷systemvg扩展空间
+    ```
+
+2. 扩展逻辑卷大小
+
+    ```shell
+    vgs
+    lvextend -L 25G /dev/systemvg/vo
+    lvs
+    ```
+
+3. 扩展文件系统大小
+
+    ```shell
+    xfs_growfs /dev/systemvg/vo
+    df -h
+    ```
+
 ---
 
 ---
@@ -2475,6 +2520,62 @@ lvs
     umount /myvo
     mount -a
     ```
+
+
+### 4.16 案例：LVM逻辑卷练习
+
+1. 添加一块80G硬盘，划分三个10G的主分区，2个10G的逻辑分区
+    
+    ```shell
+    lsblk
+    fdisk /dev/sdb
+    vgcreate system /dev/sdc{3,5}    
+    lsblk
+    ```
+
+2. 利用/dev/sdb1和/dev/sdb2创建一个名为systemvg的卷组
+
+    ```shell
+    vgcreate systemvg /dev/sdb[1-2]
+    ```
+
+3. 在此卷组中创建一个名为vo的逻辑卷，大小是16G
+
+    ```shell
+    lvcreate -L 16G -n vo systemvg1
+    ```
+
+4. 将此逻辑卷格式化为xfs文件系统类型
+
+    ```shell
+    mkfs.xfs /dev/systemvg/vo
+    blkid /dev/systemvg/vo
+    ```
+
+5. 将该逻辑卷挂载到根下的vo文件夹下，并写入测试文件为test.txt，内容为"I AM KING."
+
+    ```shell
+    mkdir /vo
+    mount /dev/systemvg/vo /vo
+
+    vim /vo/test.txt
+        I AM KING.
+    echo "I AM KING." > /vo/test.txt
+
+    cat /vo/test.txt 
+    ```
+
+6. 将此逻辑卷实现开机自动化挂载
+
+    ```shell
+    vim /etc/fstab 
+        /dev/systemvg/vo /vo xfs defaults 0 0
+
+    umount /vo
+    mount -a
+    lsblk
+    ```
+
 
 
 > 如有侵权，请联系作者删除
