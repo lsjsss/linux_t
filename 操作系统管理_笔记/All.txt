@@ -2123,6 +2123,54 @@ LVM快速部署及使用
 
 
 
+Day22
+案例：LVM逻辑卷练习
+添加一块80G硬盘，采用MBR分区模式完成以下操作
+
+划分3个10G的主分区，2个10G的逻辑分区
+
+1、利用/dev/sdb1和/dev/sdb2分区创建一个名为systemvg的卷组
+2、在此卷组中创建一个名为vo的逻辑卷，大小是16G
+3、将此逻辑卷格式化为xfs文件系统类型
+4、将此逻辑卷挂载到/vo文件夹下，并写入测试文件为test.txt，内容为“I AM KING.”
+5、将此逻辑卷实现开机自动挂载到/vo文件夹下
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+扩展逻辑卷
+
+情况一：卷组有足够的剩余空间
+
+1）扩展逻辑卷大小
+
+	[root@A ~]# vgs
+	[root@A ~]#  lvextend -L 18G /dev/systemvg/vo                      #扩展到18个G
+	[root@A ~]#  lvs
+	[root@A ~]#  df -h
+
+2）扩展文件系统大小
+resize2fs ：扩展ext3/ext4文件系统类型
+xfs_growfs ：扩展xfs文件系统类型
+
+	[root@A ~]#  xfs_growfs /dev/systemvg/vo
+	[root@A ~]#  df -h
+
+
+情况二：卷组没有足够的剩余空间
+
+1）扩展卷组大小
+	[root@A ~]# vgs
+	[root@A ~]# vgextend systemvg /dev/sdb3
+
+
+2）扩展逻辑卷大小
+
+	[root@A ~]# vgs
+	[root@A ~]#  lvextend -L 25G /dev/systemvg/vo
+	[root@A ~]#  lvs
+
+3）扩展文件系统大小
+	[root@A ~]#  xfs_growfs /dev/systemvg/vo
+	[root@A ~]#  df -h
 
 
 
