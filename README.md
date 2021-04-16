@@ -2504,6 +2504,7 @@ lvs
 
     ```shell
     mkfs.xfs /dev/systemvg/vo
+    blkid /dev/systemvg/vo
     ```
 
 5. 将该逻辑卷挂载到根下的vo文件夹下，并写入测试文件为test.txt，内容为"I AM KING"
