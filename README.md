@@ -1272,7 +1272,21 @@ vim /etc/fstab
 reboot
 ```
 
+## 重设root密码
+开机界面按e
 
+```shell
+UTF-8
+rd.break console=tty0
+
+mount -o remount,rw /sysroot
+chroot /sysroot
+echo redhat | passwd --stdin root
+
+touch /.autorelabel
+exit
+reboot
+```
 
 
 ---
