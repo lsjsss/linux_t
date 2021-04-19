@@ -2638,6 +2638,7 @@ lvs
 4. 将逻辑卷vo挂载到/vo目录，并在此目录下建立一个测试文件votest.txt，内容为“I AM KING”
 
     ```shell
+    mkdir /vo
     mount /dev/systemvg/vo /vo
     echo "I AM KING" > votest.txt
     ```
