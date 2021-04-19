@@ -2658,9 +2658,24 @@ lvs
 ### 案例3：构建lvm存储（修改PE大小）
 1. 新的逻辑卷命名为dateabase，其大小为50个PE的大小，属于datastore卷组
 
+    ```shell
+    vgcreate database /dev/sdb3
+    vgs
+    lvcreate -l 50 -n database datastore
+    ```
 
 
 2. 使用EXT4文件系统对逻辑卷database格式化，此逻辑卷应该在开机时自动挂载到/nsd/vo
+
+    ```shell
+    mkfs.ext4 /dev/database/datastore
+    vim /etc/fstab
+        /dev/database/datastore /nsd/vo ext4 defaults 0 0
+    
+    mkdir -p /nsd/vo
+    mount -a
+    df -h
+    ```
 
 
 ### 案例4:扩展逻辑卷
