@@ -1247,6 +1247,34 @@ lvs
 >
 > 主板 -> 硬盘 -> 操作系统 -> RAID软件 -> 数据
 
+
+### 系统文件损坏故障
+#### 故障现象：
+/etc/fstab文件内容有误，系统无法正常开机
+
+#### 解决思路：
+引导进入修复模式，然后进行修复
+
+#### 模拟故障：
+
+```shell
+vim /etc/fstab
+	/dev/sdb1 /mypar1 xfs defaults 0 0
+reboot
+```
+
+解决故障：
+在Control-D界面处直接输入root密码，会直接进入命令行，之后修改fstab文件
+
+```shell
+vim /etc/fstab
+# /dev/sdb1 /mypar1 xfs defaults 0 0
+reboot
+```
+
+
+
+
 ---
 
 ---
