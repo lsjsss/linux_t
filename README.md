@@ -2640,7 +2640,8 @@ lvs
     ```shell
     mkdir /vo
     mount /dev/systemvg/vo /vo
-    echo "I AM KING" > votest.txt
+    echo "I AM KING" > /vo/votest.txt
+    cat /vo/votest.txt
     ```
 
 5. 实现逻辑卷vo开机自动挂载到/vo
