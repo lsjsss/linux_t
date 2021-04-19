@@ -2577,6 +2577,106 @@ lvs
     lsblk
     ```
 
+## 练习4.19
+### 案例1：MBR分区模式规划分区
+0. 添加一块80G的硬盘并规划分区
+1. 划分2个10G的主分区；1个12G的主分区；2个10G的逻辑分区。
+
+    ```shell
+    fdisk /dev/sdb
+        n
+        p
+        1
+        
+        +10G
+        
+        n
+        p
+        2
+        
+        +10G
+        n
+        p
+        3
+        
+        +10G
+        n
+        e
+        
+        
+        n
+        e
+        
+        +10G
+        n
+        e
+        
+        +10G
+    ```
+
+### 案例2：构建LVM存储
+1. 利用/dev/sdb1和/dev/sdb2新建一个名为systemvg的卷组
+
+    ```shell
+    vgcreate systemvg /dev/sdb1 /dev/sdb2
+    vgs
+    ```
+
+2. 在此卷组中创建一个名为vo的逻辑卷，大小为10G
+
+    ```shell
+    lvcreate -L 10G -n vo systemvg
+    ```
+
+3. 将逻辑卷vo格式化为xfs文件系统
+
+    ```shell
+    mkfs.xfs /dev/systemvg/vo 
+    blkid /dev/systemvg/vo
+    ```
+
+4. 将逻辑卷vo挂载到/vo目录，并在此目录下建立一个测试文件votest.txt，内容为“I AM KING”
+
+    ```shell
+    mount /dev/systemvg/vo /vo
+    echo "I AM KING" > votest.txt
+    ```
+
+5. 实现逻辑卷vo开机自动挂载到/vo
+
+    ```shell
+    vim /etc/fstab
+        /dev/systemvg/vo /vo xfs defaults 0 0
+    umount /vo
+    df -h
+    mount -a
+    df -h /vo
+    ```
+
+### 案例3：构建lvm存储（修改PE大小）
+1. 新的逻辑卷命名为dateabase，其大小为50个PE的大小，属于datastore卷组
+
+
+
+2. 使用EXT4文件系统对逻辑卷database格式化，此逻辑卷应该在开机时自动挂载到/nsd/vo
+
+
+### 案例4:扩展逻辑卷
+1. 将/dev/systemvg/vo逻辑卷的大小扩展到30G
+
+    ```shell
+    vgs
+    lvs
+    
+    vgextend systemvg /dev/sdb5 /dev/sdb6
+    vgs
+    lvextend -L 30G /dev/systemvg/vo
+    
+    df -h
+    xfs_grows /dev/systemvg/vo
+    df -h /vo
+    ```
+    
 
 
 > 如有侵权，请联系作者删除
