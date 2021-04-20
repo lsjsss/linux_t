@@ -1102,8 +1102,9 @@ swapon -s
 #### 创建卷组
 格式：vgcreate 卷组名 设备路径
 
-零散空闲存储 -> 整合的虚拟磁盘 -> 虚拟的分区
-物理卷（PV）        卷组（VG）        逻辑卷（LV）
+工作方式：
+> 零散空闲存储 -> 整合的虚拟磁盘 -> 虚拟的分区
+> 物理卷（PV）        卷组（VG）        逻辑卷（LV）
 
 | 功能 | 物理卷管理 | 卷组管理 | 逻辑卷管理 |
 | -- | -- | -- | -- |
@@ -1180,6 +1181,117 @@ lvs
     xfs_growfs /dev/systemvg/vo
     df -h
     ```
+
+#### 逻辑卷的删除
+
+--
+
+#### 逻辑卷的缩减
+
+> ext4不支持逻辑卷的缩减
+>
+> xfs不支持逻辑卷的缩减
+
+
+## RAID磁盘阵列
+
+> 廉价冗余磁盘阵列
+>
+> 通过硬件/软件技术，将多个较小/低速磁盘整合成一个磁盘
+>
+> 阵列的价值：提升I/O效率、硬件级别的数据冗余
+>
+> 不同RAID级别的功能、 特性各不相同
+
+
+### RAID0，条带模式
+同一个文档分散存放在不同磁盘
+并行写入以提高效率
+
+### RAID1，镜像模式
+一个文档**复制**成多分，分别写入不同磁盘
+多份拷贝提高可靠性，效率无提升
+
+### RAID5（至少需要三块磁盘组成）
+相当于RAID0和RAID1的折中方案
+需要至少一块磁盘的容量来存放校验数据（奇偶校验）
+
+### RAID0+1（至少需要四块磁盘组成）
+?整合于RAID0和RAID1的折中方案
+?需要至少一块磁盘的容量来存放校验数据（奇偶校验）
+
+### RAID1+0（至少需要四块磁盘组成）
+?整合于RAID0和RAID1的折中方案
+?需要至少一块磁盘的容量来存放校验数据（奇偶校验）
+
+### RAID各级别特点对比
+
+| 对比项 | RAID0 | RAID1 | RAID10 | RAID5 | RAID
+| -- | -- | -- | -- | -- | -- |
+| 磁盘数 | >=2 | >=2 | >=4 | >=3 | >=4 |
+| 存储利用率 | 100% | <=50% | <=50% | n-1/n | n-2/n |
+| 校验盘 | 无 | 无 | 无 | 1 | 2 |
+| 容错性 | 无 | 有 | 有 | 有 | 有 |
+| IO性能 | 高 | 低 | 中 | 较高 | 较高 |
+
+
+
+### RAID阵列实现方式
+#### 硬RAID
+> 由RAID控制卡管理阵列（不同型号服务器配置方式不同）
+>
+> 主板 -> 阵列卡 -> 磁盘 -> 操作系统 -> 数据
+
+#### 软RAID
+> 由操作系统来管理阵列
+>
+> 主板 -> 硬盘 -> 操作系统 -> RAID软件 -> 数据
+
+
+### 系统文件损坏故障
+#### 故障现象：
+/etc/fstab文件内容有误，系统无法正常开机
+
+#### 解决思路：
+引导进入修复模式，然后进行修复
+
+#### 模拟故障：
+
+```shell
+vim /etc/fstab
+	/dev/sdb1 /mypar1 xfs defaults 0 0
+reboot
+```
+
+解决故障：
+在Control-D界面处直接输入root密码，会直接进入命令行，之后修改fstab文件
+
+```shell
+vim /etc/fstab
+# /dev/sdb1 /mypar1 xfs defaults 0 0
+reboot
+```
+
+## 重设root密码
+开机界面按e
+
+```shell
+UTF-8
+rd.break console=tty0
+```
+
+`Ctrl+X`
+
+```shell
+mount -o remount,rw /sysroot
+chroot /sysroot
+echo redhat | passwd --stdin root
+
+touch /.autorelabel
+exit
+reboot
+```
+
 
 ---
 
@@ -2576,6 +2688,123 @@ lvs
     lsblk
     ```
 
+## 练习4.19
+### 案例1：MBR分区模式规划分区
+0. 添加一块80G的硬盘并规划分区
+1. 划分2个10G的主分区；1个12G的主分区；2个10G的逻辑分区。
+
+    ```shell
+    fdisk /dev/sdb
+        n
+        p
+        1
+        
+        +10G
+        
+        n
+        p
+        2
+        
+        +10G
+        n
+        p
+        3
+        
+        +10G
+        n
+        e
+        
+        
+        n
+        e
+        
+        +10G
+        n
+        e
+        
+        +10G
+    ```
+
+### 案例2：构建LVM存储
+1. 利用/dev/sdb1和/dev/sdb2新建一个名为systemvg的卷组
+
+    ```shell
+    vgcreate systemvg /dev/sdb1 /dev/sdb2
+    vgs
+    ```
+
+2. 在此卷组中创建一个名为vo的逻辑卷，大小为10G
+
+    ```shell
+    lvcreate -L 10G -n vo systemvg
+    ```
+
+3. 将逻辑卷vo格式化为xfs文件系统
+
+    ```shell
+    mkfs.xfs /dev/systemvg/vo 
+    blkid /dev/systemvg/vo
+    ```
+
+4. 将逻辑卷vo挂载到/vo目录，并在此目录下建立一个测试文件votest.txt，内容为“I AM KING”
+
+    ```shell
+    mkdir /vo
+    mount /dev/systemvg/vo /vo
+    echo "I AM KING" > /vo/votest.txt
+    cat /vo/votest.txt
+    ```
+
+5. 实现逻辑卷vo开机自动挂载到/vo
+
+    ```shell
+    vim /etc/fstab
+        /dev/systemvg/vo /vo xfs defaults 0 0
+    umount /vo
+    df -h
+    mount -a
+    df -h /vo
+    ```
+
+### 案例3：构建lvm存储（修改PE大小）
+1. 新的逻辑卷命名为dateabase，其大小为50个PE的大小，属于datastore卷组
+
+    ```shell
+    vgcreate database /dev/sdb3
+    vgs
+    lvcreate -l 50 -n database datastore
+    ```
+
+
+2. 使用EXT4文件系统对逻辑卷database格式化，此逻辑卷应该在开机时自动挂载到/nsd/vo
+
+    ```shell
+    mkfs.ext4 /dev/database/datastore
+    vim /etc/fstab
+        /dev/database/datastore /nsd/vo ext4 defaults 0 0
+    
+    mkdir -p /nsd/vo
+    mount -a
+    df -h
+    ```
+
+
+### 案例4:扩展逻辑卷
+1. 将/dev/systemvg/vo逻辑卷的大小扩展到30G
+
+    ```shell
+    vgs
+    lvs
+    
+    vgextend systemvg /dev/sdb5 /dev/sdb6
+    vgs
+    lvextend -L 30G /dev/systemvg/vo
+    
+    df -h
+    xfs_grows /dev/systemvg/vo
+    df -h /vo
+    ```
+    
 
 
 > 如有侵权，请联系作者删除

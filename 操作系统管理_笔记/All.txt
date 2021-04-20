@@ -2173,5 +2173,141 @@ xfs_growfs ：扩展xfs文件系统类型
 	[root@A ~]#  df -h
 
 
+Day23
+案例1: MBR分区模式规划分区
+ 添加一块80G的硬盘并规划分区：
+   划分2个10G的主分区；1个12G的主分区;2个10G的逻辑分区。
+
+案例2:构建 LVM 存储
+
+– 利用/dev/sdb1和/dev/sdb2 新建一个名为 systemvg 的卷组
+– 在此卷组中创建一个名为 vo 的逻辑卷，大小为10G
+– 将逻辑卷 vo 格式化为 xfs 文件系统
+– 将逻辑卷 vo 挂载到 /vo 目录，并在此目录下建立一个测试文件 votest.txt，内容为“I AM KING.”
+– 实现逻辑卷vo开机自动挂载到/vo
+
+案例4:扩展逻辑卷
+
+– 将/dev/systemvg/vo逻辑卷的大小扩展到30G
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+五、删除逻辑卷
+1、先卸载设备
+	[root@A ~]# umount /vo
+
+2、删除逻辑卷
+	[root@A ~]# lvremove /dev/systemvg/vo
+	[root@A ~]#  lvs
+
+3、删除卷组
+	[root@A ~]#  vgremove systemvg
+	[root@A ~]#  vgs
+
+4、删除物理卷
+	[root@A ~]#  pvremove /dev/sdb1 /dev/sdb2  /dev/sdb5  /dev/sdb6
+	[root@A ~]#  pvs
+
+5、取消开机自动挂载
+	[root@A ~]#  vim /etc/fstab                                                      #删除最后一行自己添加的逻辑卷
+
+逻辑卷其他命令
+
+语法格式如下：
+vgcreate   -s    pe大小     卷组名      物理卷
+vgchange -s   pe大小   卷组名                                               #修改pe大小，一般是2或者4的倍数
+lvcreate   -l   pe个数    -n   逻辑卷名   卷组名
+
+注：pe是LVM最小的存储单位，默认一个PE是4M。是构成VG的基本单位
+
+	[root@A ~]#  vgdisplay    vg
+	[root@A ~]#  vgcreate vg /dev/sdb1
+	[root@A ~]#   vgs
+	[root@A ~]#   lvcreate -L 250M -n lvtest01 vg                         #创建250M的逻辑卷，实际上会多出2M，是252M
+	[root@A ~]#   lvs
+	[root@A ~]#   vgchange -s 1M vg                                             #修改pe的大小
+	[root@A ~]#   vgdisplay vg
+	[root@A ~]#   lvcreate -L 250M -n lvtest02 vg
+	[root@A ~]#   lvs
+	[root@A ~]#   lvcreate -l 50 -n lvtest03 vg                                # -l 指定pe个数
+	[root@A ~]#   lvs
+
+练习：构建 LVM 存储(修改PE大小)
+– 新的逻辑卷命名为 database，其大小为50个PE的大小，属于 datastore 卷组
+– 使用 EXT4 文件系统对逻辑卷 database 格式化，此逻辑卷应该在开机时自动挂载到/nsd/vo
+
+
+逻辑卷的缩减（了解内容）
+
+ext4文件系统支持缩减
+xfs文件系统不支持缩减
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+RAID磁盘阵列
+--廉价冗余磁盘阵列
+--通过硬件/软件技术，将多个较小/低速的磁盘整合成一个大磁盘
+--阵列的价值：提升I/O效率，硬件级别的数据冗余
+--不同RAID级别的功能、特性各不相同
+
+RAID0：条带模式
+--至少需要两块磁盘组成
+--同一个文档分散存放在不同磁盘
+--并行写入以提高效率
+
+RAID1：镜像模式
+--至少需要两块磁盘组成
+--一个文档复制成多份，分别写入不同磁盘
+--多份拷贝提高可靠性，效率无提升
+
+RAID5：高性价比模式（较多的一种模式，通过算法产生基偶校验，来完成可靠性的提升）
+--至少需要三块磁盘组成
+--需要至少一块磁盘的容量来存放校验数据
+--相当于RAID0和RAID1的折中方案
+
+RAID0+1或RAID1+0（RAID10）（了解）
+--至少需要四块磁盘组成
+--并行存储提高效率，镜像写入提高可靠性
+--整合RAID0、RAID1的优势
+
+RAID阵列实现的方式：
+
+硬RAID：由RAID控制卡管理阵列
+	主板---->阵列卡----->磁盘------->操作系统-------->数据
+软RAID：由操作系统管理阵列（用的较少）
+	主板---->磁盘------->操作系统----->RAID软件-------->数据
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+系统文件损坏故障
+故障现象：
+         /etc/fstab文件内容有误，系统无法正常开机
+解决思路：
+        引导进入修复模式，然后进行修复
+
+模拟故障：
+      [root@A ~]#  vim   /etc/fstab
+     /dev/sdb1   /mypar1   xfs   defaults  0 0
+      [root@A ~]#  reboot
+
+解决故障
+	在Control-D界面处直接输入root密码，会直接进入命令行，之后修改fstab文件
+	 [root@A ~]#  vim   /etc/fstab
+      	#/dev/sdb1   /mypar1   xfs   defaults  0 0
+      	[root@A ~]#  reboot
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+重设root用户密码
+重启系统，进入recovery恢复模式
+	按e键，找到linux16开头的行，末尾添加rd.break console=tty0
+	按Ctrl+x启动
+
+以可写的方式重新挂载/sysroot，并切换到此环境
+Switch_root# mount  -o  remount,rw  /sysroot
+Switch_root# chroot  /sysroot
+
+将root密码设置为redhat
+# echo  redhat  |  passwd  --stdin  root
+
+重设SELinux安全标签
+# touch  /.autorelabel
+先执行exit，在执行reboot完成恢复
+# exit
+# reboot
 
 
