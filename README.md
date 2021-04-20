@@ -1278,7 +1278,11 @@ reboot
 ```shell
 UTF-8
 rd.break console=tty0
+```
 
+`Ctrl+X`
+
+```shell
 mount -o remount,rw /sysroot
 chroot /sysroot
 echo redhat | passwd --stdin root
