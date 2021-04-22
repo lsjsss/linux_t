@@ -366,6 +366,10 @@ du -sh	#统计文件占用空间（带单位显示）
 
 ```shell
 hostname	#查看主机名
+
+echo "svr7.nm.cn" > /etc/hostname	#永久修改主机名
+hostname svr7.nm.cn
+
 uname -r	#查看内核版本
 lscpu	#查看cpu信息
 cat /proc/meminfo	#查看内存
