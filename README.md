@@ -1297,6 +1297,56 @@ reboot
 ```
 
 
+
+
+
+
+# 云计算网络管理命令
+
+## 远程管理ssh
+
+### SSH协议（Secure Shell）
+
+> 为客户机提供安全的 Shell 环境
+>
+> 默认端口：**TCP22**
+
+
+### OpenSSH 服务
+
+>服务名称：sshd
+>
+>主程序：/use/sbin/sshd、/usr/bin/ssh
+>
+> 配置主件：/etc/ssh/sshd_config
+>
+> 	/etc/ssh/ssh_config
+
+### SSH的基本使用
+
+```shell
+ssh root@要远程主机的ip地址	#远程指定的主机
+
+ssh root@要使用图形界面远程主机的ip地址	#使用图形界面远程指定的主机
+firefox	#测试图形界面状态下
+```
+
+
+## 使用scp远程复制工具
+### 安全复制工具scp
+
+```shell
+scp -r 用户名@服务器:远程路径 本地路径	#将指定主机上的文件下载到本地
+scp -r 本地路径 用户名@服务器:远程路径	#将本地的文件上上传至指定主机
+```
+
+```shell
+scp -r root@192.168.4.207:/boot /opt/	#将远程主机.207的目录boot复制到本地opt目录下
+scp -r /boot root@192.168.4.207:/opt/	#将本机的boot目录复制到远程主机.207主机的opt目录下
+```
+
+
+
 ---
 
 ---
