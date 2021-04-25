@@ -2860,5 +2860,123 @@ scp -r /boot root@192.168.4.207:/opt/	#将本机的boot目录复制到远程主�
     ```
     
 
+## 远程管理ssh
+
+### SSH协议（Secure Shell）
+
+> 为客户机提供安全的 Shell 环境
+>
+> 默认端口：**TCP22**
+
+
+### OpenSSH 服务
+
+> 服务名称：sshd
+>
+> 主程序：/use/sbin/sshd、/usr/bin/ssh
+>
+> 配置主件：/etc/ssh/sshd_config
+>
+> 	/etc/ssh/ssh_config
+
+### SSH的基本使用
+
+```shell
+ssh root@要远程主机的ip地址	#远程指定的主机
+
+ssh root@要使用图形界面远程主机的ip地址	#使用图形界面远程指定的主机
+firefox	#测试图形界面状态下
+```
+
+
+### 使用scp远程复制工具
+#### 安全复制工具scp
+
+```shell
+scp -r 用户名@服务器:远程路径 本地路径	#将指定主机上的文件下载到本地
+scp -r 本地路径 用户名@服务器:远程路径	#将本地的文件上上传至指定主机
+```
+
+```shell
+scp -r root@192.168.4.207:/boot /opt/	#将远程主机.207的目录boot复制到本地opt目录下
+scp -r /boot root@192.168.4.207:/opt/	#将本机的boot目录复制到远程主机.207主机的opt目录下
+```
+
+### 实现ssh无密码验证
+部署公钥与私钥
+生成公钥与私钥
+
+```shell
+ssh-keygen
+（使用默认ssh路径）
+（实现ssh无密码验证，不需要设置密码）
+（确认密码）
+ls /root/.ssh
+cat /root/.ssh/known_hosts
+
+ssh-copy-id root@要传输公钥目标主机（无密码登陆）的ip地址
+ssh root@无密码登陆目标主机的ip地址
+```
+
+传递公钥到对方主机
+
+
+
+
+## 练习 4.25
+
+### 案例：使用ssh客户端
+准备虚拟机A和虚拟机B，完成以下操作
+1. 从主机A(192.168.4.7)上以root身份登入主机B(192.168.4.207)
+
+```shell
+ssh root@192.168.4.207
+```
+
+2. 在主机B上创建用户student，设置密码为redhat
+
+```shell
+useradd student
+echo redhat | passwd --stdin student
+```
+
+3. 从主机A上以用户student登入主机B
+
+```shell
+ssh student@192.168.4.207
+```
+
+### 案例：使用scp远程复制工具
+1. 在主机A上使用scp下载文档
+a. 将主机B上的/root/anaconda-ks.cfg文件复制到/opt下
+
+```shell
+scp -r root@192.168.4.207:/root/anaconda-ks.cfg /opt/
+ls /opt/
+```
+
+b. 将主机B上的/home目录复制到本地的/opt下
+
+```shell
+scp -r root@192.168.4.207:/home /opt
+ls /home
+```
+
+2. 在主机A上使用scp上传文档
+a. 确保主机B上有本地用户lisi
+
+```shell
+id lisi
+```
+
+b. 将本地的/root/anaconda-ks.cfg文件复制到主机B上用户lisi的家目录下，以用户lisi的密码验证
+
+```shell
+scp -r /root/anaconda-ks.cfg lisi@192.168.4.207:/home/lisi
+su lisi
+ls
+```
+
+
 
 > 如有侵权，请联系作者删除
