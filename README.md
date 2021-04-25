@@ -1314,9 +1314,9 @@ reboot
 
 ### OpenSSH 服务
 
->服务名称：sshd
+> 服务名称：sshd
 >
->主程序：/use/sbin/sshd、/usr/bin/ssh
+> 主程序：/use/sbin/sshd、/usr/bin/ssh
 >
 > 配置主件：/etc/ssh/sshd_config
 >
