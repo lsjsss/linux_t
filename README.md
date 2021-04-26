@@ -3085,6 +3085,45 @@ su lisi
 ls
 ```
 
+## 4.26 练习
+### 案例
+1. 利用ip命令查看ip地址
+
+    ```shell
+    ip address show
+    ```
+
+2. 利用ip命令为本机第一张网卡添加ip地址192.168.100.10/24
+
+    ```shell
+    ip address add 192.168.100.10/24 dev ens33
+    ```
+
+3. 利用ip命令添加路由，去往200.0.0.0/24下一跳为192.168.100.10
+
+    ```shell
+    ip route add 200.0.0.0/24 via 192.168.100.10 dev ens33
+    ```
+
+4. 安装vsftpd软件包
+
+    ```shell
+    yum -y install vsftpd
+    ```
+
+5. 启动vsftpd服务（systemctl restart vsftpd）
+
+    ```shell
+    systemctl restart vsftpd
+    ```
+    
+6. 查看vsftpd服务监听的端口号
+
+    ```shell
+    netstat -anptu | grep vsftpd
+    ```
+
+
 
 
 > 如有侵权，请联系作者删除
