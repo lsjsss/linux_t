@@ -1297,6 +1297,164 @@ reboot
 ```
 
 
+
+
+
+
+# 云计算网络管理命令
+
+## 远程管理ssh
+
+### SSH协议（Secure Shell）
+
+> 为客户机提供安全的 Shell 环境
+>
+> 默认端口：**TCP22**
+
+
+### OpenSSH 服务
+
+> 服务名称：sshd
+>
+> 主程序：/use/sbin/sshd、/usr/bin/ssh
+>
+> 配置主件：/etc/ssh/sshd_config
+>
+> 	/etc/ssh/ssh_config
+
+### SSH的基本使用
+
+```shell
+ssh root@要远程主机的ip地址	#远程指定的主机
+
+ssh root@要使用图形界面远程主机的ip地址	#使用图形界面远程指定的主机
+firefox	#测试图形界面状态下
+```
+
+
+## 使用scp远程复制工具
+### 安全复制工具scp
+
+```shell
+scp -r 用户名@服务器:远程路径 本地路径	#将指定主机上的文件下载到本地
+scp -r 本地路径 用户名@服务器:远程路径	#将本地的文件上上传至指定主机
+```
+
+```shell
+scp -r root@192.168.4.207:/boot /opt/	#将远程主机.207的目录boot复制到本地opt目录下
+scp -r /boot root@192.168.4.207:/opt/	#将本机的boot目录复制到远程主机.207主机的opt目录下
+```
+
+
+## 常用的网络工具
+### 查看ip地址
+
+```shell
+ip address show
+ip a s	#简写
+```
+
+### 添加ip地址
+
+```shell
+ip address add 192.168.8.1/24 dev ens33
+ip aa
+```
+
+### 指定下一跳
+
+```shell
+vim /etc/rc.d/rc.local	#设置每次开机生效
+	ip address add 192.168.8.1/24 dev ens33
+
+ip route add 10.0.0.0/24 via 192.168.8.100 dev ens33	#添加路由，via是下一跳
+ip route del 10.0.0.0/24	#删除路由表
+ip route show	#查看路由表
+```
+
+
+### 查看对应的端口号
+ss与netstat
+
+选项列表：
+
+> **-a**：显示所有端口的信息
+> 
+> **-n**：以数字格式显示端口号
+> 
+> **-t**：显示TCP连接的端口
+>
+> **-u**：显示UDP连接的端口
+> 
+> **-l**：显示服务正在监听的端口信息
+> 
+> **-p**：显示监听端口的服务名（程序名称）
+
+```shell
+netstat -anptu	#查看端口的详细信息
+ss -antpu	#查看TCP端口号（相对全面）
+netstat -anptu | grep :22	#筛选端口号为22的端口
+ss -anptu | grep :22
+```
+
+
+### ping命令
+
+```shell
+ping -c 测试包的个数n 目标ip地址 #ping包n次
+```
+
+### Yum仓库特点
+作为yum源需要准备的内容
+大量的.rpm源需要准备的内容
+针对这些软件包 **repodata/** 仓库档案
+
+
+**repodata/**：仓库档案数据
+
+> filelists.xml.gz	软件包的文件安装清单
+>
+> primary.xml.gz	软件包的基本/主要信息
+>
+> other.xml.gz	软件包的其他信息
+>
+> repomd.xml
+
+
+### 结束后台进程
+
+```shell
+kill oneko	
+```
+
+
+### 源码编译安装的优势
+
+主要优点
+
+> 获得软件的最新版，及时修复bug
+>
+> 软件功能可按需选择/定制，有更多软件可供选择
+> 
+> 源码包适用于各种平台
+
+#### 安装开发工具gcc、make
+
+```shell
+yum -y install gcc make	#安装gcc、make包
+rpm -q gcc	#检查是否安装成功
+rpm -q make
+tar -xf /opt/tools/inotify-tools-3.13.tar.gz -C /opt/
+cd /opt/inotify-tools-3.13/
+./confgure --help
+./confgure --help --prefix=/opt/haha	#配置时指定安装位置
+make	#编译
+make install	#安装
+ls /opt/haha/
+ls /opt/haha/bin/
+```
+
+
 ---
 
 ---
@@ -2809,6 +2967,163 @@ reboot
     df -h /vo
     ```
     
+
+## 远程管理ssh
+
+### SSH协议（Secure Shell）
+
+> 为客户机提供安全的 Shell 环境
+>
+> 默认端口：**TCP22**
+
+
+### OpenSSH 服务
+
+> 服务名称：sshd
+>
+> 主程序：/use/sbin/sshd、/usr/bin/ssh
+>
+> 配置主件：/etc/ssh/sshd_config
+>
+> 	/etc/ssh/ssh_config
+
+### SSH的基本使用
+
+```shell
+ssh root@要远程主机的ip地址	#远程指定的主机
+
+ssh root@要使用图形界面远程主机的ip地址	#使用图形界面远程指定的主机
+firefox	#测试图形界面状态下
+```
+
+
+### 使用scp远程复制工具
+#### 安全复制工具scp
+
+```shell
+scp -r 用户名@服务器:远程路径 本地路径	#将指定主机上的文件下载到本地
+scp -r 本地路径 用户名@服务器:远程路径	#将本地的文件上上传至指定主机
+```
+
+```shell
+scp -r root@192.168.4.207:/boot /opt/	#将远程主机.207的目录boot复制到本地opt目录下
+scp -r /boot root@192.168.4.207:/opt/	#将本机的boot目录复制到远程主机.207主机的opt目录下
+```
+
+### 实现ssh无密码验证
+部署公钥与私钥
+生成公钥与私钥
+
+```shell
+ssh-keygen
+（使用默认ssh路径）
+（实现ssh无密码验证，不需要设置密码）
+（确认密码）
+ls /root/.ssh
+cat /root/.ssh/known_hosts
+
+ssh-copy-id root@要传输公钥目标主机（无密码登陆）的ip地址
+ssh root@无密码登陆目标主机的ip地址
+```
+
+传递公钥到对方主机
+
+
+
+
+## 练习 4.25
+
+### 案例：使用ssh客户端
+准备虚拟机A和虚拟机B，完成以下操作
+1. 从主机A(192.168.4.7)上以root身份登入主机B(192.168.4.207)
+
+```shell
+ssh root@192.168.4.207
+```
+
+2. 在主机B上创建用户student，设置密码为redhat
+
+```shell
+useradd student
+echo redhat | passwd --stdin student
+```
+
+3. 从主机A上以用户student登入主机B
+
+```shell
+ssh student@192.168.4.207
+```
+
+### 案例：使用scp远程复制工具
+1. 在主机A上使用scp下载文档
+a. 将主机B上的/root/anaconda-ks.cfg文件复制到/opt下
+
+```shell
+scp -r root@192.168.4.207:/root/anaconda-ks.cfg /opt/
+ls /opt/
+```
+
+b. 将主机B上的/home目录复制到本地的/opt下
+
+```shell
+scp -r root@192.168.4.207:/home /opt
+ls /home
+```
+
+2. 在主机A上使用scp上传文档
+a. 确保主机B上有本地用户lisi
+
+```shell
+id lisi
+```
+
+b. 将本地的/root/anaconda-ks.cfg文件复制到主机B上用户lisi的家目录下，以用户lisi的密码验证
+
+```shell
+scp -r /root/anaconda-ks.cfg lisi@192.168.4.207:/home/lisi
+su lisi
+ls
+```
+
+## 4.26 练习
+### 案例
+1. 利用ip命令查看ip地址
+
+    ```shell
+    ip address show
+    ```
+
+2. 利用ip命令为本机第一张网卡添加ip地址192.168.100.10/24
+
+    ```shell
+    ip address add 192.168.100.10/24 dev ens33
+    ```
+
+3. 利用ip命令添加路由，去往200.0.0.0/24下一跳为192.168.100.10
+
+    ```shell
+    ip route add 200.0.0.0/24 via 192.168.100.10 dev ens33
+    ```
+
+4. 安装vsftpd软件包
+
+    ```shell
+    yum -y install vsftpd
+    ```
+
+5. 启动vsftpd服务（systemctl restart vsftpd）
+
+    ```shell
+    systemctl restart vsftpd
+    ```
+    
+6. 查看vsftpd服务监听的端口号
+
+    ```shell
+    netstat -anptu | grep vsftpd
+    ```
+
+
 
 
 > 如有侵权，请联系作者删除
