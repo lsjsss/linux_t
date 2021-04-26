@@ -1404,6 +1404,56 @@ ss -anptu | grep :22
 ping -c 测试包的个数n 目标ip地址 #ping包n次
 ```
 
+### Yum仓库特点
+作为yum源需要准备的内容
+大量的.rpm源需要准备的内容
+针对这些软件包 **repodata/** 仓库档案
+
+
+**repodata/**：仓库档案数据
+
+> filelists.xml.gz	软件包的文件安装清单
+>
+> primary.xml.gz	软件包的基本/主要信息
+>
+> other.xml.gz	软件包的其他信息
+>
+> repomd.xml
+
+
+### 结束后台进程
+
+```shell
+kill oneko	
+```
+
+
+### 源码编译安装的优势
+
+主要优点
+
+> 获得软件的最新版，及时修复bug
+>
+> 软件功能可按需选择/定制，有更多软件可供选择
+> 
+> 源码包适用于各种平台
+
+#### 安装开发工具gcc、make
+
+```shell
+yum -y install gcc make	#安装gcc、make包
+rpm -q gcc	#检查是否安装成功
+rpm -q make
+tar -xf /opt/tools/inotify-tools-3.13.tar.gz -C /opt/
+cd /opt/inotify-tools-3.13/
+./confgure --help
+./confgure --help --prefix=/opt/haha	#配置时指定安装位置
+make	#编译
+make install	#安装
+ls /opt/haha/
+ls /opt/haha/bin/
+```
+
 
 ---
 
