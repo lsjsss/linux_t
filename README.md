@@ -1533,6 +1533,38 @@ ls /opt/haha/bin/
 ```
 
 
+## SELinux运行模式的切换
+### SELinux的运行模式
+
+> enforcing（强制模式）
+>
+> permissive（宽松模式）
+>
+> disabled（彻底禁用）
+
+
+### 切换运行模式
+#### 临时切换：
+
+```shell
+getenforce	#查看SELinux当前的运行状态
+
+setendorce 1	#切换至强制模式 1
+setendorce 0	#切换至宽松模式 0
+```
+
+#### 永久改变SELinux的运行模式
+
+> 固定配置：/etc/selinux/config 文件
+
+```shell
+vim /etc/selinux/config	#永久改变SELinux的运行模式
+    SELINUX=disabled	#彻底禁用SELinux
+    SELINUX=enabled	#彻底禁用SELinux
+	
+reboot	#重启查看状态
+```
+
 ---
 
 ---
@@ -3202,6 +3234,78 @@ ls
     ```
 
 
+## 4.27 练习
+### 实验环境准备
+虚拟机A
+1. 主机名配置为A.tedu.cn
+
+    ```shell
+    hostname A.tedu.cn
+    echo A.tedu.cn > /etc/hostname
+    ```
+
+2. IP地址配置为192.168.4.10/24
+
+    ```shell
+    nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes
+    nmcli connection up ens33 
+    ```
+
+3. 用真机Xshell远程到虚拟机A
+
+    ```shell
+    ssh root@192.168.4.10
+    ```
+
+4. 将tools.tar.gz包传输到虚拟机A
+
+    ```shell
+    tar xf /root/tools.tar.gz /
+    ```
+
+5. 将tools.tar.gz解压到/tools文件夹下
+
+    ```shell
+    mkdir /tools/
+    tar xf /root/tools.tar.gz /tools/
+    ```
+
+6. 源码编译安装inotify-tools-3.13.tar.gz，安装位置为/opt/abc
+
+    ```shell
+    ./configure --prefix=/opt/abc
+    vim /etc/yum.repos.d/mnt.repo
+        [mnt]
+        name=Centos7.5
+        baseurl=file:///dvd
+        enabled=1
+        gpgcheck=0
+        [mymnt]
+        name=Centos7.5
+        baseurl=file:///tools/tools/other
+        enabled=1
+        gpgcheck=0
+    
+    rm -rf /etc/yum.repos.d/C*
+    yum clean all
+    yum repolist
+    
+    createrepo /tools/tools/other/
+    yum -y install gcc
+    yum -y install make
+    
+    rpm -q gcc make	#检查安装情况
+    
+    tar -xf /tools/tools/inotify-tools-3.13.tar.gz -C /opt
+    
+    cd /opt/inotify-tools-3.13/
+    
+    make
+    make install
+    
+    ls /opt/abc/
+    ```
+    
 
 
 > 如有侵权，请联系作者删除
