@@ -1533,6 +1533,38 @@ ls /opt/haha/bin/
 ```
 
 
+## SELinux运行模式的切换
+### SELinux的运行模式
+
+> enforcing（强制模式）
+>
+> permissive（宽松模式）
+>
+> disabled（彻底禁用）
+
+
+### 切换运行模式
+#### 临时切换：
+
+```shell
+getenforce	#查看SELinux当前的运行状态
+
+setendorce 1	#切换至强制模式 1
+setendorce 0	#切换至宽松模式 0
+```
+
+#### 永久改变SELinux的运行模式
+
+> 固定配置：/etc/selinux/config 文件
+
+```shell
+vim /etc/selinux/config	#永久改变SELinux的运行模式
+    SELINUX=disabled	#彻底禁用SELinux
+    SELINUX=enabled	#彻底禁用SELinux
+	
+reboot	#重启查看状态
+```
+
 ---
 
 ---
