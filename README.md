@@ -1337,10 +1337,10 @@ nmcli connection delete ens33   #删除ens33网卡设备
 nmcli connection show
 nmcli connection delete 有线连接\ 1
 nmcli connection show
-nmcli connection add type ethernet ifname eth0 con-name eth0         #添加网卡设备为eth0
+nmcli connection add type ethernet ifname eth0 con-name eth0         #添加网卡设备eth0
 nmcli connection show
 
-#配置 eth0 的IP地址 （手动） 为 192.168.4.10/24，网关为 192.168.4.254，开机后自动连接
+#配置 eth0 的IP地址 （手动manual，自动auto） 为 192.168.4.10/24，网关为 192.168.4.254，开机后自动连接
 nmcli connection modify eth0 ipv4.method manual ipv4.addresses 192.168.4.10/24 ipv4.gateway 192.168.4.254 connection.autoconnect yes
 
 nmcli connection up eth0    #激活网卡
@@ -1357,13 +1357,13 @@ vim /etc/sysconfig/network-scripts/ifcfg-eth0
     NAME=eth0
     DEVICE=eth0
     ONBOOT=yes
-    IPADDR=192.168.4.25
-    PREFIX=24
+    IPADDR=192.168.4.25 #ip地址
+    PREFIX=24   #子网掩码
 
 systemctl restart network   #重启network网络服务
 ifconfig | head -2
-eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-inet 192.168.4.25  netmask 255.255.255.0  broadcast 192.168.4.255
+    eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+    inet 192.168.4.25  netmask 255.255.255.0  broadcast 192.168.4.255
 ```
 
 ### 为本机指定DNS服务器
