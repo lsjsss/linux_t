@@ -1549,8 +1549,8 @@ ls /opt/haha/bin/
 ```shell
 getenforce	#查看SELinux当前的运行状态
 
-setendorce 1	#切换至强制模式 1
-setendorce 0	#切换至宽松模式 0
+setenforce 1	#切换至强制模式 1
+setenforce 0	#切换至宽松模式 0
 ```
 
 #### 永久改变SELinux的运行模式
@@ -1564,6 +1564,187 @@ vim /etc/selinux/config	#永久改变SELinux的运行模式
 	
 reboot	#重启查看状态
 ```
+
+
+## 服务器架构
+
+服务器：能够为其他服务器提供服务的更高级的电脑
+> 
+> 机架式
+> 
+> 塔式
+> 
+> 机柜室
+>
+> 刀片式
+
+
+### Client/Server架构
+
+> 由服务器提供资源或某种功能
+>
+> 客户机使用资源或功能
+
+### 搭建http服务
+#### 装包、起服务
+
+1. 安装httpd（Apache）软件包（服务器软件）
+
+    ```shell
+    yum -y install httpd
+    ```
+
+2. 重起httpd服务
+
+    ```shell
+    systemctl start httpd
+    ```
+
+3. 访问测试，书写一个页面文件
+
+    ```shell
+    firefox http://192.168.4.10
+    
+    vim /var/www/html/index.html	#打开默认存放网页文件的路径进行编辑
+    	<marquee><fount color=red><h1>I am king
+    
+    yum -y install elinks	#命令行浏览器
+    
+    elinks --dump http://192.168.4.10
+    curl http://192.168.4.10	#命令行浏览器
+    ```
+
+##### 浏览页面
+
+```shell
+curl http://192.168.4.10	#命令行界面访问网站
+elinks http://192.168.4.10	#命令行界面下的浏览器
+elinks --dump http://192.168.4.10	#命令行界面直接浏览
+```
+
+### 搭建ftp服务
+#### 装包、起服务
+1. 安装vsftpd软件包
+
+    ```shell
+    yum -y install vsftpd
+    ```
+
+2. 启动vsftpd服务
+
+    ```shell
+    systemctl start vsftpd	#启动vsftpd服务
+    systemctl restart vsftpd	#重起vsftpd服务
+    ```
+
+3. 访问测试
+
+    ```shell
+    firefox ftp://192.168.4.10
+    touch /var/ftp/a.txt
+    
+    ls /var/ftp
+    ```
+
+
+## 防火墙
+### Firewalld服务基础
+
+> 系统服务：firewalld
+>
+> 管理工具：firewall-cmd、firewall-config
+
+
+```shell
+systemctl restart firewalld
+firewall-config &
+```
+
+
+### 预设安全区域
+
+根据所在的网络场所划分，预设保护规则集
+
+> **public**：仅允许访问本机的sshd等少数几个服务
+>
+> **trusted**：允许任何访问
+>
+> **block**：阻塞任何来访请求
+>
+> **drop**：丢弃任何来访的数据包
+
+配置规则的位置
+
+> 运行时（runtime）
+>
+> 永久（permanent）
+
+
+```shell
+#A机器
+firewall-cmd --get-default-zone
+
+#B机器
+ping 192.168.4.10	可以ping通
+curl http://192.168.4.10	#拒绝访问
+curl ftp://192.168.4.10	#拒绝访问
+
+#A机器
+firewall-cmd --set-default-zone=trusted	#修改防火墙默认区域为trusted
+firewall-cmd --get-default-zone
+
+#B机器测试
+ping 192.168.4.10	#可以ping通
+curl http://192.168.4.10	#可以访问
+curl ftp://192.168.4.10	#可以访问
+
+#A机器
+firewall-cmd --set-default-zone=block	#修改防火墙默认区域为block
+firewall-cmd --get-default-zone
+
+#B机器测试
+ping 192.168.4.10	#不可以ping通，但是有回应
+
+#A机器
+firewall-cmd --set-default-zone=drop	#修改防火墙默认区域为drop
+firewall-cmd --get-default-zone
+
+#B机器测试
+ping 192.168.4.10	#不可以ping通，但是有回应
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -3306,6 +3487,30 @@ ls
     ls /opt/abc/
     ```
     
+## 4.28 练习
+### 案例
+
+1. 在svr7安装web服务和ftp服务
+
+    ```shell
+    #前提：安装yum源
+    yum -y install httpd
+    systemctl start httpd
+    
+    yum -y install vsftpd
+    systemctl start vsftpd
+    ```
+
+2. 修改防火墙默认区域，在pc207上验证
+
+    ```shell
+    firewall-cmd --set-default-zone=trusted
+    
+    curl http://192.168.4.7	#使用另一台主机进行验证
+    curl ftp://192.168.4.7
+    ```
+
+
 
 
 > 如有侵权，请联系作者删除
