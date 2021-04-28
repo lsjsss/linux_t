@@ -3493,6 +3493,7 @@ ls
 1. 在svr7安装web服务和ftp服务
 
     ```shell
+    #前提：安装yum源
     yum -y install httpd
     systemctl start httpd
     
