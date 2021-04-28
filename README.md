@@ -1616,11 +1616,11 @@ reboot	#重启查看状态
 
 ##### 浏览页面
 
-    ```shell
-    curl http://192.168.4.10	#命令行界面访问网站
-    elinks http://192.168.4.10	#命令行界面下的浏览器
-    elinks --dump http://192.168.4.10	#命令行界面直接浏览
-    ```
+```shell
+curl http://192.168.4.10	#命令行界面访问网站
+elinks http://192.168.4.10	#命令行界面下的浏览器
+elinks --dump http://192.168.4.10	#命令行界面直接浏览
+```
 
 ### 搭建ftp服务
 #### 装包、起服务
@@ -1654,12 +1654,15 @@ reboot	#重启查看状态
 >
 > 管理工具：firewall-cmd、firewall-config
 
+
 ```shell
 systemctl restart firewalld
 firewall-config &
 ```
 
+
 ### 预设安全区域
+
 根据所在的网络场所划分，预设保护规则集
 
 > **public**：仅允许访问本机的sshd等少数几个服务
