@@ -1549,8 +1549,8 @@ ls /opt/haha/bin/
 ```shell
 getenforce	#查看SELinux当前的运行状态
 
-setendorce 1	#切换至强制模式 1
-setendorce 0	#切换至宽松模式 0
+setenforce 1	#切换至强制模式 1
+setenforce 0	#切换至宽松模式 0
 ```
 
 #### 永久改变SELinux的运行模式
