@@ -3487,6 +3487,29 @@ ls
     ls /opt/abc/
     ```
     
+## 4.28 练习
+### 案例
+
+1. 在svr7安装web服务和ftp服务
+
+    ```shell
+    yum -y install httpd
+    systemctl start httpd
+    
+    yum -y install vsftpd
+    systemctl start vsftpd
+    ```
+
+2. 修改防火墙默认区域，在pc207上验证
+
+    ```shell
+    firewall-cmd --set-default-zone=trusted
+    
+    curl http://192.168.4.7	#使用另一台主机进行验证
+    curl ftp://192.168.4.7
+    ```
+
+
 
 
 > 如有侵权，请联系作者删除
