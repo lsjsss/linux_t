@@ -1680,6 +1680,38 @@ firewall-config &
 > 永久（permanent）
 
 
+```shell
+#A机器
+firewall-cmd --get-default-zone
+
+#B机器
+ping 192.168.4.10	可以ping通
+curl http://192.168.4.10	#拒绝访问
+curl ftp://192.168.4.10	#拒绝访问
+
+#A机器
+firewall-cmd --set-default-zone=trusted	#修改防火墙默认区域为trusted
+firewall-cmd --get-default-zone
+
+#B机器测试
+ping 192.168.4.10	#可以ping通
+curl http://192.168.4.10	#可以访问
+curl ftp://192.168.4.10	#可以访问
+
+#A机器
+firewall-cmd --set-default-zone=block	#修改防火墙默认区域为block
+firewall-cmd --get-default-zone
+
+#B机器测试
+ping 192.168.4.10	#不可以ping通，但是有回应
+
+#A机器
+firewall-cmd --set-default-zone=drop	#修改防火墙默认区域为drop
+firewall-cmd --get-default-zone
+
+#B机器测试
+ping 192.168.4.10	#不可以ping通，但是有回应
+```
 
 
 
