@@ -3645,419 +3645,521 @@ ls
 2. 采取自动分区规划
 3. 软件选择“最小安装”
 
-### 案例2： 配置网络参数，要求如下：
+### 案例2（重复）： 配置网络参数，要求如下：
 1. 永久设置主机名为 A.tedu.cn
 
-```shell
-
-```
+    ```shell
+    echo A.tedu.cn > /etc/hostname
+    hostname A.tedu.cn
+    
+    hostname
+    ```
 
 2. 永久配置静态IP地址为192.168.4.20/24
 
-```shell
+    ```shell
+    #安装yum源
+    mount /dev/cdrom /mnt/	#先连接光盘
+    vi /etc/fstab
+    	/dev/cdrom /mnt iso9660 defaults 0 0
+    
+    vi /etc/yum.repos.d/mnt.repo
+    	[mnt]
+    	name=Centos7.5
+    	baseurl=file:///mnt
+    	enable=1
+    	gpgcheck=0
+    
+    rm -rf /etc/yum.repos/CentOS-*
+    yum clean all
+    yum repolist
+    
+    yum -y install vim-enhanced	#安装vim包
+    yum -y install net-tools	#安装ifconfig支持包
+    yum -y install bash-completion	#安装Tab键支持包
+    poweroff	#重启以生效
+    #调整网络适配器，开机
+    
+    nmcli connection modify ens33 ipv4.addresses 192.168.4.20/24 connection.autoconnect yes
+    nmcli connection up ens33
+    ```
 
-```
+3. 用真机XShell远程到虚拟机B
+
+    ```shell
+    ssh root@192.168.4.20
+    ```
 
 ### 案例3：练习克隆
 1. 将A机器进行克隆
-
-```shell
-
-```
-
 2. 克隆后的机器配置要求如下：
-2.1. 永久设置主机名为 B.tedu.cn
+a. 永久设置主机名为 B.tedu.cn
 
-```shell
+    ```shell
+    echo B.tedu.cn > /etc/hostname
+    hostname B.tedu.cn
+    
+    hostname
+    ```
 
-```
+b. 永久配置静态IP地址为192.168.4.30/24
 
-2.2. 永久配置静态IP地址为192.168.4.30/24
+    ```shell
+    nmcli connection modify ens33 ipv4.addresses 192.168.4.30/24 connection.autoconnect yes
+    nmcli connection up ens33
+    ```
 
-```shell
-
-```
-
-### 案例4：复制，拷贝，移动要求如下：
+### 案例4（重复）：复制，拷贝，移动要求如下：
 1. 新建目录结构/student/test/nsd
 
-```shell
-
-```
+    ```shell
+    mkdir -p /student/test/nsd
+    ```
 
 2. 在目录/student/test/nsd创建文件testa.txt并写入内容 NSD  Student
 
 
-```shell
+    ```shell
+    echo "NSD  Student" > /student/test/nsd/testa.txt
+    ```
 
-```
+3. 将/student/test/nsd/testa.txt文件复制到/root目录下，同时改名为 tedu.txt
 
-3. 将/student/test/nsd/testa.txt文件复制到/root目录下，同时 改名为 tedu.txt
-
-```shell
-
-```
+    ```shell
+    cp /student/test/nsd/testa.txt /root/tedu.txt
+    ```
 
 4. 将/etc/passwd 、/etc/resolv.conf、/etc/hosts 同时拷贝到/student/test/nsd目录下
 
-```shell
-
-```
+    ```shell
+    cp /etc/passwd /etc/resolv.conf /etc/hosts /student/test/nsd
+    ```
 
 5. 将文件 student/test/nsd 重改名为 hs.txt
 
-```shell
+    ```shell
+    mv student/test/nsd student/test/hs.txt
+    ```
 
-```
-
-
-
-### 案例5:查找并处理文件
+### 案例5（重复）:查找并处理文件
 1. 创建目录/root/findfiles/
 
-```shell
-
-```
+    ```shell
+    mkdir /root/findfiles/
+    ```
 
 2. 利用find查找所有用户 lisi 拥有的必须是文件,把它们拷贝到 /root/findfiles/ 文件夹中
 
-```shell
-
-```
+    ```shell
+    useradd lisi
+    mkdir /root/findfiles/
+    find /home -user lisi -type f -exec cp {} /root/findfiles/ \;
+    ```
 
 3. 利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
 
-```shell
-
-```
+    ```shell
+    find /boot -size +10M -type f -exec cp {} /opt \;
+    ```
 
 4. 利用find查找/boot/ 目录下以 vm 开头且必须是文件，拷贝到/opt
 
-```shell
-
-```
+    ```shell
+    find /boot -name "vm*" -type f -exec cp {} /opt \;
+    ```
 
 5. 利用find查找/etc 目录下，以 tab 作为结尾的 必须是文件
 
-```shell
+    ```shell
+    find /etc -name "*tab" -type f -exec cp {} /opt \;
+    ```
 
-```
-
-
-
-### 案例6:查找并提取文件内容
+### 案例6（重复）:查找并提取文件内容
 1. 在文件 /usr/share/dict/words 中查找到所有包含字符串 seismic 的行,将输出信息,写入到/opt/nsd18.txt
 
-```shell
-
-```
+    ```shell
+    grep seismic /usr/share/dict/words > /opt/nsd18.txt
+    ```
 
 2. 查看内核版本，将显示结果重定向到/root/version.txt
 
-```shell
-
-```
+    ```shell
+    uname -r > /root/version.txt
+    ```
 
 3. 查看红帽系统版本，将显示结果追加到/root/version.txt
 
-```shell
-
-```
+    ```shell
+    cat /red hat-release > /root/version.txt
+    ```
 
 4. 查看主机名将显示结果追加到/root/version.txt
 
-```shell
-
-```
+    ```shell
+    hostname > /root/version.txt
+    ```
 
 5. 将/etc/fstab文件中以UUID开头的信息，写入到/root/fstab.txt
 
-```shell
-
-```
+    ```shell
+    grep ‘^UUID’ /etc/fstab > /root/fastab.txt
+    ```
 
 6. 提取/etc/passwd以bash结尾的行，将其信息写入/opt/pass.txt
 
-```shell
-
-```
+    ```shell
+    grep ‘bash$’ /etc/passwd  > /opt/pass.txt
+    ```
 
 7. 复制/etc/login.defs文件到当前目录下，改名为init.txt
 
-```shell
-
-```
-
+    ```shell
+    cp /etc/login.defs ./init.txt
+    ```
+    
 8. 提取init.txt文件里的有效配置（去除以#号开头，去除空行），保存为init2.txt
 
-```shell
-
-```
+    ```shell
+    grep -v '^#' init.txt | grep -v '^$' > init2.txt
+    ```
 
     
 
-### 案例7: MBR分区模式规划分区
+### 案例7（重复）: MBR分区模式规划分区
 1. 添加一块80G的硬盘并规划分区：
-
-```shell
-
-```
-
 2. 划分2个10G的主分区；1个12G的主分区;2个10G的逻辑分区。
 
-```shell
-
-```
-
-### 案例8:构建 LVM 存储
+    ```shell
+    fdisk /dev/sdb
+        n
+        p
+        1
+        
+        +10G
+        
+        n
+        p
+        2
+        
+        +10G
+        n
+        p
+        3
+        
+        +10G
+        n
+        e
+        
+        
+        n
+        e
+        
+        +10G
+        n
+        e
+        
+        +10G
+    ```
+    
+### 案例8（重复）:构建 LVM 存储
 1. 利用/dev/sdb1和/dev/sdb2 新建一个名为 systemvg 的卷组 
 
-```shell
-
-```
+    ```shell
+    vgcreate systemvg /dev/sdb1 /dev/sdb2
+    vgs
+    ```
 
 2. 在此卷组中创建一个名为 vo 的逻辑卷，大小为10G 
 
-```shell
-
-```
+    ```shell
+    lvcreate -L 10G -n vo systemvg
+    ```
 
 3. 将逻辑卷 vo 格式化为 xfs 文件系统 
 
-```shell
-
-```
+    ```shell
+    mkfs.xfs /dev/systemvg/vo 
+    blkid /dev/systemvg/vo
+    ```
 
 4. 将逻辑卷 vo 挂载到 /vo 目录，并在此目录下建立一个测试文件 votest.txt，内容为“I AM KING.” 
 
-```shell
-
-```
+    ```shell
+    mkdir /vo
+    mount /dev/systemvg/vo /vo
+    echo "I AM KING" > /vo/votest.txt
+    cat /vo/votest.txt
+    ```
 
 5. 实现逻辑卷vo开机自动挂载到/vo
 
-```shell
+    ```shell
+    vim /etc/fstab
+        /dev/systemvg/vo /vo xfs defaults 0 0
+    umount /vo
+    df -h
+    mount -a
+    df -h /vo
+    ```
 
-```
 
 
 
-
-### 案例9:构建 LVM 存储(修改PE大小)
+### 案例9（重复）:构建 LVM 存储(修改PE大小)
 1. 新的逻辑卷命名为 database，其大小为50个PE的大小，属于 datastore 卷组 
 
-```shell
-
-```
+    ```shell
+    vgcreate database /dev/sdb3
+    vgs
+    lvcreate -l 50 -n database datastore
+    ```
 
 2. 使用 EXT4 文件系统对逻辑卷 database 格式化，此逻辑卷应该在开机时自动挂载到/nsd/vo
 
-```shell
+    ```shell
+    mkfs.ext4 /dev/database/datastore
+    vim /etc/fstab
+        /dev/database/datastore /nsd/vo ext4 defaults 0 0
+    
+    mkdir -p /nsd/vo
+    mount -a
+    df -h
+    ```
 
-```
 
-
-### 案例10:扩展逻辑卷
+### 案例10（重复）:扩展逻辑卷
 1. 将/dev/systemvg/vo逻辑卷的大小扩展到30G
 
-```shell
+    ```shell
+    vgs
+    lvs
+    
+    vgextend systemvg /dev/sdb5 /dev/sdb6
+    vgs
+    lvextend -L 30G /dev/systemvg/vo
+    
+    df -h
+    xfs_grows /dev/systemvg/vo
+    df -h /vo
+    ```
 
-```
 
 
-
-### 案例11：创建用户
+### 案例11（重复）：创建用户
 1. 创建一个名为alex的用户，用户ID是 3456。密码是flectrag
 
-```shell
+    ```shell
+    useradd -u 3456 alex
+    grep alex /etc/passwd
+    echo flectrag | passwd --stdin alex
+    id alex
+    ```
 
-```
-
-### 案例12：创建用户和组
+### 案例12（重复）：创建用户和组
 1. 一个名为adminuser的组
 
-```shell
-
-```
+    ```shell
+    groupadd adminuser
+    grep adminuser /etc/group
+    ```
 
 2. 一个名为natasha的用户，其属于adminuser，这个组是该用户的从属组
 
-```shell
-
-```
+    ```shell
+    useradd -G adminuser natasha
+    grep natasha /etc/group
+    ```
 
 3. 一个名为harry的用户，属于adminuser，这个组是该用户的从属组
 
-```shell
-
-```
+    ```shell
+    useradd -G adminuser harry
+    grep harryr /etc/group
+    ```
 
 4. 一个名为sarah的用户，其在系统中没有可交互的shell，并且不是adminuser组的成员用户
 
-```shell
-
-```
+    ```shell
+    useradd -s /sbin/nologin sarah
+    grep sarah /etc/group
+    ```
 
 5. natasha、harry、和sarah的密码都要设置为flectrag
 
-```shell
+    ```shell
+    echo flectrag | passwd --stdin natasha
+    echo flectrag | passwd --stdin harry
+    echo flectrag | passwd --stdin sarah
+    ```
 
-```
-
-### 案例13：配置文件 /var/tmp/fstab 的权限
+### 案例13（重复）：配置文件 /var/tmp/fstab 的权限
 1.  拷贝文件/etc/fstab到/var/tmp/fstab，配置文件/var/tmp/fstab的权限：
 
-```shell
-
-```
+    ```shell
+    cp /etc/fstab /var/tmp/fstab
+    ```
 
 2. 文件/var/tmp/fstab的拥有者是root用户
-
-```shell
-
-```
-
 3. 文件/var/tmp/fstab属于root组
 
-```shell
-
-```
+    ```shell
+    chown root:root /var/tmp/fstab
+    ls -ld /var/tmp/fstab 
+    ```
 
 4. 文件/var/tmp/fstab对任何人都不可执行
-
-```shell
-
-```
+    
+    ```shell
+    chmod -x /var/tmp/fstab
+    ls -l /var/tmp/fstab
+    ```
 
 5. 用户natasha 能够对文件/var/tmp/fstab执行读和写操作
 
-```shell
-
-```
-
+    ```shell
+    setfacl -m u:natasha:rw /var/tmp/fstab
+    setfacl /var/tmp/fstab
+    ```
+    
 6. 用户harry 对文件/var/tmp/fstab既不能读，也不能写
 
-```shell
-
-```
+    ```shell
+    setfacl -m u:harry:- /var/tmp/fstab
+    getfacl /var/tmp/fstab
+    ```
 
 7. 所有其他用户（当前的和将来的）能够对文件/var/tmp/fstab进行读操作
 
-```shell
+    ```shell
+    ls -l /var/tmp/fstab
+    ```
 
-```
 
-
-### 案例14：创建一个归档
+### 案例14（重复）：创建一个归档
 1. 创建一个名为 /root/backup.tar.bz2 的归档文件，其中包含 /usr/local 目录中的内容，tar 归档必须使用 bzip2 进行压缩
 
-```shell
+    ```shell
+    tar -jcf /root/backup.tar.bz2 /usr/local/
+    ```
 
-```
-
-### 案例15：配置一个cron任务
+### 案例15（重复）：配置一个cron任务
 1. 为用户 natasha 配置一个定时任务
 
-```shell
-
-```
+    ```shell
+    su natasha
+    crontab -e
+    
+    crontab -e -u natasha
+    ```
 
 2. 每天在本地时间 14:23 执行
-
-```shell
-
-```
-
 3. 需要完成的任务操作为 /bin/echo  hiya
 
-```shell
+    ```shell
+    23 14 * * * /bin/echo hiya
+    ```
 
-```
 
-
-### 案例16：设置别名
+### 案例16（重复）：设置别名
 1. 为root用户永久设置别名为hn=‘hostname’
 
-```shell
-
-```
+    ```shell
+    su root
+    vim ~/.bashrc
+    	alias hn='hostname'
+    ```
 
 2. 为所有用户设置别名为 qstat='/bin/ps -Ao pid,tt,user,fname,rsz' 
-
-```shell
-
-```
+    
+    ```shell
+    vim /etc/bashrc
+    	qstat='/bin/ps -Ao pid,tt,user,fname,rsz'
+    ```
 
 ### 案例17：实现虚拟机B的Web服务
 1. 利用httpd软件搭建Web服务，页面显示内容为 I LIKE  LINUX.
 
-```shell
-
-```
+    ```shell
+    yum -y install httpd
+    systemctl start httpd
+    
+    firefox http://192.168.4.10
+    
+    vim /var/www/html/index.html	#打开默认存放网页文件的路径进行编辑
+    	I LIKE  LINUX.
+    
+    yum -y install elinks	#命令行浏览器
+    
+    elinks --dump http://192.168.4.10
+    curl http://192.168.4.10	#命令行浏览器
+    ```
 
 ### 案例18：实现虚拟机A的防火墙配置
 1. 修改虚拟机A防火墙配置，明确拒绝所有客户端访问(默认区域修改为block)
 
-```shell
-
-```
+    ```shell
+    firewall-cmd --set-default-zone=block	#修改防火墙默认区域为block
+    ```
 
 2. 在虚拟机B上测试能否访问A的Web服务
 
-```shell
-
-```
+    ```shell
+    curl http://192.168.4.10	#不可以访问
+    ```
 
 3. 在虚拟机 B上测试能否 ping通 虚拟机A
 
-```shell
-
-```
+    ```shell
+    ping 192.168.4.10	#不可以访问
+    ```
 
 
 ### 案例19：实现虚拟机A 的防火墙配置
-
-```shell
-
-```
-
 1. 修改虚拟机A防火墙配置，将默认区域修改为trusted
 
-```shell
-
-```
+    ```shell
+    firewall-cmd --set-default-zone=trusted	#修改防火墙默认区域为trusted
+    ```
 
 2. 在虚拟机B上测试能否访问A的Web服务
 
-```shell
-
-```
+    ```shell
+    curl http://192.168.4.10	#可以访问
+    ```
 
 3. 在虚拟机B上测试能否 ping通 虚拟机 A
 
-```shell
-
-```
+    ```shell
+    ping 192.168.4.10	#可以访问
+    ```
 
 
 ### 案例20：实现虚拟机A的防火墙配置
 1. 修改虚拟机A防火墙配置，将默认区域修改为public
 
-```shell
-
-```
+    ```shell
+    firewall-cmd  --set-default-zone=public
+    ```
 
 2. 修改虚拟机A防火墙配置，在public区域中添加http协议,实现永久配置
 
-```shell
-
-```
+    ```shell
+    firewall-cmd --permanent --zone=public --add-service=http	#永久启动http服务
+    firewall-cmd --reload    #重新加载配置文件
+    firewall-cmd --permanent --zone=public --list-all    #查看区域策略
+    
+    netatat -anptu | grep :80    #过滤80端口
+    systemcli status httpd    #查看http服务状态
+    systemcli enable httpd    #设置http服务开机自启
+    ```
 
 3. 在虚拟机B上测试能否访问A 的Web服务
 
-```shell
-
-```
+    ```shell
+    curl ftp://192.168.4.10    #使用B主机检测，可以访问
+    curl http://192.168.4.10    #使用B主机检测，可以访问
+    ```
+    
 
 
 
