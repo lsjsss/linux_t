@@ -1713,6 +1713,46 @@ firewall-cmd --get-default-zone
 ping 192.168.4.10	#不可以ping通，但是有回应
 ```
 
+## 互联网常见协议
+
+> **http**：超文本传输协议	默认端口：90
+>
+> **https**：安全的超文本传输协议	默认端口：443
+>
+> **ftp**：文件传输协议		默认端口：21
+>
+> **tftp**：简单的文件传输协议	默认端口：69
+>
+> **DNS**：域名解析协议	默认端口：53
+>
+> **telent**：远程管理协议	默认端口：23
+>
+> **smtp**：邮件协议（发送端口）	默认端口：25
+>
+> **pop3**：邮件协议（接收端口）	默认端口：110
+>
+> **snmp**：简单的网络管理协议	默认端口：161
+
+
+### 添加服务
+
+```shell
+firewall-cmd --zone=public --add-service=http	#启动http服务，设置允许http协议通过public区域
+firewall-cmd --zone=public --add-service=ftp	#启动ftp服务，设置允许ftp协议通过public区域
+firewall-cmd --zone=public --list-all	#查看区域策略
+
+curl http://192.168.4.10	#在另一台主机上检测是否开启成功
+curl ftp://192.168.4.10
+```
+
+
+
+
+
+
+
+
+
 
 
 
