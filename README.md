@@ -1734,7 +1734,7 @@ ping 192.168.4.10	#不可以ping通，但是有回应
 > **snmp**：简单的网络管理协议	默认端口：161
 
 
-### 添加服务
+### 添加服务（临时）
 
 ```shell
 firewall-cmd --zone=public --add-service=http	#启动http服务，设置允许http协议通过public区域（允许其他主机通过http访问）
@@ -1745,11 +1745,41 @@ curl http://192.168.4.10	#在另一台主机上检测是否开启成功
 curl ftp://192.168.4.10
 ```
 
+### 添加服务（永久）
 
+```shell
+firewall-cmd --permanent --zone=public --add-service=http	#永久启动http服务
+firewall-cmd --reload	#重新加载
 
+netatat -anptu | grep :80	#过滤80端口
+systemcli status httpd	#查看http服务状态
 
+systemcli enable httpd	#设置http服务开机自启
+```
 
+### 服务的启动、重启、停止
 
+```shell
+systemcli enable httpd	#设置http服务开机自启
+systemcli disable httpd	#设置http服务开机不自启
+
+systemcli stop httpd	#停止http服务
+systemcli restart httpd	#重启http服务
+```
+
+### 拒绝其他主机（指定ip，指定网络段）访问服务
+
+```shell
+firewall-cmd --zone=block --add-source=192.168.4.10	#拒绝192.168.4.10主机访问服务
+curl http://192.168.4.10	#使用192.168.4.10主机检测是否可以访问
+```
+
+### 恢复其他主机（指定ip，指定网络段）访问服务
+
+```shell
+firewall-cmd --zone=block --remove-source=192.168.4.10	#移除192.168.4.10主机，使其可以访问服务
+curl http://192.168.4.10	#使用192.168.4.10主机检测是否可以访问
+```
 
 
 
