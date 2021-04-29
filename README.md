@@ -1746,39 +1746,49 @@ curl ftp://192.168.4.10
 ```
 
 ### 添加服务（永久）
+（永久设置允许ftp协议和http协议通过public区域（permanent：永久设置）开机自启）
 
 ```shell
+firewall-cmd --permanent --zone=public --add-service=ftp	#永久启动ftp服务
 firewall-cmd --permanent --zone=public --add-service=http	#永久启动http服务
-firewall-cmd --reload	#重新加载
+firewall-cmd --reload    #重新加载配置文件
+firewall-cmd --permanent --zone=public --list-all    #查看区域策略
 
-netatat -anptu | grep :80	#过滤80端口
-systemcli status httpd	#查看http服务状态
+netatat -anptu | grep :80    #过滤80端口
+systemcli status httpd    #查看http服务状态
+systemcli enable httpd    #设置http服务开机自启
 
-systemcli enable httpd	#设置http服务开机自启
+curl ftp://192.168.4.10    #使用192.168.4.7主机检测，可以访问
+curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 ```
+
 
 ### 服务的启动、重启、停止
 
 ```shell
-systemcli enable httpd	#设置http服务开机自启
-systemcli disable httpd	#设置http服务开机不自启
+systemcli enable httpd    #设置http服务开机自启
+systemcli disable httpd    #设置http服务开机不自启
 
-systemcli stop httpd	#停止http服务
-systemcli restart httpd	#重启http服务
+systemcli restart httpd    #重启http服务
+systemcli stop httpd    #停止http服务
 ```
 
 ### 拒绝其他主机（指定ip，指定网络段）访问服务
 
 ```shell
-firewall-cmd --zone=block --add-source=192.168.4.7	#拒绝192.168.4.70主机访问服务
-curl http://192.168.4.10	#使用192.168.4.7主机检测是否可以访问
+firewall-cmd --zone=block --add-source=192.168.4.7    #拒绝192.168.4.7主机访问服务
+
+curl ftp://192.168.4.10    #使用192.168.4.7主机检测，不可以访问
+curl http://192.168.4.10    #使用192.168.4.7主机检测，不可以访问
 ```
 
-### 恢复其他主机（指定ip，指定网络段）访问服务
+### 恢复其他主机（移除列表中已指定ip，指定网络段）访问服务
 
 ```shell
 firewall-cmd --zone=block --remove-source=192.168.4.7	#移除192.168.4.7主机，使其可以访问服务
-curl http://192.168.4.10	#使用192.168.4.7主机检测是否可以访问
+
+curl ftp://192.168.4.10    #使用192.168.4.7主机检测，可以访问
+curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 ```
 
 
