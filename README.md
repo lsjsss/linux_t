@@ -1770,15 +1770,15 @@ systemcli restart httpd	#重启http服务
 ### 拒绝其他主机（指定ip，指定网络段）访问服务
 
 ```shell
-firewall-cmd --zone=block --add-source=192.168.4.10	#拒绝192.168.4.10主机访问服务
-curl http://192.168.4.10	#使用192.168.4.10主机检测是否可以访问
+firewall-cmd --zone=block --add-source=192.168.4.7	#拒绝192.168.4.70主机访问服务
+curl http://192.168.4.10	#使用192.168.4.7主机检测是否可以访问
 ```
 
 ### 恢复其他主机（指定ip，指定网络段）访问服务
 
 ```shell
-firewall-cmd --zone=block --remove-source=192.168.4.10	#移除192.168.4.10主机，使其可以访问服务
-curl http://192.168.4.10	#使用192.168.4.10主机检测是否可以访问
+firewall-cmd --zone=block --remove-source=192.168.4.7	#移除192.168.4.7主机，使其可以访问服务
+curl http://192.168.4.10	#使用192.168.4.7主机检测是否可以访问
 ```
 
 
