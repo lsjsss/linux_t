@@ -3562,7 +3562,7 @@ ls
 2. 将虚拟机A IP地址设置为192.168.4.10
     
     ```shell
-    nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10 connection.autoconnect yes 
+    nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes 
     nmcli connection up ens33 
     ```
 
