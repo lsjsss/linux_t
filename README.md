@@ -3640,6 +3640,424 @@ ls
         SELINUX=disabled
     ```
 
+### 案例1：新建一台虚拟机，要求如下：
+1. 硬盘80G，内存2G
+2. 采取自动分区规划
+3. 软件选择“最小安装”
+
+### 案例2： 配置网络参数，要求如下：
+1. 永久设置主机名为 A.tedu.cn
+
+```shell
+
+```
+
+2. 永久配置静态IP地址为192.168.4.20/24
+
+```shell
+
+```
+
+### 案例3：练习克隆
+1. 将A机器进行克隆
+
+```shell
+
+```
+
+2. 克隆后的机器配置要求如下：
+2.1. 永久设置主机名为 B.tedu.cn
+
+```shell
+
+```
+
+2.2. 永久配置静态IP地址为192.168.4.30/24
+
+```shell
+
+```
+
+### 案例4：复制，拷贝，移动要求如下：
+1. 新建目录结构/student/test/nsd
+
+```shell
+
+```
+
+2. 在目录/student/test/nsd创建文件testa.txt并写入内容 NSD  Student
+
+
+```shell
+
+```
+
+3. 将/student/test/nsd/testa.txt文件复制到/root目录下，同时 改名为 tedu.txt
+
+```shell
+
+```
+
+4. 将/etc/passwd 、/etc/resolv.conf、/etc/hosts 同时拷贝到/student/test/nsd目录下
+
+```shell
+
+```
+
+5. 将文件 student/test/nsd 重改名为 hs.txt
+
+```shell
+
+```
+
+
+
+### 案例5:查找并处理文件
+1. 创建目录/root/findfiles/
+
+```shell
+
+```
+
+2. 利用find查找所有用户 lisi 拥有的必须是文件,把它们拷贝到 /root/findfiles/ 文件夹中
+
+```shell
+
+```
+
+3. 利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
+
+```shell
+
+```
+
+4. 利用find查找/boot/ 目录下以 vm 开头且必须是文件，拷贝到/opt
+
+```shell
+
+```
+
+5. 利用find查找/etc 目录下，以 tab 作为结尾的 必须是文件
+
+```shell
+
+```
+
+
+
+### 案例6:查找并提取文件内容
+1. 在文件 /usr/share/dict/words 中查找到所有包含字符串 seismic 的行,将输出信息,写入到/opt/nsd18.txt
+
+```shell
+
+```
+
+2. 查看内核版本，将显示结果重定向到/root/version.txt
+
+```shell
+
+```
+
+3. 查看红帽系统版本，将显示结果追加到/root/version.txt
+
+```shell
+
+```
+
+4. 查看主机名将显示结果追加到/root/version.txt
+
+```shell
+
+```
+
+5. 将/etc/fstab文件中以UUID开头的信息，写入到/root/fstab.txt
+
+```shell
+
+```
+
+6. 提取/etc/passwd以bash结尾的行，将其信息写入/opt/pass.txt
+
+```shell
+
+```
+
+7. 复制/etc/login.defs文件到当前目录下，改名为init.txt
+
+```shell
+
+```
+
+8. 提取init.txt文件里的有效配置（去除以#号开头，去除空行），保存为init2.txt
+
+```shell
+
+```
+
+    
+
+### 案例7: MBR分区模式规划分区
+1. 添加一块80G的硬盘并规划分区：
+
+```shell
+
+```
+
+2. 划分2个10G的主分区；1个12G的主分区;2个10G的逻辑分区。
+
+```shell
+
+```
+
+### 案例8:构建 LVM 存储
+1. 利用/dev/sdb1和/dev/sdb2 新建一个名为 systemvg 的卷组 
+
+```shell
+
+```
+
+2. 在此卷组中创建一个名为 vo 的逻辑卷，大小为10G 
+
+```shell
+
+```
+
+3. 将逻辑卷 vo 格式化为 xfs 文件系统 
+
+```shell
+
+```
+
+4. 将逻辑卷 vo 挂载到 /vo 目录，并在此目录下建立一个测试文件 votest.txt，内容为“I AM KING.” 
+
+```shell
+
+```
+
+5. 实现逻辑卷vo开机自动挂载到/vo
+
+```shell
+
+```
+
+
+
+
+### 案例9:构建 LVM 存储(修改PE大小)
+1. 新的逻辑卷命名为 database，其大小为50个PE的大小，属于 datastore 卷组 
+
+```shell
+
+```
+
+2. 使用 EXT4 文件系统对逻辑卷 database 格式化，此逻辑卷应该在开机时自动挂载到/nsd/vo
+
+```shell
+
+```
+
+
+### 案例10:扩展逻辑卷
+1. 将/dev/systemvg/vo逻辑卷的大小扩展到30G
+
+```shell
+
+```
+
+
+
+### 案例11：创建用户
+1. 创建一个名为alex的用户，用户ID是 3456。密码是flectrag
+
+```shell
+
+```
+
+### 案例12：创建用户和组
+1. 一个名为adminuser的组
+
+```shell
+
+```
+
+2. 一个名为natasha的用户，其属于adminuser，这个组是该用户的从属组
+
+```shell
+
+```
+
+3. 一个名为harry的用户，属于adminuser，这个组是该用户的从属组
+
+```shell
+
+```
+
+4. 一个名为sarah的用户，其在系统中没有可交互的shell，并且不是adminuser组的成员用户
+
+```shell
+
+```
+
+5. natasha、harry、和sarah的密码都要设置为flectrag
+
+```shell
+
+```
+
+### 案例13：配置文件 /var/tmp/fstab 的权限
+1.  拷贝文件/etc/fstab到/var/tmp/fstab，配置文件/var/tmp/fstab的权限：
+
+```shell
+
+```
+
+2. 文件/var/tmp/fstab的拥有者是root用户
+
+```shell
+
+```
+
+3. 文件/var/tmp/fstab属于root组
+
+```shell
+
+```
+
+4. 文件/var/tmp/fstab对任何人都不可执行
+
+```shell
+
+```
+
+5. 用户natasha 能够对文件/var/tmp/fstab执行读和写操作
+
+```shell
+
+```
+
+6. 用户harry 对文件/var/tmp/fstab既不能读，也不能写
+
+```shell
+
+```
+
+7. 所有其他用户（当前的和将来的）能够对文件/var/tmp/fstab进行读操作
+
+```shell
+
+```
+
+
+### 案例14：创建一个归档
+1. 创建一个名为 /root/backup.tar.bz2 的归档文件，其中包含 /usr/local 目录中的内容，tar 归档必须使用 bzip2 进行压缩
+
+```shell
+
+```
+
+### 案例15：配置一个cron任务
+1. 为用户 natasha 配置一个定时任务
+
+```shell
+
+```
+
+2. 每天在本地时间 14:23 执行
+
+```shell
+
+```
+
+3. 需要完成的任务操作为 /bin/echo  hiya
+
+```shell
+
+```
+
+
+### 案例16：设置别名
+1. 为root用户永久设置别名为hn=‘hostname’
+
+```shell
+
+```
+
+2. 为所有用户设置别名为 qstat='/bin/ps -Ao pid,tt,user,fname,rsz' 
+
+```shell
+
+```
+
+### 案例17：实现虚拟机B的Web服务
+1. 利用httpd软件搭建Web服务，页面显示内容为 I LIKE  LINUX.
+
+```shell
+
+```
+
+### 案例18：实现虚拟机A的防火墙配置
+1. 修改虚拟机A防火墙配置，明确拒绝所有客户端访问(默认区域修改为block)
+
+```shell
+
+```
+
+2. 在虚拟机B上测试能否访问A的Web服务
+
+```shell
+
+```
+
+3. 在虚拟机 B上测试能否 ping通 虚拟机A
+
+```shell
+
+```
+
+
+### 案例19：实现虚拟机A 的防火墙配置
+
+```shell
+
+```
+
+1. 修改虚拟机A防火墙配置，将默认区域修改为trusted
+
+```shell
+
+```
+
+2. 在虚拟机B上测试能否访问A的Web服务
+
+```shell
+
+```
+
+3. 在虚拟机B上测试能否 ping通 虚拟机 A
+
+```shell
+
+```
+
+
+### 案例20：实现虚拟机A的防火墙配置
+1. 修改虚拟机A防火墙配置，将默认区域修改为public
+
+```shell
+
+```
+
+2. 修改虚拟机A防火墙配置，在public区域中添加http协议,实现永久配置
+
+```shell
+
+```
+
+3. 在虚拟机B上测试能否访问A 的Web服务
+
+```shell
+
+```
 
 
 
