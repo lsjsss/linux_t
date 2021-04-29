@@ -1665,7 +1665,7 @@ firewall-config &
 
 根据所在的网络场所划分，预设保护规则集
 
-> **public**：仅允许访问本机的sshd等少数几个服务
+> **public**：仅允许访问本机的sshd等少数几个服务（sshd、ping、dhcp）
 >
 > **trusted**：允许任何访问
 >
