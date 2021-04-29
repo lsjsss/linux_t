@@ -1585,7 +1585,7 @@ reboot	#重启查看状态
 >
 > 客户机使用资源或功能
 
-### 搭建http服务
+### 搭建web（http）服务
 #### 装包、起服务
 
 1. 安装httpd（Apache）软件包（服务器软件）
@@ -1665,7 +1665,7 @@ firewall-config &
 
 根据所在的网络场所划分，预设保护规则集
 
-> **public**：仅允许访问本机的sshd等少数几个服务
+> **public**：仅允许访问本机的sshd等少数几个服务（sshd、ping、dhcp）
 >
 > **trusted**：允许任何访问
 >
@@ -1712,6 +1712,76 @@ firewall-cmd --get-default-zone
 #B机器测试
 ping 192.168.4.10	#不可以ping通，但是有回应
 ```
+
+## 互联网常见协议
+
+> **http**：超文本传输协议	默认端口：90
+>
+> **https**：安全的超文本传输协议	默认端口：443
+>
+> **ftp**：文件传输协议		默认端口：21
+>
+> **tftp**：简单的文件传输协议	默认端口：69
+>
+> **DNS**：域名解析协议	默认端口：53
+>
+> **telent**：远程管理协议	默认端口：23
+>
+> **smtp**：邮件协议（发送端口）	默认端口：25
+>
+> **pop3**：邮件协议（接收端口）	默认端口：110
+>
+> **snmp**：简单的网络管理协议	默认端口：161
+
+
+### 添加服务（临时）
+
+```shell
+firewall-cmd --zone=public --add-service=http	#启动http服务，设置允许http协议通过public区域（允许其他主机通过http访问）
+firewall-cmd --zone=public --add-service=ftp	#启动ftp服务，设置允许ftp协议通过public区域（允许其他主机通过ftp访问）
+firewall-cmd --zone=public --list-all	#查看区域策略（查看已启动的服务）
+
+curl http://192.168.4.10	#在另一台主机上检测是否开启成功
+curl ftp://192.168.4.10
+```
+
+### 添加服务（永久）
+
+```shell
+firewall-cmd --permanent --zone=public --add-service=http	#永久启动http服务
+firewall-cmd --reload	#重新加载
+
+netatat -anptu | grep :80	#过滤80端口
+systemcli status httpd	#查看http服务状态
+
+systemcli enable httpd	#设置http服务开机自启
+```
+
+### 服务的启动、重启、停止
+
+```shell
+systemcli enable httpd	#设置http服务开机自启
+systemcli disable httpd	#设置http服务开机不自启
+
+systemcli stop httpd	#停止http服务
+systemcli restart httpd	#重启http服务
+```
+
+### 拒绝其他主机（指定ip，指定网络段）访问服务
+
+```shell
+firewall-cmd --zone=block --add-source=192.168.4.10	#拒绝192.168.4.10主机访问服务
+curl http://192.168.4.10	#使用192.168.4.10主机检测是否可以访问
+```
+
+### 恢复其他主机（指定ip，指定网络段）访问服务
+
+```shell
+firewall-cmd --zone=block --remove-source=192.168.4.10	#移除192.168.4.10主机，使其可以访问服务
+curl http://192.168.4.10	#使用192.168.4.10主机检测是否可以访问
+```
+
+
 
 
 
@@ -3508,6 +3578,61 @@ ls
     
     curl http://192.168.4.7	#使用另一台主机进行验证
     curl ftp://192.168.4.7
+    ```
+
+## 4.29 练习
+### 将虚拟机A，svr7，pc207开机，网络模式选为vmnet1
+1. 将虚拟机A主机名设置为A.tedu.cn
+
+    ```shell
+    hostname A.tedu.cn
+    echo A.tedu.cn > /etc/hostname
+    ```
+
+2. 将虚拟机A IP地址设置为192.168.4.10
+    
+    ```shell
+    nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes 
+    nmcli connection up ens33 
+    ```
+
+3. 在虚拟机A上构建web服务和ftp服务
+
+    ```shell
+    mount /dev/cdrom /mnt
+    
+    vim /etc/yum.repos.d/a.repo
+        [mnt]
+        name=Centos
+        baseurl=file:///mnt
+        gpgcheck=0
+        enabled=1
+        
+    rm -rf /etc/yum.repos.d/C*
+    yum clean all
+    yum repolist 
+    
+    yum repolist 
+    yum -y install httpd
+    yum -y install vsftpd
+    systemctl start vsftpd
+    systemctl start httpd
+    
+    curl http://192.168.4.10
+    curl ftp://192.168.4.10
+    ```
+
+4. 用真机xshell远程到虚拟机A，svr7，pc207
+
+    ```shell
+    ssh root@192.168.4.10
+    ```
+
+5. 关闭虚拟机A，svr7，pc207的selinux
+
+    ```shell
+    vim /etc/selinux/config 
+        SELINUX=disabled
     ```
 
 
