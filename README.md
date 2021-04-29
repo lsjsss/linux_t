@@ -3510,6 +3510,61 @@ ls
     curl ftp://192.168.4.7
     ```
 
+## 4.29 练习
+### 将虚拟机A，svr7，pc207开机，网络模式选为vmnet1
+1. 将虚拟机A主机名设置为A.tedu.cn
+
+    ```shell
+    hostname A.tedu.cn
+    echo A.tedu.cn > /etc/hostname
+    ```
+
+2. 将虚拟机A IP地址设置为192.168.4.10
+    
+    ```shell
+    nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10 connection.autoconnect yes 
+    nmcli connection up ens33 
+    ```
+
+3. 在虚拟机A上构建web服务和ftp服务
+
+    ```shell
+    mount /dev/cdrom /mnt
+    
+    vim /etc/yum.repos.d/a.repo
+        [mnt]
+        name=Centos
+        baseurl=file:///mnt
+        gpgcheck=0
+        enabled=1
+        
+    rm -rf /etc/yum.repos.d/C*
+    yum clean all
+    yum repolist 
+    
+    yum repolist 
+    yum -y install httpd
+    yum -y install vsftpd
+    systemctl start vsftpd
+    systemctl start httpd
+    
+    curl http://192.168.4.10
+    curl ftp://192.168.4.10
+    ```
+
+4. 用真机xshell远程到虚拟机A，svr7，pc207
+
+    ```shell
+    ssh root@192.168.4.10
+    ```
+
+5. 关闭虚拟机A，svr7，pc207的selinux
+
+    ```shell
+    vim /etc/selinux/config 
+        SELINUX=disabled
+    ```
+
 
 
 
