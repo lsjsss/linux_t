@@ -1737,8 +1737,8 @@ ping 192.168.4.10	#不可以ping通，但是有回应
 ### 添加服务
 
 ```shell
-firewall-cmd --zone=public --add-service=http	#启动http服务，设置允许http协议通过public区域
-firewall-cmd --zone=public --add-service=ftp	#启动ftp服务，设置允许ftp协议通过public区域
+firewall-cmd --zone=public --add-service=http	#启动http服务，设置允许http协议通过public区域（允许其他主机通过http访问）
+firewall-cmd --zone=public --add-service=ftp	#启动ftp服务，设置允许ftp协议通过public区域（允许其他主机通过ftp访问）
 firewall-cmd --zone=public --list-all	#查看区域策略
 
 curl http://192.168.4.10	#在另一台主机上检测是否开启成功
