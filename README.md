@@ -1851,7 +1851,7 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 > 	enabled=1
 > 	gpgcheck=0
 > yum clean all
-> yum repolis
+> yum repolist
 > ```
 
 
