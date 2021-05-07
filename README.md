@@ -1092,7 +1092,7 @@ vim /etc/fstab
 swapon -a
 swapon -s
 ```
-    
+
 ## 逻辑卷
 
 > 优势：
@@ -1788,9 +1788,71 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 
 
 
+## 部署网络 yum 源
+
+>  服务端：利用 Web 服务或 FTP 服务共享光盘所有内容
+
+### 利用 web（HTTP）服务共享
+
+默认共享位置:/var/www/html/ 
+
+> 服务端svr7操作
+>
+> ```shell
+> yum -y install httpd
+> systemctl start httpd
+> systemctl status httpd #查看服务运行状态
+> mkdir /var/www/html/dvd
+> mount /dev/cdrom /var/www/html/dvd
+> ls /var/www/html/dvd #查看是否有光盘内容
+> firefox http://192.168.4.7/dvd #访问测试
+> ```
+
+>  客户端pc207操作
+>
+> ```shell
+> vim /etc/yum.repos.d/dvd.repo
+> 	[dvd]
+> 	name=CentOS7.5
+> 	baseurl=http://192.168.4.7/dvd
+> 	enabled=1
+> 	gpgcheck=0
+> yum clean all
+> yum repolist
+> yum -y install unzip
+> ```
 
 
 
+### 利用 FTP 服务共享
+
+默认共享位置：/var/ftp  
+
+>  服务端svr7操作
+>
+> ```shell
+> rpm -q vsftpd
+> systemctl start vsftpd
+> systemctl status vsftpd #查看服务运行状态
+> mkdir /var/ftp/dvd
+> mount /dev/cdrom /var/ftp/dvd
+> firefox ftp://192.168.4.7/dvd #访问测试
+> ```
+
+
+
+> 客户端pc207操作
+>
+> ```shell
+> vim /etc/yum.repos.d/dvd.repo
+> 	[dvd]
+> 	name=CentOS7.5
+> 	baseurl=ftp://192.168.4.7/dvd
+> 	enabled=1
+> 	gpgcheck=0
+> yum clean all
+> yum repolis
+> ```
 
 
 
@@ -2507,7 +2569,6 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 	echo flectrag | passwd --stdin alex
 	id alex
 	```
-	
 ### 案例7：创建用户和组
 
 1. 一个名为adminuser的组
@@ -2580,7 +2641,6 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 	vim /root/.bashrc
 		alias hn='hostname'
 	```
-	
 
 
 2. 为所有用户设置别名为 qstat='/bin/ps -Ao pid,tt,user,fname,rsz' 
@@ -2651,34 +2711,34 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 	2.2 一个名为natasha的用户，其属于adminuser组，这个组是该用户的从属组
 	
 	```shell
-
-	```shell
+	
+	​```shell
 	useradd -G adminuser natasha
 	id natasha
 	```
 
 
     2.3 一个名为harry的用户，其属于adminuser组，这个组是该用户的从属组
-
-	```shell
-	useradd -G adminuser harry
-	id harry
-	```
-
+    
+    ```shell
+    useradd -G adminuser harry
+    id harry
+    ```
+    
     2.4 一个名为sarah的用户，其在系统中没有可交互的Shell，并且不是adminuser组的成员
-
-	```shell
-	useradd -s /sbin/nologin sarah
-	grep sarah /etc/passwd
-	```
-
+    
+    ```shell
+    useradd -s /sbin/nologin sarah
+    grep sarah /etc/passwd
+    ```
+    
     2.5 natasha、harry、sarah的密码都要设置为flectrag
-
-	```shell
-	echo flectrag | passwd --stdin natasha
-	echo flectrag | passwd --stdin harry
-	echo flectrag | passwd --stdin sarah
-	```
+    
+    ```shell
+    echo flectrag | passwd --stdin natasha
+    echo flectrag | passwd --stdin harry
+    echo flectrag | passwd --stdin sarah
+    ```
 
 ### 练习4.8
 #### 案例2：文件/目录的默认权限
@@ -3165,7 +3225,7 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 ### 4.16 案例：LVM逻辑卷练习
 
 1. 添加一块80G硬盘，划分三个10G的主分区，2个10G的逻辑分区
-    
+   
     ```shell
     lsblk
     fdisk /dev/sdb
@@ -3210,7 +3270,7 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
     ```shell
     vim /etc/fstab 
         /dev/systemvg/vo /vo xfs defaults 0 0
-
+    
     umount /vo
     mount -a
     lsblk
@@ -3332,7 +3392,6 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
     xfs_grows /dev/systemvg/vo
     df -h /vo
     ```
-    
 
 ## 远程管理ssh
 
@@ -3561,7 +3620,6 @@ ls
     
     ls /opt/abc/
     ```
-    
 ## 4.28 练习
 ### 案例
 
@@ -3595,7 +3653,7 @@ ls
     ```
 
 2. 将虚拟机A IP地址设置为192.168.4.10
-    
+   
     ```shell
     nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes 
     nmcli connection up ens33 
@@ -3693,7 +3751,7 @@ ls
 ### 案例3：练习克隆
 1. 将A机器进行克隆
 2. 克隆后的机器配置要求如下：
-a. 永久设置主机名为 B.tedu.cn
+   a. 永久设置主机名为 B.tedu.cn
 
     ```shell
     echo B.tedu.cn > /etc/hostname
@@ -3860,7 +3918,6 @@ b. 永久配置静态IP地址为192.168.4.30/24
         
         +10G
     ```
-    
 ### 案例8（重复）:构建 LVM 存储
 1. 利用/dev/sdb1和/dev/sdb2 新建一个名为 systemvg 的卷组 
 
@@ -4008,7 +4065,7 @@ b. 永久配置静态IP地址为192.168.4.30/24
     ```
 
 4. 文件/var/tmp/fstab对任何人都不可执行
-    
+   
     ```shell
     chmod -x /var/tmp/fstab
     ls -l /var/tmp/fstab
@@ -4070,7 +4127,7 @@ b. 永久配置静态IP地址为192.168.4.30/24
     ```
 
 2. 为所有用户设置别名为 qstat='/bin/ps -Ao pid,tt,user,fname,rsz' 
-    
+   
     ```shell
     vim /etc/bashrc
     	qstat='/bin/ps -Ao pid,tt,user,fname,rsz'
@@ -4159,7 +4216,6 @@ b. 永久配置静态IP地址为192.168.4.30/24
     curl ftp://192.168.4.10    #使用B主机检测，可以访问
     curl http://192.168.4.10    #使用B主机检测，可以访问
     ```
-    
 
 
 
