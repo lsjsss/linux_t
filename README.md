@@ -497,8 +497,20 @@ vim ~/.bashrc	#为当前用户添加别名（永久）
 **:w /root/newfile** ：另存为其他文件（ /root/newfile ）
 **:r /etc/filesystems** ：读取其他文件内容（ /etc/filesystems ）
 
-### 字符串替换
 
+### 批量添加注释（命令模式下）
+
+>`Ctrl`+`v`键
+>
+> 选中要添加注释的行
+>
+> `I`键
+>
+> #
+>
+> `Esc`键
+
+### 字符串替换
 #### 行内替换
 
 **: s /old/new** ：使用new替换当前行的第一个old
@@ -1855,7 +1867,44 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 > ```
 
 
+## NPT（网络时间协议）时间同步
+Network Time Protocol（网络时间协议）
 
+> 用来同步网络中各个计算机的时间的协议
+>
+> 210.72.145.39（国家授时中心服务器IP地址）
+
+Stratum（分层设计）
+
+> Stratum层的总数限制在15层以内（包括15）
+
+### 时间同步软件包
+
+服务端（设置为时间同步服务器）：
+
+```shell
+yum -y install chrony
+rpm -qc chrony	#查看配置文件（.conf结尾的文件）
+
+vim /etc/chrony.conf
+	server 0.centos.pool.ntp.org iburst	#网络标准时间服务器（快速同步）
+	allow 192.168.4.0/24	#允许同步时间的主机网络段
+	denv 192.168.4.1	#拒绝同步时间的主机网络段
+	local statum 10	#访问层数
+systemctl restart chronyd	#重启时间同步服务
+
+setenforce 0
+systemctl stop firewalld	#关闭防火墙
+```
+
+客户端（同步服务器上的时间）：
+
+```shell
+vim /etc/chrony.conf
+	server 192.168.4.7 iburst	#指定要同步时间的服务器（192.168.4.7）
+systemctl restart chronyd	#重启时间同步服务
+chronyc sources -v	#验证时间是否同步成功
+```
 
 
 
