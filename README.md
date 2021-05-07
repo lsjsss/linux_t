@@ -4217,6 +4217,82 @@ b. 永久配置静态IP地址为192.168.4.30/24
     curl http://192.168.4.10    #使用B主机检测，可以访问
     ```
 
+## 5.7 练习
+服务端是svr7，客户端为pc207,完成以下案例
+
+### 案例1：构建网络yum
+
+利用ftp服务实现yum源提供服务
+1. svr7构建vsftpd服务
+
+    ```shell
+    mount /dev/cdrom /mnt
+    vim /etc/yum.repos.d/mnt.repo
+    	[mnt]
+    	name=Centos7.5
+    	baseurl=file:///mnt
+    	gpgcheck=0
+    	enabled=1
+    rm -rf /etc/yum.repos.d/C*
+    yum clean all
+    yum repolist
+    
+    yum -y install vsftpd
+    systemctl start vsftpd
+    systemctl status vsftpd #查看服务运行状态
+    
+    firewall-cmd --set-default-zone=trusted 
+    
+    curl ftp://192.168.4.7
+    ```
+
+2. 利用vsftpd服务提供如下内容：
+a. Centos7光盘内容
+
+    ```shell
+    mkdir /var/ftp/dvd
+    mount /dev/cdrom /var/ftp/dvd
+    ```
+
+b. 自定义yum仓库内容
+
+    ```shell
+    vim /etc/yum.repos.d/dvd.repo
+    	[dvd]
+    	name=CentOS7.5
+    	baseurl=ftp://192.168.4.7/dvd
+    	enabled=1
+    	gpgcheck=0
+    
+    yum clean all
+    yum repolist
+    ```
+
+### 案例2：高级远程管理
+
+1. 实现svr7远程管理pc207，无密码验证
+
+    ```shell
+    ssh root@192.168.4.207
+    ssh-keygen
+    ssh-copy-id root@192.168.4.207
+    
+    ssh root@192.168.4.207
+    ```
+
+2. 将svr7的/home目录拷贝到pc207的/opt目录下
+
+    ```shell
+    scp -r /home root@192.168.4.207:/opt/
+    ```
+
+3. 将svr7的/etc/passwd文件拷贝到tom用户的家目录下，以用户tom的密码验证（用户tom密码为redhat）
+
+    ```shell
+    scp -r /etc/passwd tom@192.168.4.207:/home/tom/
+    ```
+
+
 
 
 > 如有侵权，请联系作者删除
