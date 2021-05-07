@@ -497,8 +497,20 @@ vim ~/.bashrc	#为当前用户添加别名（永久）
 **:w /root/newfile** ：另存为其他文件（ /root/newfile ）
 **:r /etc/filesystems** ：读取其他文件内容（ /etc/filesystems ）
 
-### 字符串替换
 
+### 批量添加注释（命令模式下）
+
+>`Ctrl`+`v`键
+>
+> 选中要添加注释的行
+>
+> `I`键
+>
+> #
+>
+> `Esc`键
+
+### 字符串替换
 #### 行内替换
 
 **: s /old/new** ：使用new替换当前行的第一个old
@@ -1851,11 +1863,48 @@ curl http://192.168.4.10    #使用192.168.4.7主机检测，可以访问
 > 	enabled=1
 > 	gpgcheck=0
 > yum clean all
-> yum repolis
+> yum repolist
 > ```
 
 
+## NPT（网络时间协议）时间同步
+Network Time Protocol（网络时间协议）
 
+> 用来同步网络中各个计算机的时间的协议
+>
+> 210.72.145.39（国家授时中心服务器IP地址）
+
+Stratum（分层设计）
+
+> Stratum层的总数限制在15层以内（包括15）
+
+### 时间同步软件包
+
+服务端（设置为时间同步服务器）：
+
+```shell
+yum -y install chrony
+rpm -qc chrony	#查看配置文件（.conf结尾的文件）
+
+vim /etc/chrony.conf
+	server 0.centos.pool.ntp.org iburst	#网络标准时间服务器（快速同步）
+	allow 192.168.4.0/24	#允许同步时间的主机网络段
+	denv 192.168.4.1	#拒绝同步时间的主机网络段
+	local statum 10	#访问层数
+systemctl restart chronyd	#重启时间同步服务
+
+setenforce 0
+systemctl stop firewalld	#关闭防火墙
+```
+
+客户端（同步服务器上的时间）：
+
+```shell
+vim /etc/chrony.conf
+	server 192.168.4.7 iburst	#指定要同步时间的服务器（192.168.4.7）
+systemctl restart chronyd	#重启时间同步服务
+chronyc sources -v	#验证时间是否同步成功
+```
 
 
 
@@ -4216,6 +4265,82 @@ b. 永久配置静态IP地址为192.168.4.30/24
     curl ftp://192.168.4.10    #使用B主机检测，可以访问
     curl http://192.168.4.10    #使用B主机检测，可以访问
     ```
+
+## 5.7 练习
+服务端是svr7，客户端为pc207,完成以下案例
+
+### 案例1：构建网络yum
+
+利用ftp服务实现yum源提供服务
+1. svr7构建vsftpd服务
+
+    ```shell
+    mount /dev/cdrom /mnt
+    vim /etc/yum.repos.d/mnt.repo
+    	[mnt]
+    	name=Centos7.5
+    	baseurl=file:///mnt
+    	gpgcheck=0
+    	enabled=1
+    rm -rf /etc/yum.repos.d/C*
+    yum clean all
+    yum repolist
+    
+    yum -y install vsftpd
+    systemctl start vsftpd
+    systemctl status vsftpd #查看服务运行状态
+    
+    firewall-cmd --set-default-zone=trusted 
+    
+    curl ftp://192.168.4.7
+    ```
+
+2. 利用vsftpd服务提供如下内容：
+a. Centos7光盘内容
+
+    ```shell
+    mkdir /var/ftp/dvd
+    mount /dev/cdrom /var/ftp/dvd
+    ```
+
+b. 自定义yum仓库内容
+
+    ```shell
+    vim /etc/yum.repos.d/dvd.repo
+    	[dvd]
+    	name=CentOS7.5
+    	baseurl=ftp://192.168.4.7/dvd
+    	enabled=1
+    	gpgcheck=0
+    
+    yum clean all
+    yum repolist
+    ```
+
+### 案例2：高级远程管理
+
+1. 实现svr7远程管理pc207，无密码验证
+
+    ```shell
+    ssh root@192.168.4.207
+    ssh-keygen
+    ssh-copy-id root@192.168.4.207
+    
+    ssh root@192.168.4.207
+    ```
+
+2. 将svr7的/home目录拷贝到pc207的/opt目录下
+
+    ```shell
+    scp -r /home root@192.168.4.207:/opt/
+    ```
+
+3. 将svr7的/etc/passwd文件拷贝到tom用户的家目录下，以用户tom的密码验证（用户tom密码为redhat）
+
+    ```shell
+    scp -r /etc/passwd tom@192.168.4.207:/home/tom/
+    ```
+
 
 
 
