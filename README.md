@@ -1983,7 +1983,7 @@ man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
 iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
 
 #重启iscsi服务（主服务），使用共享存储
-systemctl restart iscsi	
+systemctl restart iscsid
 lsblk
 ```
 
