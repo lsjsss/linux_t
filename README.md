@@ -1980,7 +1980,7 @@ systemctl restart iscsid
 
 #利用命令发现服务端共享存储
 man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
-iscsiadm --mode discoverydb --type sendtargets --portal 192.168.1.10 --discover
+iscsiadm --mode discoverydb --type sendtargets --portal 192.168.1.7 --discover
 
 #重启iscsi服务（主服务），使用共享存储
 systemctl restart iscsi	
