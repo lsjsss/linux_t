@@ -4452,6 +4452,76 @@ b. 自定义yum仓库内容
     ls /home/tom
     ```
 
+### 案例练习
+配置iSCSI服务端
+1. 配置svr7提供iSCSI服务，磁盘名为iqn.2016-02.com.example:svr7，服务端口为3260，使用store作其后端卷，其大小为3GiB
+
+    ```shell
+    fdisk /dev/sdb
+    	+3G
+    partprobe /dev/sdb	#刷新分区
+    lsblk
+    
+    yum -y install targetcli
+    systemctl stop firewalld
+    targetcli
+    	ls
+    	backstores/block create dev=/dev/sdb1 name=store
+    	iscsi/ create iqn.2016-02.com.example:svr7
+    	iscsi/iqn.2016-02.com.example:svr7/tpg1/luns create /backstores/block/store
+    	iscsi/iqn.2016-02.com.example:svr7/tpg1/acls create iqn.2016-02.com.example:client
+    	ls
+    	exit
+    systemctl restart target.service
+    ```
+
+配置iSCSI客户端
+2. 配置pc207使其能连接上svr7提供的iqn.2016-02.com.example.svr7，iSCSI设备在系统启动期间自动挂载，块设备iSCSI上包含一个大小为2100MiB的分区，并格式化为ext4文件系统，此分区挂载在/mnt/data上，同时在系统启动的期间自动挂载
+
+    ```shell
+    #安装客户端软件
+    yum -y install iscsi-initiator-utils
+    rpm -q iscsi-initiator-utils
+    
+    #修改配置文件，指定客户端声称的名称
+    vim  /etc/iscsi/initiatorname.iscsi
+    	InitiatorName=iqn.2016-02.com.example.client
+    
+    #重启iscsi服务（主服务），使用共享存储
+    systemctl restart iscsi	d
+    iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover	#利用命令发现服务端共享存储
+    
+    #iSCSI自动挂载
+    systemctl restart iscsi	
+    systemctl enable iscsi	
+    
+    #重起iscsid服务，仅仅是刷新客户端声称的名称
+    systemctl restart iscsi
+    
+    #添加iSCSI 2100M分区
+    fdisk /dev/sdb
+    	+2100M
+    partprobe /dev/sdb	#刷新分区
+    lsblk
+    
+    #格式化为ext4文件系统类型?
+    mkfs.ext4 /dev/sdb2
+    
+    #挂载到 /mnt/data
+    umount /mnt
+    mkdir /mnt/data
+    mount /mnt/data
+    mount /dev/sdb2 /mnt/data
+    
+    #系统启动自动挂载
+    vim /etc/fstab
+    	/dev/sdb2 /mnt/data ext4 defaults 0 0
+    
+    mount -a
+    df -h
+    ```
+
+
 
 
 
