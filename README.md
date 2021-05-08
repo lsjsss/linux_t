@@ -1907,8 +1907,61 @@ chronyc sources -v	#验证时间是否同步成功
 ```
 
 
+## Iscsi概述
+### Internet SCSI，网际SCSI接口
+
+> 一种基于C/S架构的虚拟磁盘技术
+>
+> 服务器提供磁盘空间，客户机连接并当成本地磁盘使用
 
 
+### Iscsi磁盘的构成
+backstore，后端存储
+> 对应到服务端提供实际存储空间的设备，需要起一个管理名称
+
+target，磁盘组
+> 是客户端的访问目标，作为一个框架，由多个lun组成
+
+lun，逻辑单元
+> 每一个lun需要关联到某一个后端存储设备，在客户端会视为一块虚拟磁盘
+
+#### 使用targetcli建立配置
+
+```shell
+backstore/block create name=后端存储名 dev=实际设备路径	#创建后端存储
+iscsi create 磁盘组的IQN名称	#IQN名称规范，创建磁盘组
+iscsi/磁盘组名/tpql/luns create 后端存储路径	#创建关联
+iscsi/磁盘组名/tpgl/acls create 客户机IQN标识
+iscsi/磁盘组名/tpql/portals create IP地址 端口号
+```
+
+```shell
+yum -y install targetcli	#安装服务软件包 targetcli
+
+targetcli	#运行 targetcli 命令进行配置
+	ls
+	
+	#创建后端存储
+	backstores/block create dev=/dev/sdb1 name=nsd
+	
+	#创建磁盘组target，使用IQN名称规范
+	iscsi/ create iqn.2019-09.cn.tedu:server
+	
+	#创建lun关联
+	iscsi/iqn.2019-09.cn.tedu:server/tpg1/luns create /backstores/block/nsd
+	
+	#设置访问控制（acl），设置客户端的名称
+	iscsi/iqn.2019-09.cn.tedu:server/tpg1/acls create iqn.2019-09.cn.tedu:client
+
+	ls
+	exit
+systemctl restart target.service
+```
+
+#### IQN名称规范
+
+`iqn.yyyy-mm.倒序域名：自定义标识`
+用来识别target磁盘组，也用来识别客户机身份
 
 
 
