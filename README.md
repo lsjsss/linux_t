@@ -1907,6 +1907,107 @@ chronyc sources -v	#验证时间是否同步成功
 ```
 
 
+## Iscsi概述
+### Internet SCSI，网际SCSI接口
+
+> 一种基于C/S架构的虚拟磁盘技术
+>
+> 服务器提供磁盘空间，客户机连接并当成本地磁盘使用
+
+
+### Iscsi磁盘的构成
+backstore，后端存储
+> 对应到服务端提供实际存储空间的设备，需要起一个管理名称
+
+target，磁盘组
+> 是客户端的访问目标，作为一个框架，由多个lun组成
+
+lun，逻辑单元
+> 每一个lun需要关联到某一个后端存储设备，在客户端会视为一块虚拟磁盘
+
+### 使用targetcli建立配置（服务机svr7）
+
+```shell
+backstore/block create name=后端存储名 dev=实际设备路径	#创建后端存储
+iscsi create 磁盘组的IQN名称	#IQN名称规范，创建磁盘组
+iscsi/磁盘组名/tpql/luns create 后端存储路径	#创建关联
+iscsi/磁盘组名/tpgl/acls create 客户机IQN标识
+iscsi/磁盘组名/tpql/portals create IP地址 端口号
+```
+
+```shell
+yum -y install targetcli	#安装服务软件包 targetcli
+systemctl stop firewalld    #关闭防火墙
+targetcli	#运行 targetcli 命令进行配置
+	ls
+	
+	#创建后端存储
+	backstores/block create dev=/dev/sdb1 name=nsd
+	
+	#创建磁盘组target，使用IQN名称规范
+	iscsi/ create iqn.2019-09.cn.tedu:server
+	
+	#创建lun关联
+	iscsi/iqn.2019-09.cn.tedu:server/tpg1/luns create /backstores/block/nsd
+	
+	#设置访问控制（acl），设置客户端的名称
+	iscsi/iqn.2019-09.cn.tedu:server/tpg1/acls create iqn.2019-09.cn.tedu:client
+
+	ls
+	exit
+systemctl restart target.service
+```
+
+#### IQN名称规范
+
+`iqn.yyyy-mm.倒序域名`：自定义标识
+用来识别target磁盘组，也用来识别客户机身份
+
+
+### 使用targetcli建立配置（客户机pc207）
+
+```shell
+#安装客户端软件
+yum -y install iscsi-initiator-utils
+rpm -q iscsi-initiator-utils
+
+#修改配置文件，指定客户端声称的名称
+vim  /etc/iscsi/initiatorname.iscsi
+	InitiatorName=iqn.2019-09.cn.tedu:client
+
+#重起iscsid服务，仅仅是刷新客户端声称的名称
+systemctl restart iscsid
+
+#利用命令发现服务端共享存储
+man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
+iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
+
+#重启iscsi服务（主服务），使用共享存储
+systemctl restart iscsid
+lsblk
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4275,6 +4376,11 @@ b. 永久配置静态IP地址为192.168.4.30/24
 1. svr7构建vsftpd服务
 
     ```shell
+    setenforce 0	#SELinux运行模式切换 0宽松 1强制
+	/etc/selinux/config	#永久配置
+    getenforce	#查看
+    ststemctl stop firewall
+
     mount /dev/cdrom /mnt
     vim /etc/yum.repos.d/mnt.repo
     	[mnt]
@@ -4333,13 +4439,89 @@ b. 自定义yum仓库内容
 
     ```shell
     scp -r /home root@192.168.4.207:/opt/
+    ls /opt
     ```
 
 3. 将svr7的/etc/passwd文件拷贝到tom用户的家目录下，以用户tom的密码验证（用户tom密码为redhat）
 
     ```shell
+    ssh root@192.168.4.207
+    useradd tom
+    echo 'redhat' | passwd --stdin tom
     scp -r /etc/passwd tom@192.168.4.207:/home/tom/
+    ls /home/tom
     ```
+
+### 案例练习
+配置iSCSI服务端
+1. 配置svr7提供iSCSI服务，磁盘名为iqn.2016-02.com.example:svr7，服务端口为3260，使用store作其后端卷，其大小为3GiB
+
+    ```shell
+    fdisk /dev/sdb
+    	+3G
+    partprobe /dev/sdb	#刷新分区
+    lsblk
+    
+    yum -y install targetcli
+    systemctl stop firewalld
+    targetcli
+    	ls
+    	backstores/block create dev=/dev/sdb1 name=store
+    	iscsi/ create iqn.2016-02.com.example:svr7
+    	iscsi/iqn.2016-02.com.example:svr7/tpg1/luns create /backstores/block/store
+    	iscsi/iqn.2016-02.com.example:svr7/tpg1/acls create iqn.2016-02.com.example:client
+    	ls
+    	exit
+    systemctl restart target.service
+    ```
+
+配置iSCSI客户端
+
+2. 配置pc207使其能连接上svr7提供的iqn.2016-02.com.example.svr7，iSCSI设备在系统启动期间自动挂载，块设备iSCSI上包含一个大小为2100MiB的分区，并格式化为ext4文件系统，此分区挂载在/mnt/data上，同时在系统启动的期间自动挂载
+
+    ```shell
+    #安装客户端软件
+    yum -y install iscsi-initiator-utils
+    rpm -q iscsi-initiator-utils
+    
+    #修改配置文件，指定客户端声称的名称
+    vim  /etc/iscsi/initiatorname.iscsi
+    	InitiatorName=iqn.2016-02.com.example.client
+    
+    #重启iscsi服务（主服务），使用共享存储
+    systemctl restart iscsi	d
+    iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover	#利用命令发现服务端共享存储
+    
+    #iSCSI自动挂载
+    systemctl restart iscsi	
+    systemctl enable iscsi	
+    
+    #重起iscsid服务，仅仅是刷新客户端声称的名称
+    systemctl restart iscsi
+    
+    #添加iSCSI 2100M分区
+    fdisk /dev/sdb
+    	+2100M
+    partprobe /dev/sdb	#刷新分区
+    lsblk
+    
+    #格式化为ext4文件系统类型?
+    mkfs.ext4 /dev/sdb2
+    
+    #挂载到 /mnt/data
+    umount /mnt
+    mkdir /mnt/data
+    mount /mnt/data
+    mount /dev/sdb2 /mnt/data
+    
+    #系统启动自动挂载
+    vim /etc/fstab
+    	/dev/sdb2 /mnt/data ext4 defaults 0 0
+    
+    mount -a
+    df -h
+    ```
+
 
 
 
