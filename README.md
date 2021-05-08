@@ -1925,7 +1925,7 @@ target，磁盘组
 lun，逻辑单元
 > 每一个lun需要关联到某一个后端存储设备，在客户端会视为一块虚拟磁盘
 
-#### 使用targetcli建立配置
+### 使用targetcli建立配置（服务机svr7）
 
 ```shell
 backstore/block create name=后端存储名 dev=实际设备路径	#创建后端存储
@@ -1964,7 +1964,28 @@ systemctl restart target.service
 用来识别target磁盘组，也用来识别客户机身份
 
 
+### 使用targetcli建立配置（客户机pc207）
 
+```shell
+#安装客户端软件
+yum -y install iscsi-initiator-utils
+rpm -q iscsi-initiator-utils
+
+#修改配置文件，指定客户端声称的名称
+vim  /etc/iscsi/initiatorname.iscsi
+	InitiatorName=iqn.2019-09.cn.tedu:client
+
+#重起iscsid服务，仅仅是刷新客户端声称的名称
+systemctl restart iscsid
+
+#利用命令发现服务端共享存储
+man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
+iscsiadm --mode discoverydb --type sendtargets --portal 192.168.1.10 --discover
+
+#重启iscsi服务（主服务），使用共享存储
+systemctl restart iscsi	
+lsblk
+```
 
 
 
