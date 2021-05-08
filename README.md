@@ -1937,7 +1937,7 @@ iscsi/磁盘组名/tpql/portals create IP地址 端口号
 
 ```shell
 yum -y install targetcli	#安装服务软件包 targetcli
-
+systemctl stop firewalld    #关闭防火墙
 targetcli	#运行 targetcli 命令进行配置
 	ls
 	
@@ -1960,7 +1960,7 @@ systemctl restart target.service
 
 #### IQN名称规范
 
-`iqn.yyyy-mm.倒序域名：自定义标识`
+`iqn.yyyy-mm.倒序域名`：自定义标识
 用来识别target磁盘组，也用来识别客户机身份
 
 
@@ -1986,6 +1986,33 @@ iscsiadm --mode discoverydb --type sendtargets --portal 192.168.1.10 --discover
 systemctl restart iscsi	
 lsblk
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
