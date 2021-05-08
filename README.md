@@ -4275,6 +4275,11 @@ b. 永久配置静态IP地址为192.168.4.30/24
 1. svr7构建vsftpd服务
 
     ```shell
+    setenforce 0	#SELinux运行模式切换 0宽松 1强制
+	/etc/selinux/config	#永久配置
+    getenforce	#查看
+    ststemctl stop firewall
+
     mount /dev/cdrom /mnt
     vim /etc/yum.repos.d/mnt.repo
     	[mnt]
@@ -4333,12 +4338,17 @@ b. 自定义yum仓库内容
 
     ```shell
     scp -r /home root@192.168.4.207:/opt/
+    ls /opt
     ```
 
 3. 将svr7的/etc/passwd文件拷贝到tom用户的家目录下，以用户tom的密码验证（用户tom密码为redhat）
 
     ```shell
+    ssh root@192.168.4.207
+    useradd tom
+    echo 'redhat' | passwd --stdin tom
     scp -r /etc/passwd tom@192.168.4.207:/home/tom/
+    ls /home/tom
     ```
 
 
