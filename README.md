@@ -1983,16 +1983,157 @@ man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
 iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
 
 #重启iscsi服务（主服务），使用共享存储
-systemctl restart iscsid
+systemctl restart iscsi
 lsblk
 ```
 
 
+## Web通信基本概念
+
+> 基于B/S（Browser/Server）架构的网页服务
+>
+> 服务端提供网页
+>
+> 浏览器下载并显示网页
+
+### 构建独立的web服务器
+
+服务端
+
+```shell
+yum -y install httpd	#安装httpd软件包
+echo abc > /var/www/html/index.html	#书写页面文件内容
+systemctl restart httpd	#启动服务
+```
+
+客户端
+```shell
+curl http://192.168.4.7
+```
+
+### 提供的默认配置
+
+> Listen：监听地址：端口80
+>
+> ServerName：本站点注册的DNS名称（空缺）
+>
+> DocumentRoot：网页根目录（/var/www/html）
+>
+> DirectoryIndex：起始页/首页文件名（index.html）
 
 
+#### 修改http服务的默认路径
+```shell
+vim /etc/httpd/conf/httpd.conf	#修改监听的端口号
+	/DocumentRoot
+	DocumentRoot /var/www/myweb
+echo abc > /var/www/myweb/index.html
+systemctl restart httpd	#重启服务
+
+#客户端测试
+curl http://192.168.4.7	#成功
+```
+
+#### 修改http服务的默认端口号
+
+```shell
+vim /etc/httpd/conf/httpd.conf
+	/Listen
+	Listen 8080
+netstate -anptu | grep httpd	#查看httpd服务的监听端口
+
+#客户端测试
+curl http://192.168.4.7	#失败
+curl http://192.168.4.7:8080	#成功
+```
 
 
+#### 为浏览器程序提供URL网址
 
+ `协议名://服务器地址[:端口号]/目录/文件名`
+
+```shell
+elinks -dump http://server0.example.com/
+firefox http://server0.example.com/
+```
+
+
+### 改变网页文件存放路径
+
+> 网络路径：浏览器中输入的路径（192.168.4.7/abc）
+>
+> 实际路径：服务器上网页文件存放的路径（/var/www/myweb /abc/index.html）
+
+```shell
+#服务端配置
+mkdir/webapp
+vim /etc/httpd/conf/httpd.conf
+	DocumentRoot /webapp
+echo woshiapp > /webapp/index.html
+systemctl restart httpd
+
+#客户端测试
+curl http://192.168.4.7	#出现测试页面
+
+#服务端配置
+vim /etc/httpd/conf/httpd.conf
+    <Directory "/webapp">	#新添加
+        Require all granted	#对webapp目录设置为允许任何人访问
+    <Directory>
+systemctl restart httpd
+
+#客户端测试
+curl http://192.168.4.7	#出现woshiapp页面
+```
+
+### 配置文件说明
+`/etc/httpd/conf/httpd.conf`	#主配置文件
+`/etc/httpd/conf.d/*.conf`	#调用配置文件
+
+
+### 域名解析（一台服务器使用两个域名，虚拟主机）
+#### 为每个虚拟站点添加配置
+
+```shell
+vim /etc/httpd/conf.d/nsd01.conf
+	<VirtualHost IP地址:端口>
+		ServerName 此站点的DNS名称(www.qq.com)
+		DocumentRoot 此站点的网页根目录(/var/www/qq)
+	</VirtualHost>
+```
+
+#### 配置页面
+
+服务端操作
+
+```shell
+vim /etc/httpd/conf.d/nsd01.conf
+    <VirtualHost *:80>
+    	ServerName www.qq.com
+    	DocumentRoot /var/www/qq
+    </VirtualHost>
+    <VirtualHost *:80>
+    	ServerName www.baidu.com
+    	DocumentRoot /var/www/baidu
+    </VirtualHost>
+
+mkdir /var/www/qq /var/www/baidu
+
+echo "qq" > /var/www/qq/index.html
+echo "baidu" > /var/www/baiud/index.html
+
+systemctl restart httpd
+```
+
+客户端操作
+
+```shell
+vim /etc/hosts
+    192.168.4.7 www.qq.com www.baidu.com
+
+curl www.qq.com	#结果显示qq
+curl www.baidu.com	#结果显示baidu
+```
 
 
 
@@ -4521,6 +4662,90 @@ b. 自定义yum仓库内容
     mount -a
     df -h
     ```
+
+## 5.10
+### 案例ISCSI练习
+
+1. 为svr7添加一块10G硬盘
+2. 在svr7操作，采用MBR分区模式利用/dev/sdb/划分一个主分区，大小为5G
+
+    ```shell
+    lsblk
+    fdisk /dev/sdb
+    n
+    +5G
+    w
+    
+    lsblk
+    ```
+
+3. 在svr7创建iscsi服务，磁盘名为iqn.2020-05.com.example:server，
+服务端口号为3260，使用nsd做后端卷，大小为5G
+
+    ```shell
+    yum -y install targetcli	#安装服务软件包 targetcli
+    systemctl stop firewalld    #关闭防火墙
+    targetcli	#运行 targetcli 命令进行配置
+    	ls
+    	
+    	#创建后端存储
+    	backstores/block create name=nsd dev=/dev/sdb1
+    	ls
+    	
+    	#创建磁盘组target，使用IQN名称规范
+    	iscsi/ create iqn.2020-05.com.example:server
+    	
+    	#创建lun关联
+    	iscsi/iqn.2020-05.com.example:server/tpg1/luns/ create /backstores/block/nsd
+    	
+    	#设置访问控制（acl），设置客户端的名称
+    	iscsi/iqn.2020-05.com.example:serve/tpg1/acls create iqn.2020-05.com.example:client
+    
+    	ls
+    	exit
+    systemctl restart target
+    
+    getenforce 0
+    systemctl status firewalld.service
+    ```
+    
+
+
+
+4. 在pc207上连接使用服务端提供的iqn.2020-05.com.example:server，
+并利用共享过来的磁盘划分一个主分区，大小为2G，格式化xfs文件系统类型，
+挂载到/data文件夹下
+
+    ```shell
+    #安装客户端软件
+    yum -y install iscsi-initiator-utils
+    rpm -q iscsi-initiator-utils
+    
+    #修改配置文件，指定客户端声称的名称
+    vim  /etc/iscsi/initiatorname.iscsi
+    	InitiatorName=iqn.2020-05.com.example:client
+    
+    #重起iscsid服务，刷新客户端声称的名称
+    systemctl restart iscsid
+    
+    #利用命令发现服务端共享存储
+    man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
+    iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
+    
+    #重启iscsi服务（主服务），使用共享存储
+    systemctl restart iscsi
+    lsblk
+    fdisk /dev/sdb
+        n
+        +2G
+        
+    mkfs.xfs /dev/sdb1
+    mount /dev/sdb1 /data
+    df -h
+    ```
+
+
+
 
 
 
