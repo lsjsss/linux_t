@@ -2087,8 +2087,8 @@ curl http://192.168.4.7	#出现woshiapp页面
 ```
 
 ### 配置文件说明
-/etc/httpd/conf/httpd.conf	#主配置文件
-/etc/httpd/conf.d/*.conf	#调用配置文件
+`/etc/httpd/conf/httpd.conf`	#主配置文件
+`/etc/httpd/conf.d/*.conf`	#调用配置文件
 
 
 ### 域名解析（一台服务器使用两个域名，虚拟主机）
