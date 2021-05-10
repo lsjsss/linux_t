@@ -4522,6 +4522,90 @@ b. 自定义yum仓库内容
     df -h
     ```
 
+## 5.10
+### 案例ISCSI练习
+
+1. 为svr7添加一块10G硬盘
+2. 在svr7操作，采用MBR分区模式利用/dev/sdb/划分一个主分区，大小为5G
+
+    ```shell
+    lsblk
+    fdisk /dev/sdb
+    n
+    +5G
+    w
+    
+    lsblk
+    ```
+
+3. 在svr7创建iscsi服务，磁盘名为iqn.2020-05.com.example:server，
+服务端口号为3260，使用nsd做后端卷，大小为5G
+
+    ```shell
+    yum -y install targetcli	#安装服务软件包 targetcli
+    systemctl stop firewalld    #关闭防火墙
+    targetcli	#运行 targetcli 命令进行配置
+    	ls
+    	
+    	#创建后端存储
+    	backstores/block create name=nsd dev=/dev/sdb1
+    	ls
+    	
+    	#创建磁盘组target，使用IQN名称规范
+    	iscsi/ create iqn.2020-05.com.example:server
+    	
+    	#创建lun关联
+    	iscsi/iqn.2020-05.com.example:server/tpg1/luns/ create /backstores/block/nsd
+    	
+    	#设置访问控制（acl），设置客户端的名称
+    	iscsi/iqn.2020-05.com.example:serve/tpg1/acls create iqn.2020-05.com.example:client
+    
+    	ls
+    	exit
+    systemctl restart target
+    
+    getenforce 0
+    systemctl status firewalld.service
+    ```
+    
+
+
+
+4. 在pc207上连接使用服务端提供的iqn.2020-05.com.example:server，
+并利用共享过来的磁盘划分一个主分区，大小为2G，格式化xfs文件系统类型，
+挂载到/data文件夹下
+
+    ```shell
+    #安装客户端软件
+    yum -y install iscsi-initiator-utils
+    rpm -q iscsi-initiator-utils
+    
+    #修改配置文件，指定客户端声称的名称
+    vim  /etc/iscsi/initiatorname.iscsi
+    	InitiatorName=iqn.2020-05.com.example:client
+    
+    #重起iscsid服务，刷新客户端声称的名称
+    systemctl restart iscsid
+    
+    #利用命令发现服务端共享存储
+    man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
+    iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
+    
+    #重启iscsi服务（主服务），使用共享存储
+    systemctl restart iscsi
+    lsblk
+    fdisk /dev/sdb
+        n
+        +2G
+        
+    mkfs.xfs /dev/sdb1
+    mount /dev/sdb1 /data
+    df -h
+    ```
+
+
+
+
 
 
 
