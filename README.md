@@ -2123,7 +2123,7 @@ echo "qq" > /var/www/qq/index.html
 echo "baidu" > /var/www/baiud/index.html
 
 systemctl restart httpd
-
+```
 
 客户端操作
 
