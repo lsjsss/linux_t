@@ -2058,7 +2058,33 @@ firefox http://server0.example.com/
 ```
 
 
+### 改变网页文件存放路径
 
+> 网络路径：浏览器中输入的路径（192.168.4.7/abc）
+>
+> 实际路径：服务器上网页文件存放的路径（/var/www/myweb /abc/index.html）
+
+```shell
+#服务端配置
+mkdir/webapp
+vim /etc/httpd/conf/httpd.conf
+	DocumentRoot /webapp
+echo woshiapp > /webapp/index.html
+systemctl restart httpd
+
+#客户端测试
+curl http://192.168.4.7	#出现测试页面
+
+#服务端配置
+vim /etc/httpd/conf/httpd.conf
+<Directory "/webapp">	#新添加
+Require all granted	#对webapp目录设置为允许任何人访问
+<Directory>
+systemctl restart httpd
+
+#客户端测试
+curl http://192.168.4.7	#出现woshiapp页面
+```
 
 
 
