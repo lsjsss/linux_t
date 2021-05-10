@@ -2077,16 +2077,63 @@ curl http://192.168.4.7	#出现测试页面
 
 #服务端配置
 vim /etc/httpd/conf/httpd.conf
-<Directory "/webapp">	#新添加
-Require all granted	#对webapp目录设置为允许任何人访问
-<Directory>
+    <Directory "/webapp">	#新添加
+        Require all granted	#对webapp目录设置为允许任何人访问
+    <Directory>
 systemctl restart httpd
 
 #客户端测试
 curl http://192.168.4.7	#出现woshiapp页面
 ```
 
+### 配置文件说明
+/etc/httpd/conf/httpd.conf	#主配置文件
+/etc/httpd/conf.d/*.conf	#调用配置文件
 
+
+### 域名解析（一台服务器使用两个域名，虚拟主机）
+#### 为每个虚拟站点添加配置
+
+```shell
+vim /etc/httpd/conf.d/nsd01.conf
+	<VirtualHost IP地址:端口>
+		ServerName 此站点的DNS名称(www.qq.com)
+		DocumentRoot 此站点的网页根目录(/var/www/qq)
+	</VirtualHost>
+```
+
+#### 配置页面
+
+服务端操作
+
+```shell
+vim /etc/httpd/conf.d/nsd01.conf
+    <VirtualHost *:80>
+    	ServerName www.qq.com
+    	DocumentRoot /var/www/qq
+    </VirtualHost>
+    <VirtualHost *:80>
+    	ServerName www.baidu.com
+    	DocumentRoot /var/www/baidu
+    </VirtualHost>
+
+mkdir /var/www/qq /var/www/baidu
+
+echo "qq" > /var/www/qq/index.html
+echo "baidu" > /var/www/baiud/index.html
+
+systemctl restart httpd
+
+
+客户端操作
+
+```shell
+vim /etc/hosts
+    192.168.4.7 www.qq.com www.baidu.com
+
+curl www.qq.com	#结果显示qq
+curl www.baidu.com	#结果显示baidu
+```
 
 
 
