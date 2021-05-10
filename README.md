@@ -1988,6 +1988,74 @@ lsblk
 ```
 
 
+## Web通信基本概念
+
+> 基于B/S（Browser/Server）架构的网页服务
+>
+> 服务端提供网页
+>
+> 浏览器下载并显示网页
+
+### 构建独立的web服务器
+
+服务端
+
+```shell
+yum -y install httpd	#安装httpd软件包
+echo abc > /var/www/html/index.html	#书写页面文件内容
+systemctl restart httpd	#启动服务
+```
+
+客户端
+```shell
+curl http://192.168.4.7
+```
+
+### 提供的默认配置
+
+> Listen：监听地址：端口80
+>
+> ServerName：本站点注册的DNS名称（空缺）
+>
+> DocumentRoot：网页根目录（/var/www/html）
+>
+> DirectoryIndex：起始页/首页文件名（index.html）
+
+
+#### 修改http服务的默认路径
+```shell
+vim /etc/httpd/conf/httpd.conf	#修改监听的端口号
+	/DocumentRoot
+	DocumentRoot /var/www/myweb
+echo abc > /var/www/myweb/index.html
+systemctl restart httpd	#重启服务
+
+#客户端测试
+curl http://192.168.4.7	#成功
+```
+
+#### 修改http服务的默认端口号
+
+```shell
+vim /etc/httpd/conf/httpd.conf
+	/Listen
+	Listen 8080
+netstate -anptu | grep httpd	#查看httpd服务的监听端口
+
+#客户端测试
+curl http://192.168.4.7	#失败
+curl http://192.168.4.7:8080	#成功
+```
+
+
+#### 为浏览器程序提供URL网址
+
+ `协议名://服务器地址[:端口号]/目录/文件名`
+
+```shell
+elinks -dump http://server0.example.com/
+firefox http://server0.example.com/
+```
 
 
 
