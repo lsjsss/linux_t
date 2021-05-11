@@ -2107,6 +2107,9 @@ vim /etc/httpd/conf.d/nsd01.conf
 服务端操作
 
 ```shell
+setenforce 0
+systemctl stop firewalld.services	#关闭防火墙
+
 vim /etc/httpd/conf.d/nsd01.conf
     <VirtualHost *:80>
     	ServerName www.qq.com
