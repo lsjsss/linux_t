@@ -2123,7 +2123,7 @@ vim /etc/httpd/conf.d/nsd01.conf
 mkdir /var/www/qq /var/www/baidu
 
 echo "qq" > /var/www/qq/index.html
-echo "baidu" > /var/www/baiud/index.html
+echo "baidu" > /var/www/baidu/index.html
 
 systemctl restart httpd
 ```
