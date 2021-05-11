@@ -2107,6 +2107,9 @@ vim /etc/httpd/conf.d/nsd01.conf
 服务端操作
 
 ```shell
+setenforce 0
+systemctl stop firewalld.services	#关闭防火墙
+
 vim /etc/httpd/conf.d/nsd01.conf
     <VirtualHost *:80>
     	ServerName www.qq.com
@@ -2120,7 +2123,7 @@ vim /etc/httpd/conf.d/nsd01.conf
 mkdir /var/www/qq /var/www/baidu
 
 echo "qq" > /var/www/qq/index.html
-echo "baidu" > /var/www/baiud/index.html
+echo "baidu" > /var/www/baidu/index.html
 
 systemctl restart httpd
 ```
@@ -2135,6 +2138,14 @@ curl www.qq.com	#结果显示qq
 curl www.baidu.com	#结果显示baidu
 ```
 
+
+### 虚拟主机对web站点的影响
+
+> 一旦启用虚拟主机之后，外部的DocumentRoot、ServerName都会被忽略
+>
+> 第一个虚拟站点被视为默认站点，若客户机请求的URL不属于任何已有站点，则有第一个站点响应
+>
+> 当独立web服务器升级为虚拟主机服务器之后，需要为原web站点建立一个虚拟站点
 
 
 
@@ -4743,6 +4754,199 @@ b. 自定义yum仓库内容
     mount /dev/sdb1 /data
     df -h
     ```
+
+
+## 5.11 练习
+### 案例：虚拟主机练习
+
+1. 配置域名为www.tedu.cn，访问页面内容为I AM KING.
+    
+    ```shell
+    yum -y install httpd
+    vim /etc/httpd/conf.d/nsd01.conf
+        <VirtualHost *:80>
+        	ServerName www.tedu.cn
+        	DocumentRoot /var/www/tedu
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName www0.qq.com
+        	DocumentRoot /var/www/qq
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName www.baidu.com
+        	DocumentRoot /var/www/baidu
+        </VirtualHost>
+    
+    mkdir /var/www/qq /var/www/baidu /var/www/tedu
+    
+    echo I AM KING  > /var/www/tedu/index.html
+    ```
+
+2. 配置域名为www0.qq.com，访问页面内容为I GOOD STUDY.
+
+    ```shell
+       echo I GOOD STUDY  > /var/www/qq/index.html
+    ```
+    
+3. 配置域名为www.baidu.com，访问页面内容为I AM girl.
+
+    ```shell
+    echo I AM girl  > /var/www/qq/index.html
+    
+    systemctl restart httpd
+    ```
+
+
+
+4. 用客户端pc207测试访问3个页面
+
+    ```shell
+    vim /etc/host
+        192.168.4.7 www.baidu.com
+        192.168.4.7 www.tedu.cn
+        192.168.4.7 www0.qq.com
+    
+    curl www.baidu.com
+    curl www.tedu.cn
+    www0.qq.com
+    ```
+
+
+
+
+5. 书写页面内容为wo shi abc，用pc207测试页面内容（用IP地址访问）
+
+    ```shell
+    #svr7
+    echo "wo shi abc" > /var/www/html/index.html
+    
+    vim /etc/httpd/conf.d/nsd01.conf
+        <VirtualHost *:80>
+                ServerName www.test.cn
+                DocumentRoot /var/www/html
+        </VirtualHost>
+    
+    systemctl restart httpd.service 
+    
+    
+    #pc207
+    vim /etc/hosts
+        192.168.4.7 www.test.cn
+    
+    curl www.test.cn
+    ```
+
+
+### 案例15:为虚拟机A配置以下虚拟Web主机
+实现三个网站的部署
+1. 实现客户端访问server0.example.com网页内容为 大圣归来
+2.  实现客户端访问www0.example.com网页内容为  大圣又归来
+3.  实现客户端访问webapp0.example.com网页内容为 大圣累了
+
+    ```shell
+    setenforce 0
+    systemctl stop firewalld.services	#关闭防火墙
+    
+    vim /etc/httpd/conf.d/nsd01.conf
+        <VirtualHost *:80>
+        	ServerName server0.example.com
+        	DocumentRoot /var/www/server0
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName www0.example.com
+        	DocumentRoot /var/www/www0
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName webapp0.example.com
+        	DocumentRoot /var/www/webapp0
+        </VirtualHost>
+    
+    mkdir /var/www/server0 /var/www/www0 /var/www/webapp0
+    
+    echo "大圣归来" > /var/www/server0/index.html
+    echo "大圣又归来" > /var/www/www0/index.html
+    echo "大圣累了" > /var/www/webapp0/index.html
+    
+    systemctl restart httpd
+    
+    
+    #客户端测试
+    curl server0.example.com
+    curl www0.example.com
+    curl webapp0.example.com
+    ```
+    
+
+### 案例16：为虚拟机A配置web服务访问控制
+1. 修改默认网页文件位置为/webapp1
+
+    ```shell
+    #服务端配置
+    mkdir /webapp1
+    vim /etc/httpd/conf/httpd.conf
+    	DocumentRoot /webapp1
+    ```
+
+
+2. 实现访问/webapp1页面文件为index.html,内容为奔跑吧 骆驼
+
+    ```shell
+    #服务端配置
+    echo "奔跑吧 骆驼" > /webapp1/index.html
+    systemctl restart httpd
+    
+    #客户端测试
+    curl http://192.168.4.7	#出现测试页面
+    ```
+
+
+### 案例17：发布iSCSI网络磁盘
+
+配置 A提供 iSCSI 服务，要求如下：
+1. 磁盘名为iqn.2020-06.com.example:server0
+
+    ```shell
+    yum -y install targetcli	#安装服务软件包 targetcli
+    systemctl stop firewalld    #关闭防火墙
+    targetcli	#运行 targetcli 命令进行配置
+    	ls
+    	
+    	#创建后端存储
+    	backstores/block create dev=/dev/sdb1 name=nsd
+    	
+    	#创建磁盘组target，使用IQN名称规范
+    	iscsi/ create iqn.2020-06.com.example:server0
+    	
+    	#创建lun关联
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/luns create /backstores/block/nsd
+    	
+    	#设置访问控制（acl），设置客户端的名称
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/acls create iqn.2020-06.com.example:client0
+    
+    	ls
+    	exit
+    systemctl restart target.service
+    ```
+    
+2. 服务端口为 3260
+
+
+
+
+3. 使用 iscsi_store（后端存储的名称） 作其后端卷，其大小为 3GiB
+
+
+
+
+4. 在A配置客户端ACL为iqn.2020-06.com.example:desktop0
+
+
+
+
+6. 配置虚拟机B使用 虚拟机A提供 iSCSI 服务
+
+
+
 
 
 
