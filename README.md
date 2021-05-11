@@ -4816,26 +4816,135 @@ b. 自定义yum仓库内容
 
 5. 书写页面内容为wo shi abc，用pc207测试页面内容（用IP地址访问）
 
+    ```shell
+    #svr7
+    echo "wo shi abc" > /var/www/html/index.html
+    
+    vim /etc/httpd/conf.d/nsd01.conf
+        <VirtualHost *:80>
+                ServerName www.test.cn
+                DocumentRoot /var/www/html
+        </VirtualHost>
+    
+    systemctl restart httpd.service 
+    
+    
+    #pc207
+    vim /etc/hosts
+        192.168.4.7 www.test.cn
+    
+    curl www.test.cn
+    ```
 
-```shell
-#svr7
-echo "wo shi abc" > /var/www/html/index.html
 
-vim /etc/httpd/conf.d/nsd01.conf
-    <VirtualHost *:80>
-            ServerName www.test.cn
-            DocumentRoot /var/www/html
-    </VirtualHost>
+### 案例15:为虚拟机A配置以下虚拟Web主机
+实现三个网站的部署
+1. 实现客户端访问server0.example.com网页内容为 大圣归来
+2.  实现客户端访问www0.example.com网页内容为  大圣又归来
+3.  实现客户端访问webapp0.example.com网页内容为 大圣累了
 
-systemctl restart httpd.service 
+    ```shell
+    setenforce 0
+    systemctl stop firewalld.services	#关闭防火墙
+    
+    vim /etc/httpd/conf.d/nsd01.conf
+        <VirtualHost *:80>
+        	ServerName server0.example.com
+        	DocumentRoot /var/www/server0
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName www0.example.com
+        	DocumentRoot /var/www/www0
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName webapp0.example.com
+        	DocumentRoot /var/www/webapp0
+        </VirtualHost>
+    
+    mkdir /var/www/server0 /var/www/www0 /var/www/webapp0
+    
+    echo "大圣归来" > /var/www/server0/index.html
+    echo "大圣又归来" > /var/www/www0/index.html
+    echo "大圣累了" > /var/www/webapp0/index.html
+    
+    systemctl restart httpd
+    
+    
+    #客户端测试
+    curl server0.example.com
+    curl www0.example.com
+    curl webapp0.example.com
+    ```
+    
+
+### 案例16：为虚拟机A配置web服务访问控制
+1. 修改默认网页文件位置为/webapp1
+
+    ```shell
+    #服务端配置
+    mkdir /webapp1
+    vim /etc/httpd/conf/httpd.conf
+    	DocumentRoot /webapp1
+    ```
 
 
-#pc207
-vim /etc/hosts
-    192.168.4.7 www.test.cn
+2. 实现访问/webapp1页面文件为index.html,内容为奔跑吧 骆驼
 
-curl www.test.cn
-```
+    ```shell
+    #服务端配置
+    echo "奔跑吧 骆驼" > /webapp1/index.html
+    systemctl restart httpd
+    
+    #客户端测试
+    curl http://192.168.4.7	#出现测试页面
+    ```
+
+
+### 案例17：发布iSCSI网络磁盘
+
+配置 A提供 iSCSI 服务，要求如下：
+1. 磁盘名为iqn.2020-06.com.example:server0
+
+    ```shell
+    yum -y install targetcli	#安装服务软件包 targetcli
+    systemctl stop firewalld    #关闭防火墙
+    targetcli	#运行 targetcli 命令进行配置
+    	ls
+    	
+    	#创建后端存储
+    	backstores/block create dev=/dev/sdb1 name=nsd
+    	
+    	#创建磁盘组target，使用IQN名称规范
+    	iscsi/ create iqn.2020-06.com.example:server0
+    	
+    	#创建lun关联
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/luns create /backstores/block/nsd
+    	
+    	#设置访问控制（acl），设置客户端的名称
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/acls create iqn.2020-06.com.example:client0
+    
+    	ls
+    	exit
+    systemctl restart target.service
+    ```
+    
+2. 服务端口为 3260
+
+
+
+
+3. 使用 iscsi_store（后端存储的名称） 作其后端卷，其大小为 3GiB
+
+
+
+
+4. 在A配置客户端ACL为iqn.2020-06.com.example:desktop0
+
+
+
+
+6. 配置虚拟机B使用 虚拟机A提供 iSCSI 服务
+
 
 
 
