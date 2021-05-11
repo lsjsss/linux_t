@@ -4756,6 +4756,90 @@ b. 自定义yum仓库内容
     ```
 
 
+## 5.11 练习
+### 案例：虚拟主机练习
+
+1. 配置域名为www.tedu.cn，访问页面内容为I AM KING.
+    
+    ```shell
+    yum -y install httpd
+    vim /etc/httpd/conf.d/nsd01.conf
+        <VirtualHost *:80>
+        	ServerName www.tedu.cn
+        	DocumentRoot /var/www/tedu
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName www0.qq.com
+        	DocumentRoot /var/www/qq
+        </VirtualHost>
+        <VirtualHost *:80>
+        	ServerName www.baidu.com
+        	DocumentRoot /var/www/baidu
+        </VirtualHost>
+    
+    mkdir /var/www/qq /var/www/baidu /var/www/tedu
+    
+    echo I AM KING  > /var/www/tedu/index.html
+    ```
+
+2. 配置域名为www0.qq.com，访问页面内容为I GOOD STUDY.
+
+    ```shell
+       echo I GOOD STUDY  > /var/www/qq/index.html
+    ```
+    
+3. 配置域名为www.baidu.com，访问页面内容为I AM girl.
+
+    ```shell
+    echo I AM girl  > /var/www/qq/index.html
+    
+    systemctl restart httpd
+    ```
+
+
+
+4. 用客户端pc207测试访问3个页面
+
+    ```shell
+    vim /etc/host
+        192.168.4.7 www.baidu.com
+        192.168.4.7 www.tedu.cn
+        192.168.4.7 www0.qq.com
+    
+    curl www.baidu.com
+    curl www.tedu.cn
+    www0.qq.com
+    ```
+
+
+
+
+5. 书写页面内容为wo shi abc，用pc207测试页面内容（用IP地址访问）
+
+
+```shell
+#svr7
+echo "wo shi abc" > /var/www/html/index.html
+
+vim /etc/httpd/conf.d/nsd01.conf
+    <VirtualHost *:80>
+            ServerName www.test.cn
+            DocumentRoot /var/www/html
+    </VirtualHost>
+
+systemctl restart httpd.service 
+
+
+#pc207
+vim /etc/hosts
+    192.168.4.7 www.test.cn
+
+curl www.test.cn
+```
+
+
+
+
 
 
 
