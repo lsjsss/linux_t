@@ -4903,50 +4903,64 @@ b. 自定义yum仓库内容
 ### 案例17：发布iSCSI网络磁盘
 
 配置 A提供 iSCSI 服务，要求如下：
+
 1. 磁盘名为iqn.2020-06.com.example:server0
+2. 服务端口为 3260
+3. 使用 iscsi_store（后端存储的名称） 作其后端卷，其大小为 3GiB
+4. 在A配置客户端ACL为iqn.2020-06.com.example:desktop0
 
     ```shell
+    fdisk /dev/sdb
+    	+3G
+    partprobe /dev/sdb	#刷新分区
+    lsblk
+
     yum -y install targetcli	#安装服务软件包 targetcli
     systemctl stop firewalld    #关闭防火墙
     targetcli	#运行 targetcli 命令进行配置
     	ls
     	
     	#创建后端存储
-    	backstores/block create dev=/dev/sdb1 name=nsd
+    	backstores/block create dev=/dev/sdb1 name=store
     	
     	#创建磁盘组target，使用IQN名称规范
     	iscsi/ create iqn.2020-06.com.example:server0
     	
     	#创建lun关联
-    	iscsi/iqn.2020-06.com.example:server0/tpg1/luns create /backstores/block/nsd
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/luns create /backstores/block/store
     	
     	#设置访问控制（acl），设置客户端的名称
-    	iscsi/iqn.2020-06.com.example:server0/tpg1/acls create iqn.2020-06.com.example:client0
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/acls create iqn.2020-06.com.example:desktop0
     
     	ls
     	exit
     systemctl restart target.service
     ```
+
+
+5. 配置虚拟机B使用虚拟机A提供 iSCSI 服务
+
+    ```shell
+    #安装客户端软件
+    yum -y install iscsi-initiator-utils
+    rpm -q iscsi-initiator-utils
     
-2. 服务端口为 3260
-
-
-
-
-3. 使用 iscsi_store（后端存储的名称） 作其后端卷，其大小为 3GiB
-
-
-
-
-4. 在A配置客户端ACL为iqn.2020-06.com.example:desktop0
-
-
-
-
-6. 配置虚拟机B使用 虚拟机A提供 iSCSI 服务
-
-
-
+    #修改配置文件，指定客户端声称的名称
+    vim  /etc/iscsi/initiatorname.iscsi
+    	InitiatorName=iqn.2020-06.com.example:desktop0
+    
+    #重起iscsid服务，仅仅是刷新客户端声称的名称
+    systemctl restart iscsid
+    
+    #利用命令发现服务端共享存储（A的ip地址：192.168.4.7）
+    man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
+    iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
+    
+    #重启iscsi服务（主服务），使用共享存储
+    systemctl restart iscsi
+    lsblk
+    ```
+    
 
 
 
