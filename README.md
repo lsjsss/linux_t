@@ -3691,7 +3691,7 @@ curl www.baidu.com	#结果显示baidu
     lvextend -L 30G /dev/systemvg/vo
     
     df -h
-    xfs_grows /dev/systemvg/vo
+    xfs_growfs /dev/systemvg/vo
     df -h /vo
     ```
 
@@ -4298,7 +4298,7 @@ b. 永久配置静态IP地址为192.168.4.30/24
     lvextend -L 30G /dev/systemvg/vo
     
     df -h
-    xfs_grows /dev/systemvg/vo
+    xfs_growfs /dev/systemvg/vo
     df -h /vo
     ```
 
