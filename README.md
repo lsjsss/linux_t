@@ -5053,9 +5053,8 @@ b. 自定义yum仓库内容
     yum -y install nfs-utils
     mkdir /public
     
-    echo abc >/public/1.txt
     vim /etc/exports
-    	/test 192.168.4.0/24(ro)
+    	/public 192.168.4.0/24(rw,no_root_squash)	#开放权限
     
     systemctl restart nfs-server
     systemctl enable nfs-server
