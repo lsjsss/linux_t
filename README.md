@@ -5043,7 +5043,37 @@ b. 自定义yum仓库内容
     lsblk
     ```
     
+## 5.12 练习
 
+在虚拟机svr7上配置NFS共享，完成如下操作
+1. 以读写的方式访问目录/public，只能被192.168.4.0/24系统访问
+
+    ```shell
+    rpm -q nfs-utils
+    yum -y install nfs-utils
+    mkdir /public
+    
+    echo abc >/public/1.txt
+    vim /etc/exports
+    	/test 192.168.4.0/24(ro)
+    
+    systemctl restart nfs-server
+    systemctl enable nfs-server
+    systemctl stop firewall
+    ```
+
+2. 在虚拟机pc207上访问NFS共享目录，挂载点为/nfs
+
+    ```shell
+    rpm -q nfs-utils
+    yum -y install nfs-utils
+    showmount -e 192.168.4.7
+    
+    mkdir /nfs
+    mount 192.168.4.7:/public /nfs
+    df -h
+    ls /abc
+    ```
 
 
 
