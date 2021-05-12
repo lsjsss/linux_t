@@ -4113,7 +4113,7 @@ b. 永久配置静态IP地址为192.168.4.30/24
     ```shell
     useradd lisi
     mkdir /root/findfiles/
-    find /home -user lisi -type f -exec cp {} /root/findfiles/ \;
+    find / -user lisi -a -type f -exec cp {} /root/findfiles/ \;
     ```
 
 3. 利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
