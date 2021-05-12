@@ -2148,6 +2148,88 @@ curl www.baidu.com	#结果显示baidu
 > 当独立web服务器升级为虚拟主机服务器之后，需要为原web站点建立一个虚拟站点
 
 
+## NFS共享概述
+Network File System，网络文件系统
+
+> 用途：为客户机提供共享使用的文件夹
+>
+> 协议：NFS（TCP/UDP 2049）、RPC(TCP/UDP 111)
+>
+> 所需软件包：nfs-utils
+>
+> 系统服务：nfs-server
+
+
+### exports（/etc/exports）配置文件解析
+
+> 文件夹路径  客户端地址
+>
+> /test 192.168.4.0(ro)
+
+
+
+### 实现NFS共享
+
+服务端
+```shell
+rpm -q nfs-utils
+yum -y install nfs-utils
+mkdir /test
+echo abc > /test/1.txt
+vim /etc/exports
+	/test 192.168.4.0(ro)
+
+systemctl restart nfs-server
+systemctl enable nfs-server
+systemctl stop firewall
+```
+
+客户端
+
+```shell
+rpm -q nfs-utils
+yum -y install nfs-utils
+showmount -e 192.168.4.7
+mkdir /abc
+mount 192.168.4.7:/test /abc
+df -h
+ls /abc
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
