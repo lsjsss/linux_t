@@ -2148,6 +2148,98 @@ curl www.baidu.com	#结果显示baidu
 > 当独立web服务器升级为虚拟主机服务器之后，需要为原web站点建立一个虚拟站点
 
 
+## NFS共享概述
+Network File System，网络文件系统
+
+> 用途：为客户机提供共享使用的文件夹
+>
+> 协议：NFS（TCP/UDP 2049）、RPC(TCP/UDP 111)
+>
+> 所需软件包：nfs-utils
+>
+> 系统服务：nfs-server
+
+
+### exports（/etc/exports）配置文件解析
+
+> 文件夹路径  客户端地址
+>
+> /test 192.168.4.0(ro)
+
+
+
+### 实现NFS共享
+
+服务端
+```shell
+rpm -q nfs-utils
+yum -y install nfs-utils
+mkdir /test
+echo abc > /test/1.txt
+vim /etc/exports
+	/test 192.168.4.0(ro)
+
+systemctl restart nfs-server
+systemctl enable nfs-server
+systemctl stop firewall
+```
+
+客户端
+
+```shell
+rpm -q nfs-utils
+yum -y install nfs-utils
+showmount -e 192.168.4.7
+mkdir /abc
+mount 192.168.4.7:/test /abc
+df -h
+ls /abc
+```
+
+
+### 实现开机自动挂载
+
+> _netdev：声明网络设备，系统在网络服务配置完成后，再挂载本设备
+
+```shell
+vim /etc/fstab
+192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+mount /abc
+mount -a
+df -h
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3691,7 +3783,7 @@ curl www.baidu.com	#结果显示baidu
     lvextend -L 30G /dev/systemvg/vo
     
     df -h
-    xfs_grows /dev/systemvg/vo
+    xfs_growfs /dev/systemvg/vo
     df -h /vo
     ```
 
@@ -4030,7 +4122,7 @@ ls
     	enable=1
     	gpgcheck=0
     
-    rm -rf /etc/yum.repos/CentOS-*
+    rm -rf /etc/yum.repos.d/CentOS-*
     yum clean all
     yum repolist
     
@@ -4113,7 +4205,7 @@ b. 永久配置静态IP地址为192.168.4.30/24
     ```shell
     useradd lisi
     mkdir /root/findfiles/
-    find /home -user lisi -type f -exec cp {} /root/findfiles/ \;
+    find / -user lisi -a -type f -exec cp {} /root/findfiles/ \;
     ```
 
 3. 利用find查找/boot目录下大于10M并且必须是文件，拷贝到/opt
@@ -4298,7 +4390,7 @@ b. 永久配置静态IP地址为192.168.4.30/24
     lvextend -L 30G /dev/systemvg/vo
     
     df -h
-    xfs_grows /dev/systemvg/vo
+    xfs_growfs /dev/systemvg/vo
     df -h /vo
     ```
 
@@ -4903,51 +4995,94 @@ b. 自定义yum仓库内容
 ### 案例17：发布iSCSI网络磁盘
 
 配置 A提供 iSCSI 服务，要求如下：
+
 1. 磁盘名为iqn.2020-06.com.example:server0
+2. 服务端口为 3260
+3. 使用 iscsi_store（后端存储的名称） 作其后端卷，其大小为 3GiB
+4. 在A配置客户端ACL为iqn.2020-06.com.example:desktop0
 
     ```shell
+    fdisk /dev/sdb
+    	+3G
+    partprobe /dev/sdb	#刷新分区
+    lsblk
+
     yum -y install targetcli	#安装服务软件包 targetcli
     systemctl stop firewalld    #关闭防火墙
     targetcli	#运行 targetcli 命令进行配置
     	ls
     	
     	#创建后端存储
-    	backstores/block create dev=/dev/sdb1 name=nsd
+    	backstores/block create dev=/dev/sdb1 name=store
     	
     	#创建磁盘组target，使用IQN名称规范
     	iscsi/ create iqn.2020-06.com.example:server0
     	
     	#创建lun关联
-    	iscsi/iqn.2020-06.com.example:server0/tpg1/luns create /backstores/block/nsd
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/luns create /backstores/block/store
     	
     	#设置访问控制（acl），设置客户端的名称
-    	iscsi/iqn.2020-06.com.example:server0/tpg1/acls create iqn.2020-06.com.example:client0
+    	iscsi/iqn.2020-06.com.example:server0/tpg1/acls create iqn.2020-06.com.example:desktop0
     
     	ls
     	exit
     systemctl restart target.service
     ```
+
+
+5. 配置虚拟机B使用虚拟机A提供 iSCSI 服务
+
+    ```shell
+    #安装客户端软件
+    yum -y install iscsi-initiator-utils
+    rpm -q iscsi-initiator-utils
     
-2. 服务端口为 3260
+    #修改配置文件，指定客户端声称的名称
+    vim  /etc/iscsi/initiatorname.iscsi
+    	InitiatorName=iqn.2020-06.com.example:desktop0
+    
+    #重起iscsid服务，仅仅是刷新客户端声称的名称
+    systemctl restart iscsid
+    
+    #利用命令发现服务端共享存储（A的ip地址：192.168.4.7）
+    man iscsiadm	#查看iscsiadm帮助	/example按n向下匹配，按b向上匹配
+    iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
+    
+    #重启iscsi服务（主服务），使用共享存储
+    systemctl restart iscsi
+    lsblk
+    ```
+    
+## 5.12 练习
 
+在虚拟机svr7上配置NFS共享，完成如下操作
+1. 以读写的方式访问目录/public，只能被192.168.4.0/24系统访问
 
+    ```shell
+    rpm -q nfs-utils
+    yum -y install nfs-utils
+    mkdir /public
+    
+    vim /etc/exports
+    	/public 192.168.4.0/24(rw,no_root_squash)	#开放权限
+    
+    systemctl restart nfs-server
+    systemctl enable nfs-server
+    systemctl stop firewall
+    ```
 
+2. 在虚拟机pc207上访问NFS共享目录，挂载点为/nfs
 
-3. 使用 iscsi_store（后端存储的名称） 作其后端卷，其大小为 3GiB
-
-
-
-
-4. 在A配置客户端ACL为iqn.2020-06.com.example:desktop0
-
-
-
-
-6. 配置虚拟机B使用 虚拟机A提供 iSCSI 服务
-
-
-
-
+    ```shell
+    rpm -q nfs-utils
+    yum -y install nfs-utils
+    showmount -e 192.168.4.7
+    
+    mkdir /nfs
+    mount 192.168.4.7:/public /nfs
+    df -h
+    ls /abc
+    ```
 
 
 
