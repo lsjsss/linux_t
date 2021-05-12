@@ -4030,7 +4030,7 @@ ls
     	enable=1
     	gpgcheck=0
     
-    rm -rf /etc/yum.repos/CentOS-*
+    rm -rf /etc/yum.repos.d/CentOS-*
     yum clean all
     yum repolist
     
