@@ -2285,6 +2285,13 @@ df -ah
 ```
 
 
+```shell
+vim /etc/auto.misc
+autonfs -fstype=nfs 192.168.4.7:/public
+ls /misc/autonfs
+df -ah
+```
+
 
 
 
