@@ -2266,8 +2266,24 @@ blkid /dev/sdb1
 ls /misc/mydev
 vim /etc/suto.misc	#当触发/misc/mydev时，实现将/dev/sdb1自动挂载
 	mydev -fstype=xfs :/dev/sdb1
-ls /misc/myde
+ls /misc/mydev
+df -ah
 ```
+
+客户端
+
+```shell
+vim /etc/auto.master
+	/haha /etc/xoxo.conf
+
+vim /etc/xixi.conf
+	abc -fstype=cfs "/dev/sdb1
+
+systemctl restart autofs
+ls /haha/abc
+df -ah
+```
+
 
 
 
