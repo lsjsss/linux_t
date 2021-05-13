@@ -5085,6 +5085,17 @@ b. 自定义yum仓库内容
     ```
 
 
+3. 实现开机自动挂载
+
+> _netdev：声明网络设备，系统在网络服务配置完成后，再挂载本设备
+
+```shell
+vim /etc/fstab
+192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+mount /abc
+mount -a
+df -h
+```
 
 
 
