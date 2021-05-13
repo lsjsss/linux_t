@@ -2211,7 +2211,63 @@ df -h
 
 
 
+## autofs触发挂载
 
+由autofs提供的“按需访问”机制
+
+> 只要访问挂载点，就会触发响应，自动挂载指定设备
+>
+> 闲置超过时限（默认5分钟）后，会自动卸载
+
+```shell
+yum -y install autofs
+systemctl restart autofs
+ls /
+```
+
+### autofs配置解析
+
+> 主配置文件 /etc/auto.master
+>
+> `监控点目录` `/misc` `挂载配置文件的路径`
+
+
+> 挂载配置文件，如 /etc/auto.misc
+> 
+> `触发点子目录` `挂载参数` `:设备名`
+> 
+> grep -v '^#' /etc/auto.misc
+>
+> `/misc /etc/auto.misc	#/misc为存放触发点的父文件夹`
+> 
+> `cd -fstype=iso9660,ro,nosuid,nodev :/dev/cdrom`	#cd为autofs自动建立/移除的挂载点目录名
+
+
+客户端
+
+```shell
+yum -y install autofs
+systemctl restart autofs
+ls /	#会出现misc的目录
+ls /misc/
+ls -A /misc
+cd /misc/aa	#失败
+cd /misc/bb	#失败
+cd /misc/cd	#成功
+pwd
+ls
+df -ah
+vim /etc/auto.master	#查看即可，不作任何修改
+vim /etc/auto.misc	#查看即可，不作任何修改
+fdisk /dev/sdb	#划分一个3G的主分区
+lsblk
+mkfs.xfs /dev/sdb1
+blkid /dev/sdb1
+ls /misc/mydev
+vim /etc/suto.misc	#当触发/misc/mydev时，实现将/dev/sdb1自动挂载
+	mydev -fstype=xfs :/dev/sdb1
+ls /misc/myde
+```
 
 
 
