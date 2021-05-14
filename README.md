@@ -2211,7 +2211,86 @@ df -h
 
 
 
+## autofs触发挂载
 
+由autofs提供的“按需访问”机制
+
+> 只要访问挂载点，就会触发响应，自动挂载指定设备
+>
+> 闲置超过时限（默认5分钟）后，会自动卸载
+
+```shell
+yum -y install autofs
+systemctl restart autofs
+ls /
+```
+
+### autofs配置解析
+
+> 主配置文件 /etc/auto.master
+>
+> `监控点目录` `/misc` `挂载配置文件的路径`
+
+
+> 挂载配置文件，如 /etc/auto.misc
+> 
+> `触发点子目录` `挂载参数` `:设备名`
+> 
+> grep -v '^#' /etc/auto.misc
+>
+> `/misc /etc/auto.misc	#/misc为存放触发点的父文件夹`
+> 
+> `cd -fstype=iso9660,ro,nosuid,nodev :/dev/cdrom`	#cd为autofs自动建立/移除的挂载点目录名
+
+
+客户端
+
+```shell
+yum -y install autofs
+systemctl restart autofs
+ls /	#会出现misc的目录
+ls /misc/
+ls -A /misc
+cd /misc/aa	#失败
+cd /misc/bb	#失败
+cd /misc/cd	#成功
+pwd
+ls
+df -ah
+vim /etc/auto.master	#查看即可，不作任何修改
+vim /etc/auto.misc	#查看即可，不作任何修改
+fdisk /dev/sdb	#划分一个3G的主分区
+lsblk
+mkfs.xfs /dev/sdb1
+blkid /dev/sdb1
+ls /misc/mydev
+vim /etc/suto.misc	#当触发/misc/mydev时，实现将/dev/sdb1自动挂载
+	mydev -fstype=xfs :/dev/sdb1
+ls /misc/mydev
+df -ah
+```
+
+客户端
+
+```shell
+vim /etc/auto.master
+	/haha /etc/xoxo.conf
+
+vim /etc/xixi.conf
+	abc -fstype=cfs "/dev/sdb1
+
+systemctl restart autofs
+ls /haha/abc
+df -ah
+```
+
+
+```shell
+vim /etc/auto.misc
+autonfs -fstype=nfs 192.168.4.7:/public
+ls /misc/autonfs
+df -ah
+```
 
 
 
@@ -5084,6 +5163,52 @@ b. 自定义yum仓库内容
     ls /abc
     ```
 
+
+3. 实现开机自动挂载
+
+> _netdev：声明网络设备，系统在网络服务配置完成后，再挂载本设备
+
+```shell
+vim /etc/fstab
+192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+mount /abc
+mount -a
+df -h
+```
+
+
+
+------
+### ？配置DNS服务器
+```shell
+#服务器配置
+yum -y install bind bind-chroot.x86_64
+rpm -q bind bind-chroot
+vim /etc/named.conf
+options {
+        directory       "/var/named";
+};
+
+zone "tedu.cn" IN {
+        type master;
+        file "tedu.cn.zone";
+};
+
+cd /var/named/
+
+cp -p named.localhost tedu.cn.zone
+vim tedu.cn.zone
+systemctl named
+vim /etc/resolv.conf
+nslookup www.tedu.cn	#解析ip地址
+yum -y install 
+
+
+# 客户端验证
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.tedu.cn
+```
 
 
 
