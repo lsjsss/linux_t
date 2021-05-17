@@ -2358,7 +2358,7 @@ vim /etc/named.conf
     };
     zone "baidu.com" IN {
             type master;
-            file "tedu.cn.zone";
+            file "baidu.com.zone";
     };
 
 cp -p /var/named/named.localhost /var/named/baidu.com.zone
