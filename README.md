@@ -2442,7 +2442,8 @@ nslookup wwww.baidu.com
 服务端：
 ```shell
 vim /var/named/baidu.com.zone
-	baidu.com. A 50.60.70.80
+    ···
+    baidu.com. A 50.60.70.80
 
 systemctl restart named
 ```
