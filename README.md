@@ -5215,7 +5215,9 @@ nslookup www.tedu.cn
 案例：
 提供以下正向解析记录的解析
 1. svr7.tedu.cn --> 192.168.4.7
+
     pc207.tedu.cn --> 192.168.4.207
+
     www.tedu.cn --> 192.168.4.100
 
 ```shell
