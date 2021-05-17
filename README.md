@@ -2438,7 +2438,19 @@ systemctl restart named
 nslookup wwww.baidu.com
 ```
 
+3. 无前置域名访问
+服务端：
+```shell
+vim /var/named/baidu.com.zone
+	baidu.com. A 50.60.70.80
 
+systemctl restart named
+```
+
+客户端：
+```shell
+nslookup baidu.com
+```
 
 
 
