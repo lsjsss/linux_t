@@ -2396,7 +2396,32 @@ nslookup svr7.tedu.cn
 nslookup www.baidu.com
 ```
 
+#### 特殊的解析记录
+基于DNS的站点负载均衡
+一个域名 --> 多个不同IP地址
 
+1. 基于解析记录的轮询（负载均衡，缓解网站服务器的压力）
+
+服务器：
+```shell
+vim /var/named/baidu.com.zone
+	baidu.com	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	192.168.4.50
+	www	A	192.168.4.60
+	www	A	192.168.4.70
+	www	A	192.168.4.80
+	www	A	192.168.4.90
+
+systemctl restart named
+```
+
+
+客户端：
+```shell
+ping www.baidu.com
+ping www.baidu.com
+```
 
 
 
