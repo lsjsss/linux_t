@@ -2266,6 +2266,7 @@ blkid /dev/sdb1
 ls /misc/mydev
 vim /etc/suto.misc	#当触发/misc/mydev时，实现将/dev/sdb1自动挂载
 	mydev -fstype=xfs :/dev/sdb1
+
 ls /misc/mydev
 df -ah
 ```
@@ -2274,10 +2275,10 @@ df -ah
 
 ```shell
 vim /etc/auto.master
-	/haha /etc/xoxo.conf
+    /haha /etc/xoxo.conf
 
 vim /etc/xixi.conf
-	abc -fstype=cfs "/dev/sdb1
+    abc -fstype=cfs "/dev/sdb1
 
 systemctl restart autofs
 ls /haha/abc
@@ -5239,15 +5240,15 @@ yum -y install bind bind-chroot.x86_64	#安装named包默认端口号53
 rpm -q bind bind-chroot
 
 vim /etc/named.conf
-options {
-        directory       "/var/named";
-};
-
-#指定这台机器要解析的域名
-zone "tedu.cn" IN {
-        type master;
-        file "tedu.cn.zone";
-};
+    options {
+            directory       "/var/named";
+    };
+    
+    #指定这台机器要解析的域名
+    zone "tedu.cn" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
 
 named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
 
