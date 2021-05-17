@@ -2294,7 +2294,36 @@ df -ah
 
 
 
+### ？配置DNS服务器
+```shell
+#服务器配置
+yum -y install bind bind-chroot.x86_64
+rpm -q bind bind-chroot
+vim /etc/named.conf
+options {
+        directory       "/var/named";
+};
 
+zone "tedu.cn" IN {
+        type master;
+        file "tedu.cn.zone";
+};
+
+cd /var/named/
+
+cp -p named.localhost tedu.cn.zone
+vim tedu.cn.zone
+systemctl restart named
+vim /etc/resolv.conf
+nslookup www.tedu.cn	#解析ip地址
+yum -y install 
+
+
+# 客户端验证
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.tedu.cn
+```
 
 
 
@@ -5176,39 +5205,6 @@ mount -a
 df -h
 ```
 
-
-
-------
-### ？配置DNS服务器
-```shell
-#服务器配置
-yum -y install bind bind-chroot.x86_64
-rpm -q bind bind-chroot
-vim /etc/named.conf
-options {
-        directory       "/var/named";
-};
-
-zone "tedu.cn" IN {
-        type master;
-        file "tedu.cn.zone";
-};
-
-cd /var/named/
-
-cp -p named.localhost tedu.cn.zone
-vim tedu.cn.zone
-systemctl named
-vim /etc/resolv.conf
-nslookup www.tedu.cn	#解析ip地址
-yum -y install 
-
-
-# 客户端验证
-echo "nameserver 192.168.4.7" > /etc/resolv.conf
-yum -y install bind-utils
-nslookup www.tedu.cn
-```
 
 
 ## 5.17 练习
