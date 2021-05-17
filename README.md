@@ -2294,29 +2294,43 @@ df -ah
 
 
 
-### ？配置DNS服务器
+### 配置DNS服务器
+
 ```shell
 #服务器配置
 yum -y install bind bind-chroot.x86_64
 rpm -q bind bind-chroot
+
 vim /etc/named.conf
-options {
-        directory       "/var/named";
-};
+    options {
+            directory       "/var/named";
+    };
+    
+    zone "tedu.cn" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
 
-zone "tedu.cn" IN {
-        type master;
-        file "tedu.cn.zone";
-};
+named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
 
-cd /var/named/
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@       IN SOA  @ rname.invalid. (
+	                                        0       ; serial
+	                                        1D      ; refresh
+	                                        1H      ; retry
+	                                        1W      ; expire
+	                                        3H )    ; minimum
+	
+	tedu.cn.        NS      svr7.tedu.cn.
+	www.tedu.cn.    A       192.168.4.100
 
-cp -p named.localhost tedu.cn.zone
-vim tedu.cn.zone
-systemctl restart named
-vim /etc/resolv.conf
-nslookup www.tedu.cn	#解析ip地址
-yum -y install 
+named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+systemctl restart services	#重启服务
+
+systemctl stop firewalld.service    #关闭防火墙
+setenforce 0
 
 
 # 客户端验证
