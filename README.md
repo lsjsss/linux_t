@@ -2424,7 +2424,19 @@ ping www.baidu.com
 ```
 
 
+2. 泛域名解析
+解决用户输入错误域名时的解析结果
 
+```shell
+#服务端
+vim /var/named/baidu.com.zone
+	* A 10.20.30.40
+
+systemctl restart named
+
+#客户端测试
+nslookup wwww.baidu.com
+```
 
 
 
