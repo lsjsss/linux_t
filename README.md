@@ -2400,7 +2400,7 @@ nslookup www.baidu.com
 基于DNS的站点负载均衡
 一个域名 --> 多个不同IP地址
 
-1. 基于解析记录的轮询（负载均衡，缓解网站服务器的压力）
+##### 1. 基于解析记录的轮询（负载均衡，缓解网站服务器的压力）
 
 服务器：
 ```shell
@@ -2424,7 +2424,7 @@ ping www.baidu.com
 ```
 
 
-2. 泛域名解析
+##### 2. 泛域名解析
 解决用户输入错误域名时的解析结果
 
 ```shell
@@ -2438,7 +2438,7 @@ systemctl restart named
 nslookup wwww.baidu.com
 ```
 
-3. 无前置域名访问
+##### 3. 无规律的泛域名解析（无前置域名访问）
 服务端：
 ```shell
 vim /var/named/baidu.com.zone
