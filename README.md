@@ -2345,8 +2345,6 @@ nslookup www.tedu.cn
 服务端：
 ```shell
 #修改主配置文件，在下面新添加
-
-
 vim /etc/named.conf
     options {
             directory       "/var/named";
@@ -2360,28 +2358,41 @@ vim /etc/named.conf
             type master;
             file "baidu.com.zone";
     };
-
+    
 cp -p /var/named/named.localhost /var/named/baidu.com.zone
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
 vim /var/named/baidu.com.zone
-    $TTL 1D
-    @       IN SOA  @ rname.invalid. (
-                                            0       ; serial
-                                            1D      ; refresh
-                                            1H      ; retry
-                                            1W      ; expire
-                                            3H )    ; minimum
-    
-    baidu.com.        NS      svr7
-    svr7   A       192.168.4.7
-    www    A       10.20.30.40
-    
+	$TTL 1D
+	@       IN SOA  @ rname.invalid. (
+	                                        0       ; serial
+	                                        1D      ; refresh
+	                                        1H      ; retry
+	                                        1W      ; expire
+	                                        3H )    ; minimum
+	
+	baidu.com.        NS      svr7
+	svr7   A       192.168.4.7
+	www    A       10.20.30.40
+
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+	tedu.cn.	NS	www.tedu.cn.
+	www	A	192.168.4.7
+	svr7	A	0.0.0.0
+
 systemctl restart named	#重启服务
 ```
 
 客户端操作：
 ```shell
 yum -y install bind-utils
-nslookup www.tedu.cn
+nslookup svr7.tedu.cn
 nslookup www.baidu.com
 ```
 
