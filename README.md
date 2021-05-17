@@ -5211,6 +5211,71 @@ nslookup www.tedu.cn
 ```
 
 
+## 5.17 练习
+案例：
+提供以下正向解析记录的解析
+1. svr7.tedu.cn --> 192.168.4.7
+    pc207.tedu.cn --> 192.168.4.207
+    www.tedu.cn --> 192.168.4.100
+
+```shell
+#服务器配置
+systemctl stop firewalld.service 
+setenforce 0
+
+yum -y install bind bind-chroot.x86_64	#安装named包默认端口号53
+rpm -q bind bind-chroot
+
+vim /etc/named.conf
+options {
+        directory       "/var/named";
+};
+
+#指定这台机器要解析的域名
+zone "tedu.cn" IN {
+        type master;
+        file "tedu.cn.zone";
+};
+
+named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+#第二种方法：相对路径方式
+cd /var/named/
+cp -p named.localhost tedu.cn.zone
+
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@       IN SOA  @ rname.invalid. (
+	                                        0       ; serial
+	                                        1D      ; refresh
+	                                        1H      ; retry
+	                                        1W      ; expire
+	                                        3H )    ; minimum
+	
+	tedu.cn.        NS      svr7.tedu.cn.
+	svr7.tedu.cn.   A       192.168.4.7
+	pc207.tedu.cn.  A       192.168.4.207
+	www.tedu.cn.    A       192.168.4.100
+
+
+named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+
+systemctl restart services	#重启服务
+```
+
+2. 在客户机上验证查询结果
+
+    ```shell
+    #客户端测试
+    echo "nameserver 192.168.4.7" > /etc/resolv.conf
+    nslookup pc207.tedu.cn
+    yum -y install bind-utils
+    
+    nslookup pc207.tedu.cn
+    nslookup www.tedu.cn
+    ```
+
 
 
 
