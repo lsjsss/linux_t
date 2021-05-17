@@ -2328,7 +2328,7 @@ vim /var/named/tedu.cn.zone
 	www.tedu.cn.    A       192.168.4.100
 
 named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
-systemctl restart services	#重启服务
+systemctl restart named	#重启服务
 
 systemctl stop firewalld.service    #关闭防火墙
 setenforce 0
@@ -2341,6 +2341,49 @@ nslookup www.tedu.cn
 ```
 
 
+#### 构建多区域的DNS（多区域DNS服务）
+服务端：
+```shell
+#修改主配置文件，在下面新添加
+
+
+vim /etc/named.conf
+    options {
+            directory       "/var/named";
+    };
+    #指定这台机器要解析的域名
+    zone "tedu.cn" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
+    zone "baidu.com" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/baidu.com.zone
+    $TTL 1D
+    @       IN SOA  @ rname.invalid. (
+                                            0       ; serial
+                                            1D      ; refresh
+                                            1H      ; retry
+                                            1W      ; expire
+                                            3H )    ; minimum
+    
+    baidu.com.        NS      svr7
+    svr7   A       192.168.4.7
+    www    A       10.20.30.40
+    
+systemctl restart named	#重启服务
+```
+
+客户端操作：
+```shell
+yum -y install bind-utils
+nslookup www.tedu.cn
+nslookup www.baidu.com
+```
 
 
 
@@ -5281,9 +5324,8 @@ systemctl restart services	#重启服务
 
     ```shell
     #客户端测试
-    echo "nameserver 192.168.4.7" > /etc/resolv.conf
-    nslookup pc207.tedu.cn
     yum -y install bind-utils
+    echo "nameserver 192.168.4.7" > /etc/resolv.conf
     
     nslookup pc207.tedu.cn
     nslookup www.tedu.cn
