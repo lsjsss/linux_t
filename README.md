@@ -2361,7 +2361,7 @@ vim /etc/named.conf
             file "tedu.cn.zone";
     };
 
-cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+cp -p /var/named/named.localhost /var/named/baidu.com.zone
 vim /var/named/baidu.com.zone
     $TTL 1D
     @       IN SOA  @ rname.invalid. (
@@ -2384,6 +2384,25 @@ yum -y install bind-utils
 nslookup www.tedu.cn
 nslookup www.baidu.com
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
