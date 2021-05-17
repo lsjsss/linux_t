@@ -2266,6 +2266,7 @@ blkid /dev/sdb1
 ls /misc/mydev
 vim /etc/suto.misc	#当触发/misc/mydev时，实现将/dev/sdb1自动挂载
 	mydev -fstype=xfs :/dev/sdb1
+
 ls /misc/mydev
 df -ah
 ```
@@ -2274,10 +2275,10 @@ df -ah
 
 ```shell
 vim /etc/auto.master
-	/haha /etc/xoxo.conf
+    /haha /etc/xoxo.conf
 
 vim /etc/xixi.conf
-	abc -fstype=cfs "/dev/sdb1
+    abc -fstype=cfs "/dev/sdb1
 
 systemctl restart autofs
 ls /haha/abc
@@ -2291,6 +2292,172 @@ autonfs -fstype=nfs 192.168.4.7:/public
 ls /misc/autonfs
 df -ah
 ```
+
+
+
+### 配置DNS服务器
+
+```shell
+#服务器配置
+yum -y install bind bind-chroot.x86_64
+rpm -q bind bind-chroot
+
+vim /etc/named.conf
+    options {
+            directory       "/var/named";
+    };
+    
+    zone "tedu.cn" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
+
+named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@       IN SOA  @ rname.invalid. (
+	                                        0       ; serial
+	                                        1D      ; refresh
+	                                        1H      ; retry
+	                                        1W      ; expire
+	                                        3H )    ; minimum
+	
+	tedu.cn.        NS      svr7.tedu.cn.
+	www.tedu.cn.    A       192.168.4.100
+
+named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+systemctl restart named	#重启服务
+
+systemctl stop firewalld.service    #关闭防火墙
+setenforce 0
+
+
+# 客户端验证
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.tedu.cn
+```
+
+
+#### 构建多区域的DNS（多区域DNS服务）
+服务端：
+```shell
+#修改主配置文件，在下面新添加
+vim /etc/named.conf
+    options {
+            directory       "/var/named";
+    };
+    #指定这台机器要解析的域名
+    zone "tedu.cn" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
+    zone "baidu.com" IN {
+            type master;
+            file "baidu.com.zone";
+    };
+    
+cp -p /var/named/named.localhost /var/named/baidu.com.zone
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/baidu.com.zone
+	$TTL 1D
+	@       IN SOA  @ rname.invalid. (
+	                                        0       ; serial
+	                                        1D      ; refresh
+	                                        1H      ; retry
+	                                        1W      ; expire
+	                                        3H )    ; minimum
+	
+	baidu.com.        NS      svr7
+	svr7   A       192.168.4.7
+	www    A       10.20.30.40
+
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+	tedu.cn.	NS	www.tedu.cn.
+	www	A	192.168.4.7
+	svr7	A	0.0.0.0
+
+systemctl restart named	#重启服务
+```
+
+客户端操作：
+```shell
+yum -y install bind-utils
+nslookup svr7.tedu.cn
+nslookup www.baidu.com
+```
+
+#### 特殊的解析记录
+基于DNS的站点负载均衡
+一个域名 --> 多个不同IP地址
+
+##### 1. 基于解析记录的轮询（负载均衡，缓解网站服务器的压力）
+
+服务器：
+```shell
+vim /var/named/baidu.com.zone
+	baidu.com	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	192.168.4.50
+	www	A	192.168.4.60
+	www	A	192.168.4.70
+	www	A	192.168.4.80
+	www	A	192.168.4.90
+
+systemctl restart named
+```
+
+
+客户端：
+```shell
+ping www.baidu.com
+ping www.baidu.com
+```
+
+
+##### 2. 泛域名解析
+解决用户输入错误域名时的解析结果
+
+```shell
+#服务端
+vim /var/named/baidu.com.zone
+	* A 10.20.30.40
+
+systemctl restart named
+
+#客户端测试
+nslookup wwww.baidu.com
+```
+
+##### 3. 无规律的泛域名解析（无前置域名访问）
+服务端：
+```shell
+vim /var/named/baidu.com.zone
+    ···
+    baidu.com. A 50.60.70.80
+
+systemctl restart named
+```
+
+客户端：
+```shell
+nslookup baidu.com
+```
+
+
+
+
+
+
 
 
 
@@ -5178,38 +5345,71 @@ df -h
 
 
 
-------
-### ？配置DNS服务器
+## 5.17 练习
+案例：
+提供以下正向解析记录的解析
+1. svr7.tedu.cn --> 192.168.4.7
+
+    pc207.tedu.cn --> 192.168.4.207
+
+    www.tedu.cn --> 192.168.4.100
+
 ```shell
 #服务器配置
-yum -y install bind bind-chroot.x86_64
+systemctl stop firewalld.service 
+setenforce 0
+
+yum -y install bind bind-chroot.x86_64	#安装named包默认端口号53
 rpm -q bind bind-chroot
+
 vim /etc/named.conf
-options {
-        directory       "/var/named";
-};
+    options {
+            directory       "/var/named";
+    };
+    
+    #指定这台机器要解析的域名
+    zone "tedu.cn" IN {
+            type master;
+            file "tedu.cn.zone";
+    };
 
-zone "tedu.cn" IN {
-        type master;
-        file "tedu.cn.zone";
-};
+named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
 
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+#第二种方法：相对路径方式
 cd /var/named/
-
 cp -p named.localhost tedu.cn.zone
-vim tedu.cn.zone
-systemctl named
-vim /etc/resolv.conf
-nslookup www.tedu.cn	#解析ip地址
-yum -y install 
+
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@       IN SOA  @ rname.invalid. (
+	                                        0       ; serial
+	                                        1D      ; refresh
+	                                        1H      ; retry
+	                                        1W      ; expire
+	                                        3H )    ; minimum
+	
+	tedu.cn.        NS      svr7.tedu.cn.
+	svr7.tedu.cn.   A       192.168.4.7
+	pc207.tedu.cn.  A       192.168.4.207
+	www.tedu.cn.    A       192.168.4.100
 
 
-# 客户端验证
-echo "nameserver 192.168.4.7" > /etc/resolv.conf
-yum -y install bind-utils
-nslookup www.tedu.cn
+named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+
+systemctl restart services	#重启服务
 ```
 
+2. 在客户机上验证查询结果
+
+    ```shell
+    #客户端测试
+    yum -y install bind-utils
+    echo "nameserver 192.168.4.7" > /etc/resolv.conf
+    
+    nslookup pc207.tedu.cn
+    nslookup www.tedu.cn
+    ```
 
 
 
