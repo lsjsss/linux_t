@@ -5454,7 +5454,7 @@ systemctl restart services	#重启服务
         					1H	; retry
         					1W	; expire
         					3H )	; minimum
-        tedu.cn.	NS	svr7.tedu.cn.
+        tedu.cn.	NS	svr7
         svr7	A	192.168.4.7
         www	A	192.168.4.100
     
@@ -5466,7 +5466,7 @@ systemctl restart services	#重启服务
         					1H	; retry
         					1W	; expire
         					3H )	; minimum
-        baidu.com.	NS	svr7.baidu.com.
+        baidu.com.	NS	svr7
         svr7	A	192.168.4.7
         www	A	10.20.30.40
         ftp	A	50.60.70.80
