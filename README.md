@@ -2400,7 +2400,7 @@ nslookup www.baidu.com
 基于DNS的站点负载均衡
 一个域名 --> 多个不同IP地址
 
-##### 1. 基于解析记录的轮询（负载均衡，缓解网站服务器的压力）
+##### 基于解析记录的轮询（负载均衡，缓解网站服务器的压力）
 
 服务器：
 ```shell
@@ -2424,7 +2424,7 @@ ping www.baidu.com
 ```
 
 
-##### 2. 泛域名解析
+##### 泛域名解析
 解决用户输入错误域名时的解析结果
 
 ```shell
@@ -2438,7 +2438,7 @@ systemctl restart named
 nslookup wwww.baidu.com
 ```
 
-##### 3. 无规律的泛域名解析（无前置域名访问）
+##### 无规律的泛域名解析（无前置域名访问）
 服务端：
 ```shell
 vim /var/named/baidu.com.zone
@@ -2452,6 +2452,240 @@ systemctl restart named
 ```shell
 nslookup baidu.com
 ```
+
+##### 使用内置函数生成有规律的泛域名解析
+
+> `$GENERATE 1-100 pc$ A 192.168.10.$`
+
+```shell
+vim /var/named/baidu.com.zone
+	$GENERATE 1-100 pc$ A 192.168.10.$
+	#$GENERATE 要生成的整数范围 pc$ A 192.168.10.$
+
+system restart named    #重启服务
+
+nslookup pc1.baidu.com    #测试结果
+nslookup pc2.baidu.com
+nslookup pc100.baidu.com
+```
+
+##### 使用别名解析（CNAME）
+
+```shell
+vim /var/named/baidu.com.zone
+	···
+	tts CNAME ftp
+	#别名 CNAME 要解析的域名
+
+systemctl restart named	#重启服务
+nslookup tts.baidu.com	#测试结果
+```
+
+### 主/从DNS服务器
+
+#### 主域名服务器
+
+特定DNS区域的官方服务器，具有唯一性
+
+负责维护该区域内所有的“域名 <--> IP地址”记录
+
+#### 从域名服务器
+
+也称为`辅助域名服务器`，可以没有
+
+其维护的“域名 <--> IP地址”记录取决于主域名服务器
+
+#### 主/从DNS应用场景
+案例环境
+主DNS服务器的IP地址为 192.168.4.7/24
+
+从DNS服务器的IP地址为192.168.4.207/24
+
+其中任何一台都能提供对tedu.cn域的主机查询，返回相同的解析结果
+
+
+#### 基本配置步骤
+以区域tedu.cn为例，正常搭建好DNS服务
+
+主服务器配置：
+
+1. 装bind、bind-chroot软件包
+
+2. 建立主配置文件
+
+3. 建立区域数据文件
+
+4. 启动named服务
+
+5. 测试主DNS的域名解析
+
+```shell
+#主服务器配置
+vim /etc/named/named.conf
+	options {
+		allow-transfer { 192.168.4.207; };
+		#allow-transfer  { 从服务器的IP地址; };
+	};
+
+vim /etc/named/tedu.cn.zone
+	···
+	tedu.cn NS pc207
+	pc207 A 192.168.4.207
+	#从服务器名称（NS记录必须写在A解析记录上）
+
+systemctl restart named	#重启服务
+```
+
+从服务器配置：
+
+1. 装bind、bind-chroot软件包
+
+2. 建立主配置文件
+
+3. 启动named服务
+
+4. 测试主DNS的域名解析
+
+```shell
+#从服务器配置
+vim /etc/named/named.conf
+    options {
+        directory	"/var/named";
+    };
+    
+    zone "tedu.cn" IN {
+      	type slave;
+    	file "/var/named/slaves/tedu.cn.slave";
+        masters { 192.168.4.7; };
+    };
+
+systemctl restart named	#重启服务
+```
+
+客户端测试
+
+```shell
+#客户端测试
+nslookup www.tedu.cn 192.168.4.7
+nslookup www.tedu.cn 192.168.4.207
+vim /etc/resolv.conf
+    nameserver 192.168.4.7
+    nameserver 192.168.4.207
+
+nslookup www.tedu.cn    #会首先解析到主服务器
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5412,6 +5646,78 @@ systemctl restart services	#重启服务
     ```
 
 
+## 5.18 练习
+案例：构建多区域DNS
+实现以下正向解析记录
+1. 访问www.tedu.cn ---> 192.168.4.100
+2. 访问www.baidu.com ---> 10.20.30.40
+3. 访问ftp.baidu.com ---> 50.60.70.80
+
+    ```shell
+    #服务器配置
+    systemctl stop firewalld.service 
+    setenforce 0
+    
+    yum -y install bind bind-chroot.x86_64	#安装named包默认端口号53
+    rpm -q bind bind-chroot
+    
+    vim /etc/named.conf	#指定这台机器要解析的域名
+        options {
+        	directory 	"/var/named";
+        };
+        
+        zone "tedu.cn" IN {
+        	type master;
+        	file "tedu.cn.zone";
+        };
+        zone "baidu.com" IN {
+        	type master;
+        	file "baidu.com.zone";
+        };
+    
+    named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
+    
+    cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+    cp -p /var/named/named.localhost /var/named/baidu.com.zone
+    
+    vim /var/named/tedu.cn.zone
+        $TTL 1D
+        @	IN SOA	@ rname.invalid. (
+        					0	; serial
+        					1D	; refresh
+        					1H	; retry
+        					1W	; expire
+        					3H )	; minimum
+        tedu.cn.	NS	svr7
+        svr7	A	192.168.4.7
+        www	A	192.168.4.100
+    
+    vim /var/named/baidu.com.zone
+        $TTL 1D
+        @	IN SOA	@ rname.invalid. (
+        					0	; serial
+        					1D	; refresh
+        					1H	; retry
+        					1W	; expire
+        					3H )	; minimum
+        baidu.com.	NS	svr7
+        svr7	A	192.168.4.7
+        www	A	10.20.30.40
+        ftp	A	50.60.70.80
+    
+    named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+    named-checkzone baidu.com /var/named/baidu.com.zone
+    
+    systemctl restart services	#重启服务
+    
+    #客户端测试
+    yum -y install bind-utils
+    echo "nameserver 192.168.4.7" > /etc/resolv.conf
+    
+    nslookup www.tedu.cn
+    nslookup www.baidu.com
+    nslookup ftp.baidu.com
+    ```
 
 
 
