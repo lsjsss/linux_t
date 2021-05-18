@@ -2461,6 +2461,11 @@ nslookup baidu.com
 vim /var/named/baidu.com.zone
 	$GENERATE 1-100 pc$ A 192.168.10.$
 	#$GENERATE 要生成的整数范围 pc$ A 192.168.10.$
+
+system restart named
+nslookup pc1.baidu.com
+nslookup pc2.baidu.com
+nslookup pc100.baidu.com
 ```
 
 
