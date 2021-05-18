@@ -2563,6 +2563,7 @@ systemctl restart named	#重启服务
 ```
 
 客户端测试
+
 ```shell
 #客户端测试
 nslookup www.tedu.cn 192.168.4.7
