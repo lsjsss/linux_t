@@ -5472,6 +5472,7 @@ systemctl restart services	#重启服务
         ftp	A	50.60.70.80
     
     named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+    named-checkzone baidu.com /var/named/baidu.com.zone
     
     systemctl restart services	#重启服务
     
