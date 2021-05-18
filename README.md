@@ -5412,6 +5412,77 @@ systemctl restart services	#重启服务
     ```
 
 
+## 5.18 练习
+案例：构建多区域DNS
+实现以下正向解析记录
+1. 访问www.tedu.cn ---> 192.168.4.100
+2. 访问www.baidu.com ---> 10.20.30.40
+3. 访问ftp.baidu.com ---> 50.60.70.80
+
+    ```shell
+    #服务器配置
+    systemctl stop firewalld.service 
+    setenforce 0
+    
+    yum -y install bind bind-chroot.x86_64	#安装named包默认端口号53
+    rpm -q bind bind-chroot
+    
+    vim /etc/named.conf	#指定这台机器要解析的域名
+        options {
+        	directory 	"/var/named";
+        };
+        
+        zone "tedu.cn" IN {
+        	type master;
+        	file "tedu.cn.zone";
+        };
+        zone "baidu.com" IN {
+        	type master;
+        	file "baidu.com.zone";
+        };
+    
+    named-checkconf /etc/named.conf	#检查主配置文件是否存在语法问题
+    
+    cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+    cp -p /var/named/named.localhost /var/named/baidu.com.zone
+    
+    vim /var/named/tedu.cn.zone
+        $TTL 1D
+        @	IN SOA	@ rname.invalid. (
+        					0	; serial
+        					1D	; refresh
+        					1H	; retry
+        					1W	; expire
+        					3H )	; minimum
+        tedu.cn.	NS	svr7.tedu.cn.
+        svr7	A	192.168.4.7
+        www	A	192.168.4.100
+    
+    vim /var/named/baidu.com.zone
+        $TTL 1D
+        @	IN SOA	@ rname.invalid. (
+        					0	; serial
+        					1D	; refresh
+        					1H	; retry
+        					1W	; expire
+        					3H )	; minimum
+        baidu.com.	NS	svr7.baidu.com.
+        svr7	A	192.168.4.7
+        www	A	10.20.30.40
+        ftp	A	50.60.70.80
+    
+    named-checkzone tedu.cn /var/named/tedu.cn.zone	#检查地址库文件是否存在语法问题
+    
+    systemctl restart services	#重启服务
+    
+    #客户端测试
+    yum -y install bind-utils
+    echo "nameserver 192.168.4.7" > /etc/resolv.conf
+    
+    nslookup www.tedu.cn
+    nslookup www.baidu.com
+    nslookup ftp.baidu.com
+    ```
 
 
 
