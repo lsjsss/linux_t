@@ -2562,7 +2562,17 @@ vim /etc/named/named.conf
 systemctl restart named	#重启服务
 ```
 
+客户端测试
+```shell
+#客户端测试
+nslookup www.tedu.cn 192.168.4.7
+nslookup www.tedu.cn 192.168.4.207
+vim /etc/resolv.conf
+    nameserver 192.168.4.7
+    nameserver 192.168.4.207
 
+nslookup www.tedu.cn    #会首先解析到主服务器
+```
 
 
 
