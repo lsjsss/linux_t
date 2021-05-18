@@ -2462,14 +2462,24 @@ vim /var/named/baidu.com.zone
 	$GENERATE 1-100 pc$ A 192.168.10.$
 	#$GENERATE 要生成的整数范围 pc$ A 192.168.10.$
 
-system restart named
-nslookup pc1.baidu.com
+system restart named    #重启服务
+
+nslookup pc1.baidu.com    #测试结果
 nslookup pc2.baidu.com
 nslookup pc100.baidu.com
 ```
 
+##### 使用别名解析（CNAME）
 
+```shell
+vim /var/named/baidu.com.zone
+	···
+	tts CNAME ftp
+	#别名 CNAME 要解析的域名
 
+systemctl restart named	#重启服务
+nslookup tts.baidu.com	#测试结果
+```
 
 
 
