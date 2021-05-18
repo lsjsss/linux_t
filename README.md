@@ -2481,6 +2481,58 @@ systemctl restart named	#重启服务
 nslookup tts.baidu.com	#测试结果
 ```
 
+### 主/从DNS服务器
+
+#### 主域名服务器
+
+特定DNS区域的官方服务器，具有唯一性
+
+负责维护该区域内所有的“域名 <--> IP地址”记录
+
+#### 从域名服务器
+
+也称为`辅助域名服务器`，可以没有
+
+其维护的“域名 <--> IP地址”记录取决于主域名服务器
+
+#### 主/从DNS应用场景
+案例环境
+主DNS服务器的IP地址为 192.168.4.7/24
+
+从DNS服务器的IP地址为192.168.4.207/24
+
+其中任何一台都能提供对tedu.cn域的主机查询，返回相同的解析结果
+
+
+#### 基本配置步骤
+以区域tedu.cn为例，正常搭建好DNS服务
+
+1. 装bind、bind-chroot软件包
+
+2. 建立主配置文件
+
+3. 建立区域数据文件
+
+4. 启动named服务
+
+5. 测试主DNS的域名解析
+
+```shell
+#主服务器配置
+vim /etc/named/named.conf
+	options {
+		allow-transfer { 192.168.4.207; };
+		#allow-transfer  { 从服务器的IP地址; };
+	}
+
+vim /etc/named/tedu.cn.zone
+	···
+	tedu.cn NS pc207
+	pc207 A 192.168.4.207
+	#从服务器名称（NS记录必须写在A解析记录上）
+
+systemctl restart named	#重启服务
+```
 
 
 
