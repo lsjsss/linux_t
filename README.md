@@ -2507,6 +2507,8 @@ nslookup tts.baidu.com	#测试结果
 #### 基本配置步骤
 以区域tedu.cn为例，正常搭建好DNS服务
 
+主服务器配置：
+
 1. 装bind、bind-chroot软件包
 
 2. 建立主配置文件
@@ -2523,7 +2525,7 @@ vim /etc/named/named.conf
 	options {
 		allow-transfer { 192.168.4.207; };
 		#allow-transfer  { 从服务器的IP地址; };
-	}
+	};
 
 vim /etc/named/tedu.cn.zone
 	···
@@ -2534,7 +2536,31 @@ vim /etc/named/tedu.cn.zone
 systemctl restart named	#重启服务
 ```
 
+从服务器配置：
 
+1. 装bind、bind-chroot软件包
+
+2. 建立主配置文件
+
+3. 启动named服务
+
+4. 测试主DNS的域名解析
+
+```shell
+#从服务器配置
+vim /etc/named/named.conf
+    options {
+        directory	"/var/named";
+    };
+    
+    zone "tedu.cn" IN {
+      	type slave;
+    	file "/var/named/slaves/tedu.cn.slave";
+        masters { 192.168.4.7; };
+    };
+
+systemctl restart named	#重启服务
+```
 
 
 
