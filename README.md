@@ -2424,7 +2424,7 @@ ping www.baidu.com
 ```
 
 
-##### 2. 泛域名解析
+##### 泛域名解析
 解决用户输入错误域名时的解析结果
 
 ```shell
@@ -2438,7 +2438,7 @@ systemctl restart named
 nslookup wwww.baidu.com
 ```
 
-##### 3. 无规律的泛域名解析（无前置域名访问）
+##### 无规律的泛域名解析（无前置域名访问）
 服务端：
 ```shell
 vim /var/named/baidu.com.zone
@@ -2452,6 +2452,136 @@ systemctl restart named
 ```shell
 nslookup baidu.com
 ```
+
+##### 使用内置函数生成有规律的泛域名解析
+
+> `$GENERATE 1-100 pc$ A 192.168.10.$`
+
+```shell
+vim /var/named/baidu.com.zone
+	$GENERATE 1-100 pc$ A 192.168.10.$
+	#$GENERATE 要生成的整数范围 pc$ 192.168.10.$
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
