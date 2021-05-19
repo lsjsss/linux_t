@@ -2645,7 +2645,60 @@ host mail.example.com	#查看邮件服务器解析
 ```
 
 
+#### 构建邮件服务器
 
+##### 邮件服务搭建
+
+```shell
+rpm -q postfix
+vim /etc/postfix/main.cf
+	#99行 - 去除注释
+	myorigin = example.com	#默认补全的域名后缀
+
+	#116行
+	inet_interfaces = all	#修改默认监听端口为所有网卡都提供邮件功能
+
+	#164 行
+	mydestination = example.com	#判断为本域邮件的依据
+
+systemctl restart postfix	#重启服务
+
+#测试
+useradd fajianren	#发件用户
+useradd shoujianren	#收件用户
+yum -y install mailx	#安装邮件收发包
+```
+
+##### 交互式mail命令
+
+语法格式：
+
+> mail -s '邮件标题' -r 发件人 收件人
+>
+> 邮件内容
+>
+> .	#结束邮件
+
+```shell
+mail -s "test01" -r fajianren shoujianren
+	邮件内容
+	.	#结束邮件
+
+mail -u xln	#查看邮件
+	1
+	q
+```
+
+##### 非交互式mail命令
+
+语法格式：
+
+> echo "邮件内容" | mail -s '邮件标题' -r 发件人 收件人
+
+```shell
+echo abc | mail -s 'mail title' -r fajianren shoujianren	#使用非交互式命令发送邮件
+mail -u shoujianren	#检查邮件
+```
 
 
 
