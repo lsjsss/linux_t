@@ -2590,7 +2590,59 @@ vim /etc/resolv.conf
 nslookup www.tedu.cn    #会首先解析到主服务器
 ```
 
+### 基础邮件服务
+电子邮件通信
 
+
+电子邮件服务器的基本功能
+
+> 为用户提供电子邮箱存储空间（用户名@邮件域名）
+>
+> 处理用户发出的邮件 -- 传递给收件服务器
+>
+> 处理用户收到的邮件 -- 投递到邮箱 
+
+
+#### 配置邮件服务器的DNS
+
+服务器端（svr7）构建DNS服务器
+
+```shell
+yum -y install bind bind-chroot
+vim /etc/named.conf 
+	options {
+		directory 	"/var/named";
+	};
+	zone "example.com." IN {
+		type master;
+		file "example.com.zone";
+	};
+
+cp -p /var/named/named/named.localhost /var/named/example.com.zone
+vim /var/named/example.com.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+	example.com.	NS	svr7
+	example.com.	MX	10 mail	#邮件服务器
+	svr7	A	192.168.4.7
+	mail	A	192.168.4.207
+
+systemctl restart named
+```
+
+客户端（pc207）主机验证邮件交换记录
+
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf	
+yum -y install bind-utils
+host -t MX example.com	#查看在example.com域中邮件服务器是谁
+host mail.example.com	#查看邮件服务器解析
+```
 
 
 
