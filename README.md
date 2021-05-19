@@ -5720,5 +5720,117 @@ systemctl restart services	#重启服务
     ```
 
 
+## 5.19 练习
+案例：搭建主/从DNS服务器
+1. 准备3台虚拟机，主机名及IP地址要求如下：
+| 主机名 | IP地址 |
+| -- | -- |
+| svr7.tedu.cn | 192.168.4.7 |
+| pc207.tedu.cn | 192.168.4.207 |
+| A.tedu.cn | 192.168.4.10 |
+
+虚拟机svr7
+```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.7/24 connection.autoconnect yes 
+nmcli connection up ens33 
+ifconfig
+hostname svr7.tedu.cn
+echo svr7.tedu.cn > /etc/hostname
+```
+
+虚拟机pc207
+```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.207/24 connection.autoconnect yes 
+nmcli connection up ens33 
+ifconfig
+hostname pc207.tedu.cn
+echo pc207.tedu.cn > /etc/hostname
+```
+
+虚拟机A
+```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes 
+nmcli connection up ens33 
+ifconfig
+hostname A.tedu.cn
+echo A.tedu.cn > /etc/hostname
+```
+
+
+2. 构建主/从DNS服务
+
+| 主DNS | svr7.tedu.cn | 192.168.4.7 |
+| -- | -- | -- |
+| 从DNS | pc207.tedu.cn | 192.168.4.207 |
+| 提供 | www.tedu.cn | 1.2.3.4 |
+
+用虚拟机A测试。
+
+虚拟机svr7
+```shell
+yum -y install bind bind-chroot.x86_64
+
+vim /etc/named.conf
+	options {
+		directory 	"/var/named";
+		allow-transfer     { 192.168.4.207; };
+	};
+	
+	zone "tedu.cn." IN {
+		type master;
+		file "tedu.cn.zone";
+	};
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+	tedu.cn.	NS	svr7
+	tedu.cn.	NS	pc207
+	svr7	A	192.168.4.7
+	pc207	A	192.168.4.207
+	www	A	1.2.3.4
+
+systemctl restart named	#重启服务
+systemctl stop firewalld.service 
+setenforce 0
+```
+
+
+虚拟机pc207
+```shell
+yum -y install bind bind-chroot.x86_64
+
+vim /etc/named.conf 
+	options {
+		directory 	"/var/named";
+	};
+	zone "tedu.cn." IN {
+		type slave;
+		file "/var/named/slaves/tedu.cn.slave";
+		masters { 192.168.4.7; };
+	};
+
+systemctl restart named
+systemctl stop firewalld.service 
+setenforce 0
+```
+
+虚拟机A
+```shell
+vim /etc/resolv.conf 
+	nameserver 192.168.4.7
+	nameserver 192.168.4.207
+
+nslookup www.tedu.cn
+```
+
+
+
 
 > 如有侵权，请联系作者删除
