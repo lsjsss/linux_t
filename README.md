@@ -5723,6 +5723,8 @@ systemctl restart services	#重启服务
 ## 5.19 练习
 案例：搭建主/从DNS服务器
 1. 准备3台虚拟机，主机名及IP地址要求如下：
+
+
 | 主机名 | IP地址 |
 | -- | -- |
 | svr7.tedu.cn | 192.168.4.7 |
@@ -5758,12 +5760,14 @@ echo A.tedu.cn > /etc/hostname
 
 
 2. 构建主/从DNS服务
-用虚拟机A测试。
+
+
 | 主DNS | svr7.tedu.cn | 192.168.4.7 |
 | -- | -- | -- |
 | 从DNS | pc207.tedu.cn | 192.168.4.207 |
 | 提供 | www.tedu.cn | 1.2.3.4 |
 
+用虚拟机A测试。
 
 虚拟机svr7
 ```shell
