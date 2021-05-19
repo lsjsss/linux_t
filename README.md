@@ -2628,7 +2628,7 @@ vim /var/named/example.com.zone
 						1W	; expire
 						3H )	; minimum
 	example.com.	NS	svr7
-	example.com.	MX	10 mail	#邮件服务器
+	example.com.	MX	10 mail    #MX邮件交互记录，10为第几台邮件服务器，数字越小优先级越高；mail：邮件服务器
 	svr7	A	192.168.4.7
 	mail	A	192.168.4.207
 
