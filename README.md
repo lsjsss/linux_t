@@ -5758,13 +5758,12 @@ echo A.tedu.cn > /etc/hostname
 
 
 2. 构建主/从DNS服务
-
+用虚拟机A测试。
 | 主DNS | svr7.tedu.cn | 192.168.4.7 |
 | -- | -- | -- |
 | 从DNS | pc207.tedu.cn | 192.168.4.207 |
 | 提供 | www.tedu.cn | 1.2.3.4 |
 
-用虚拟机A测试。
 
 虚拟机svr7
 ```shell
