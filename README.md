@@ -2548,7 +2548,7 @@ systemctl restart named	#重启服务
 
 ```shell
 #从服务器配置
-vim /etc/named/named.conf
+vim /etc/named.conf
     options {
         directory	"/var/named";
     };
