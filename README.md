@@ -2521,19 +2521,34 @@ nslookup tts.baidu.com	#测试结果
 
 ```shell
 #主服务器配置
-vim /etc/named/named.conf
+vim /etc/named.conf
 	options {
+                directory 	"/var/named";
 		allow-transfer { 192.168.4.207; };
 		#allow-transfer  { 从服务器的IP地址; };
 	};
+        zone "tedu.cn." IN {
+		type master;
+		file "tedu.cn.zone";
+	};
 
-vim /etc/named/tedu.cn.zone
-	···
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial    #版本号（10位数字组成，年月日修改次数 2020010101）
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum    #无效记录缓存时间
+
 	tedu.cn NS pc207
 	pc207 A 192.168.4.207
 	#从服务器名称（NS记录必须写在A解析记录上）
 
 systemctl restart named	#重启服务
+systemctl stop firewalld.service    #关闭防火墙
+setenforce 0
 ```
 
 从服务器配置：
