@@ -2701,6 +2701,110 @@ mail -u shoujianren	#检查邮件
 ```
 
 
+### 分离解析概述
+
+#### 分离解析：
+
+当收到客户机的DNS查询请求的时候
+
+
+> 能够区分客户机的来源地址
+>
+> 为不同类别的客户机提供不向的解析结果（IP地址）
+
+
+
+典型适用场景：
+
+> 访问压力大的网站，购买CDN提供的内容分发服务
+>
+> 在全国各地/不同网终内部署大量镜像服务节点
+>
+> 针对不同的客户机就近提供服务器
+
+
+#### BIND的view视图
+
+匹配原则：由上到下
+
+> 根据源地址集合将客户机分类
+>
+> 不同客户机获得不同结果(待遇有差别)
+
+```shell
+view "联通" {
+	match-clients { 来源地址1; ...; }:
+	zone "12306.cn" IN 
+		...地址库1;
+	};  };
+view "铁通" {
+	match-clients { 来源地址2; ...; };
+	zone "12306.cn" IN {
+		...地址库2;
+	}; };
+```
+
+
+#### 分离解析实例
+
+服务端（svr）7操作:
+
+```shell
+vim /etc/named.conf
+	options {
+		directory /var/named";
+	}；
+	view "VIP" {
+		match-clients { 192.168,4.207; };
+		zone "tedu.en" IN {
+			type master
+			file "tedu.cn.zone";
+		};
+	};
+	view "other" {
+		match-clients { any; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other;
+		};
+	};
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	А	192.168.4.7
+	www	A	192.168.4.100
+
+cp -p /var/named/tedu.cn.zone /var/named/tedu.cn.other
+vim /var/named/tedu.cn.other
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	А	192.168.4.7
+	www	A	1.2.3.4
+
+systemcti restart named
+```
+
+分别用pc207和虚拟机A验证
+
+```shell
+nslookup www.tedu.cn
+```
 
 
 
