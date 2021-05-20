@@ -2521,19 +2521,34 @@ nslookup tts.baidu.com	#测试结果
 
 ```shell
 #主服务器配置
-vim /etc/named/named.conf
+vim /etc/named.conf
 	options {
+                directory 	"/var/named";
 		allow-transfer { 192.168.4.207; };
 		#allow-transfer  { 从服务器的IP地址; };
 	};
+        zone "tedu.cn." IN {
+		type master;
+		file "tedu.cn.zone";
+	};
 
-vim /etc/named/tedu.cn.zone
-	···
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial    #版本号（10位数字组成，年月日修改次数 2020010101，做数据同步使用，用于在主服务器修改地址后，同步数值只可增加不可减小）
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum    #无效记录缓存时间
+
 	tedu.cn NS pc207
 	pc207 A 192.168.4.207
 	#从服务器名称（NS记录必须写在A解析记录上）
 
 systemctl restart named	#重启服务
+systemctl stop firewalld.service    #关闭防火墙
+setenforce 0
 ```
 
 从服务器配置：
@@ -2548,7 +2563,7 @@ systemctl restart named	#重启服务
 
 ```shell
 #从服务器配置
-vim /etc/named/named.conf
+vim /etc/named.conf
     options {
         directory	"/var/named";
     };
@@ -2574,6 +2589,582 @@ vim /etc/resolv.conf
 
 nslookup www.tedu.cn    #会首先解析到主服务器
 ```
+
+### 基础邮件服务
+电子邮件通信
+
+
+电子邮件服务器的基本功能
+
+> 为用户提供电子邮箱存储空间（用户名@邮件域名）
+>
+> 处理用户发出的邮件 -- 传递给收件服务器
+>
+> 处理用户收到的邮件 -- 投递到邮箱 
+
+
+#### 配置邮件服务器的DNS
+
+服务器端（svr7）构建DNS服务器
+
+```shell
+yum -y install bind bind-chroot
+vim /etc/named.conf 
+	options {
+		directory 	"/var/named";
+	};
+	zone "example.com." IN {
+		type master;
+		file "example.com.zone";
+	};
+
+cp -p /var/named/named/named.localhost /var/named/example.com.zone
+vim /var/named/example.com.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+	example.com.	NS	svr7
+	example.com.	MX	10 mail    #MX邮件交互记录，10为第几台邮件服务器，数字越小优先级越高；mail：邮件服务器
+	svr7	A	192.168.4.7
+	mail	A	192.168.4.207
+
+systemctl restart named
+```
+
+客户端（pc207）主机验证邮件交换记录
+
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf	
+yum -y install bind-utils
+host -t MX example.com	#查看在example.com域中邮件服务器是谁
+host mail.example.com	#查看邮件服务器解析
+```
+
+
+#### 构建邮件服务器
+
+##### 邮件服务搭建
+
+```shell
+rpm -q postfix
+vim /etc/postfix/main.cf
+	#99行 - 去除注释
+	myorigin = example.com	#默认补全的域名后缀
+
+	#116行
+	inet_interfaces = all	#修改默认监听端口为所有网卡都提供邮件功能
+
+	#164 行
+	mydestination = example.com	#判断为本域邮件的依据
+
+systemctl restart postfix	#重启服务
+
+#测试
+useradd fajianren	#发件用户
+useradd shoujianren	#收件用户
+yum -y install mailx	#安装邮件收发包
+```
+
+##### 交互式mail命令
+
+语法格式：
+
+> mail -s '邮件标题' -r 发件人 收件人
+>
+> 邮件内容
+>
+> .	#结束邮件
+
+```shell
+mail -s "test01" -r fajianren shoujianren
+	邮件内容
+	.	#结束邮件
+
+mail -u xln	#查看邮件
+	1
+	q
+```
+
+##### 非交互式mail命令
+
+语法格式：
+
+> echo "邮件内容" | mail -s '邮件标题' -r 发件人 收件人
+
+```shell
+echo abc | mail -s 'mail title' -r fajianren shoujianren	#使用非交互式命令发送邮件
+mail -u shoujianren	#检查邮件
+```
+
+
+### 分离解析概述
+
+#### 分离解析：
+
+当收到客户机的DNS查询请求的时候
+
+
+> 能够区分客户机的来源地址
+>
+> 为不同类别的客户机提供不向的解析结果（IP地址）
+
+
+
+典型适用场景：
+
+> 访问压力大的网站，购买CDN提供的内容分发服务
+>
+> 在全国各地/不同网终内部署大量镜像服务节点
+>
+> 针对不同的客户机就近提供服务器
+
+
+#### BIND的view视图
+
+匹配原则：由上到下
+
+> 根据源地址集合将客户机分类
+>
+> 不同客户机获得不同结果(待遇有差别)
+
+```shell
+view "联通" {
+	match-clients { 来源地址1; ...; }:
+	zone "12306.cn" IN 
+		...地址库1;
+	};  };
+view "铁通" {
+	match-clients { 来源地址2; ...; };
+	zone "12306.cn" IN {
+		...地址库2;
+	}; };
+```
+
+
+#### 分离解析实例
+
+服务端（svr）7操作:
+
+```shell
+vim /etc/named.conf
+	options {
+		directory /var/named";
+	}；
+	view "VIP" {
+		match-clients { 192.168,4.207; };
+		zone "tedu.en" IN {
+			type master
+			file "tedu.cn.zone";
+		};
+	};
+	view "other" {
+		match-clients { any; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other;
+		};
+	};
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	192.168.4.100
+
+cp -p /var/named/tedu.cn.zone /var/named/tedu.cn.other
+vim /var/named/tedu.cn.other
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	1.2.3.4
+
+systemcti restart named
+```
+
+分别用pc207和虚拟机A验证
+
+```shell
+nslookup www.tedu.cn
+```
+
+
+### 缓存DNS概述
+作用：缓存解析记录，加快解析速度
+
+
+缓存DNS的适用场景
+
+
+主要适用环境：
+
+
+> 互联网出口带宽较低的企业局域网络
+>
+> ISP服务商的公共DNS服务器
+
+
+#### 构建缓存服务器
+
+客户端（pc207）
+```shell
+yum -y install bind bind-chroot
+vim /etc/namd.conf
+	options {
+		directory"/var/named";
+		forwarders	{ 192.168.4.7 };	#转发地址
+	};
+
+systemctl restart named
+```
+
+客户端验证（A）
+```shell
+nalookup www.tedu.cn 192.168.4.207
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5718,6 +6309,299 @@ systemctl restart services	#重启服务
     nslookup www.baidu.com
     nslookup ftp.baidu.com
     ```
+
+
+## 5.19 练习
+案例：搭建主/从DNS服务器
+1. 准备3台虚拟机，主机名及IP地址要求如下：
+
+
+| 主机名 | IP地址 |
+| -- | -- |
+| svr7.tedu.cn | 192.168.4.7 |
+| pc207.tedu.cn | 192.168.4.207 |
+| A.tedu.cn | 192.168.4.10 |
+
+虚拟机svr7
+```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.7/24 connection.autoconnect yes 
+nmcli connection up ens33 
+ifconfig
+hostname svr7.tedu.cn
+echo svr7.tedu.cn > /etc/hostname
+```
+
+虚拟机pc207
+```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.207/24 connection.autoconnect yes 
+nmcli connection up ens33 
+ifconfig
+hostname pc207.tedu.cn
+echo pc207.tedu.cn > /etc/hostname
+```
+
+虚拟机A
+```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes 
+nmcli connection up ens33 
+ifconfig
+hostname A.tedu.cn
+echo A.tedu.cn > /etc/hostname
+```
+
+
+2. 构建主/从DNS服务
+
+
+| 主DNS | svr7.tedu.cn | 192.168.4.7 |
+| -- | -- | -- |
+| 从DNS | pc207.tedu.cn | 192.168.4.207 |
+| 提供 | www.tedu.cn | 1.2.3.4 |
+
+用虚拟机A测试。
+
+虚拟机svr7
+```shell
+yum -y install bind bind-chroot.x86_64
+
+vim /etc/named.conf
+	options {
+		directory 	"/var/named";
+		allow-transfer     { 192.168.4.207; };
+	};
+	
+	zone "tedu.cn." IN {
+		type master;
+		file "tedu.cn.zone";
+	};
+
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+	tedu.cn.	NS	svr7
+	tedu.cn.	NS	pc207
+	svr7	A	192.168.4.7
+	pc207	A	192.168.4.207
+	www	A	1.2.3.4
+
+systemctl restart named	#重启服务
+systemctl stop firewalld.service 
+setenforce 0
+```
+
+
+虚拟机pc207
+```shell
+yum -y install bind bind-chroot.x86_64
+
+vim /etc/named.conf 
+	options {
+		directory 	"/var/named";
+	};
+	zone "tedu.cn." IN {
+		type slave;
+		file "/var/named/slaves/tedu.cn.slave";
+		masters { 192.168.4.7; };
+	};
+
+systemctl restart named
+systemctl stop firewalld.service 
+setenforce 0
+```
+
+虚拟机A
+```shell
+vim /etc/resolv.conf 
+	nameserver 192.168.4.7
+	nameserver 192.168.4.207
+
+nslookup www.tedu.cn
+```
+
+## 5.20 练习
+多区域DNS分离解析
+1. 分类(配户端相同)相同：
+
+
+192.168.4.207 --> www.tedu.cn --> 192.168.4.100
+
+
+		www.qq.com
+
+
+其他地址 --> www.tedu.cn --> 1.2.3.4
+
+
+		www.qq.com
+
+
+
+2. 分类(匹配客户端来源不相同)不相同：
+
+
+客户端192.168.4.207 --> www.tedu.cn --> 192.168.4.100
+
+
+客户端其他地址 --> www.tedu.cn --> 1.2.3.4
+
+
+客户端192.168.4.10 --> www.qq.com -->192.168.10.100
+
+
+客户端其他地址 --> www.qq.com --> 172.25.0.11
+
+
+
+> 分析：
+>
+> 192.168.4.207 --> www.tedu.cn --> 192.168.4.100 --> 地址库tedu.cn.zone
+>
+> 192.168.4.207 --> www.qq.com --> 172.25.0.11 --> qq.com.other
+>
+>
+>
+> 192.168.4.10 --> www.tedu.cn --> 1.2.3.4 --> tedu.cn.other
+>
+> 192.168.4.10 --> www.qq.com --> 192.168.10.100 --> qq.com.other
+>
+>
+>
+> 其他地址 --> www.tedu.cn --> 1.2.3.4 --> tedu.cn.other
+>
+> 其他地址 --> www.qq.com --> 172.25.0.11 --> qq.com.zone
+
+```shell
+#服务端(svr7)
+yum -y install bind bind-chroot
+vim /etc/named.conf
+	options {
+		directory "/var/named";
+	};
+	view "nsd" {
+		match-clients { 192.168.4.207; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.zone";	#解析结果为192.168.4.100
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.zone";	#解析结果为172.25.0.11
+		};
+	 };
+	view "vip" {
+		match-clients { 192.168.4.10; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other";	#解析结果为1.2.3.4
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.other";	#解析结果为192.168.10.100
+		};
+	 };
+	view "others" {
+		match-clients { any; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other";	#解析结果为1.2.3.4
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.zone";	#解析结果为172.25.0.11
+		};
+	 };
+
+cd /var/named/
+cp -p named.localhost tedu.cn.zone
+vim tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	1.2.3.4
+
+cp -p tedu.cn.zone tedu.cn.other
+vim tedu.cn.other
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	192.168.4.100
+
+
+cp -p tedu.cn.zone qq.com.zone
+vim qq.com.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	qq.com.	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	172.25.0.11
+
+cp -p qq.com.zone qq.com.other
+vim qq.com.other
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	qq.com.	NS	svr7
+	svr7	A	192.168.4.7
+	www	A	192.168.10.100
+
+systemctl restart named
+```
+
+客户机(pc207)
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+客户机A
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+服务端(svr7)
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0520/110049_8a3c3bb9_5698809.png "屏幕截图.png")
 
 
 
