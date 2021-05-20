@@ -2780,7 +2780,7 @@ vim /var/named/tedu.cn.zone
 						3H )	; minimum
 
 	tedu.cn.	NS	svr7
-	svr7	А	192.168.4.7
+	svr7	A	192.168.4.7
 	www	A	192.168.4.100
 
 cp -p /var/named/tedu.cn.zone /var/named/tedu.cn.other
@@ -2794,7 +2794,7 @@ vim /var/named/tedu.cn.other
 						3H )	; minimum
 
 	tedu.cn.	NS	svr7
-	svr7	А	192.168.4.7
+	svr7	A	192.168.4.7
 	www	A	1.2.3.4
 
 systemcti restart named
@@ -6162,7 +6162,7 @@ vim tedu.cn.zone
 						3H )	; minimum
 
 	tedu.cn.	NS	svr7
-	svr7	А	192.168.4.7
+	svr7	A	192.168.4.7
 	www	A	1.2.3.4
 
 cp -p tedu.cn.zone tedu.cn.other
@@ -6176,7 +6176,7 @@ vim tedu.cn.other
 						3H )	; minimum
 
 	tedu.cn.	NS	svr7
-	svr7	А	192.168.4.7
+	svr7	A	192.168.4.7
 	www	A	192.168.4.100
 
 
@@ -6191,7 +6191,7 @@ vim qq.com.zone
 						3H )	; minimum
 
 	qq.com.	NS	svr7
-	svr7	А	192.168.4.7
+	svr7	A	192.168.4.7
 	www	A	172.25.0.11
 
 cp -p qq.com.zone qq.com.other
@@ -6205,7 +6205,7 @@ vim qq.com.other
 						3H )	; minimum
 
 	qq.com.	NS	svr7
-	svr7	А	192.168.4.7
+	svr7	A	192.168.4.7
 	www	A	192.168.10.100
 
 systemctl restart named
