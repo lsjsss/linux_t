@@ -2808,7 +2808,7 @@ nslookup www.tedu.cn
 
 
 ### 缓存DNS概述
-作用：加快解析速度
+作用：缓存解析记录，加快解析速度
 
 
 缓存DNS的适用场景
@@ -2823,6 +2823,7 @@ nslookup www.tedu.cn
 
 
 #### 构建缓存服务器
+
 客户端（pc207）
 ```shell
 yum -y install bind bind-chroot
