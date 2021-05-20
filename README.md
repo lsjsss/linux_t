@@ -2822,7 +2822,23 @@ nslookup www.tedu.cn
 > ISP服务商的公共DNS服务器
 
 
+#### 构建缓存服务器
+客户端（pc207）
+```shell
+yum -y install bind bind-chroot
+vim /etc/namd.conf
+	options {
+		directory"/var/named";
+		forwarders	{ 192.168.4.7 };	#转发地址
+	};
 
+systemctl restart named
+```
+
+客户端验证（A）
+```shell
+nalookup www.tedu.cn 192.168.4.207
+```
 
 
 
