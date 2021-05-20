@@ -6070,13 +6070,152 @@ nslookup www.tedu.cn
 ```
 
 2. 分类(匹配客户端来源不相同)不相同：
-客户端：192.168.4.207 --> www.tedu.cn --> 192.168.4.100
+客户端192.168.4.207 --> www.tedu.cn --> 192.168.4.100
 客户端其他地址 --> www.tedu.cn --> 1.2.3.4
-客户端：192.168.4.10 --> www.qq.com -->192.168.10.100
+客户端192.168.4.10 --> www.qq.com -->192.168.10.100
 客户端其他地址 --> www.qq.com --> 172.25.0.11
 
-```shell
+> 分析：
+>
+> 192.168.4.207 --> www.tedu.cn --> 192.168.4.100 --> 地址库tedu.cn.zone
+>
+> 192.168.4.207 --> www.qq.com --> 172.25.0.11 --> qq.com.other
+>
+>
+>
+> 192.168.4.10 --> www.tedu.cn --> 1.2.3.4 --> tedu.cn.other
+>
+> 192.168.4.10 --> www.qq.com --> 192.168.10.100 --> qq.com.other
+>
+>
+>
+> 其他地址 --> www.tedu.cn --> 1.2.3.4 --> tedu.cn.other
+>
+> 其他地址 --> www.qq.com --> 172.25.0.11 --> qq.com.zone
 
+```shell
+#服务端(svr7)
+yum -y install bind bind-chroot
+vim /etc/named.conf
+	options {
+		directory "/var/named";
+	};
+	view "nsd" {
+		match-clients { 192.168.4.207; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.zone";	#解析结果为192.168.4.100
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.zone";	#解析结果为172.25.0.11
+		};
+	 };
+	view "vip" {
+		match-clients { 192.168.4.10; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other";	#解析结果为1.2.3.4
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.other";	#解析结果为192.168.10.100
+		};
+	 };
+	view "others" {
+		match-clients { any; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other";	#解析结果为1.2.3.4
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.zone";	#解析结果为172.25.0.11
+		};
+	 };
+
+cd /var/named/
+cp -p named.localhost tedu.cn.zone
+vim tedu.cn.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	А	192.168.4.7
+	www	A	1.2.3.4
+
+cp -p tedu.cn.zone tedu.cn.other
+vim tedu.cn.other
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	tedu.cn.	NS	svr7
+	svr7	А	192.168.4.7
+	www	A	192.168.4.100
+
+
+cp -p tedu.cn.zone qq.com.zone
+vim qq.com.zone
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	qq.com.	NS	svr7
+	svr7	А	192.168.4.7
+	www	A	172.25.0.11
+
+cp -p qq.com.zone qq.com.other
+vim qq.com.other
+	$TTL 1D
+	@	IN SOA	@ rname.invalid. (
+						0	; serial
+						1D	; refresh
+						1H	; retry
+						1W	; expire
+						3H )	; minimum
+
+	qq.com.	NS	svr7
+	svr7	А	192.168.4.7
+	www	A	192.168.10.100
+
+systemctl restart named
+```
+
+客户机(pc207)
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+客户机A
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+服务端(svr7)
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.qq.com
+nslookup www.tedu.cn
 ```
 
 > 如有侵权，请联系作者删除
