@@ -6601,7 +6601,155 @@ nslookup www.qq.com
 nslookup www.tedu.cn
 ```
 
+
+案例
+
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0520/110049_8a3c3bb9_5698809.png "屏幕截图.png")
+
+web 服务器和 DNS 服务结合（web 服务器做需要开启基于域名的虚拟主机，DNS 需要使用分离解析技术）
+
+| - | 主机名 | ip地址 |
+| -- | -- | -- |
+| 虚拟机 A | A.tedu.cn | 192.168.4.10 |
+| 虚拟机 B | B.tedu.cn | 192.168.4.20 |
+| 虚拟机 C | C.tedu.cn | 192.168.4.208 |
+| 虚拟机 svr7 | svr7.tedu.cn | 192.168.4.7 |
+| 虚拟机 pc207 | pc207.tedu.cn | 192.168.4.207 |
+
+虚拟机 A 操作：
+
+```shell
+#1.安装软件包 httpd
+yum -y install httpd
+
+#2.建立修改调用配置文件
+vim /etc/httpd/conf.d/nsd01.conf
+    <VirtualHost *:80>
+        ServerName www.qq.com
+        DocumentRoot /var/www/qq
+    </VirtualHost>
+    <VirtualHost *:80>
+        ServerName www.163.com
+        DocumentRoot /var/www/163
+    </VirtualHost>
+
+mkdir /var/www/qq /var/www/163
+echo '<h1> Web1 QQ' > /var/www/qq/index.html
+echo '<h1> Web1 163' > /var/www/163/index.html
+
+systemctl restart httpd
+```
+
+虚拟机 B 操作：
+
+```shell
+yum -y install httpd
+
+#从虚拟机A拷贝nsd01配置文件
+scp /etc/httpd/conf.d/nsd01.conf 192.168.4.20:/etc/httpd/conf.d/
+mkdir /var/www/qq /var/www/163
+echo '<h1>Web2 QQ' > /var/www/qq/index.html
+echo '<h1>Web2 163' > /var/www/163/index.html
+
+systemctl restart httpd
+```
+
+虚拟机 svr7 操作：
+
+```shell
+#1、修改主配置文件
+vim /etc/named.conf
+        ……
+        view "vip" {
+            match-clients { 192.168.4.207; };
+            zone "163.com" IN {
+                type master;
+                file "163.com.zone";
+            };
+            zone "qq.com" IN {
+                type master;
+                file "qq.com.zone";
+            };
+        };
+        view "other" {
+            match-clients { any; };
+            zone "163.com" IN {
+                type master;
+                file "163.com.other";
+            };
+            zone "qq.com" IN {
+                type master;
+                file "qq.com.other";
+            };
+        };
+
+#2、建立地址库文件
+cd /var/named/
+cp -p qq.com.zone 163.com.zone
+cp -p qq.com.zone 163.com.other
+
+vim 163.com.zone
+        …….
+        163.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.168.4.10
+
+vim qq.com.zone
+        …
+        qq.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.18.4.10
+
+vim 163.com.other
+        …
+        163.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.168.4.20
+
+vim qq.com.other
+        ……
+        qq.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.168.4.20
+
+systemctl restart named
+```
+
+测试：指定 DNS 服务器地址
+虚拟机pc207
+
+```shell
+echo nameserver 192.168.4.7 > /etc/resolv.conf
+curl www.qq.com
+curl www.163.com
+```
+
+虚拟机C
+```shell
+echo nameserver 192.168.4.7 > /etc/resolv.conf
+curl www.qq.com
+curl www.163.com
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
