@@ -2921,6 +2921,7 @@ dhclient-d	#临时获取IP地址
  - 当计算机引导时，从网卡芯片中把PXE client调入内存执行，获取PXE server配置、显示菜单，根据用户选择将远程引导程序下载到本机运行
 
 #### PXE组件及过程分析
+
  * 需要哪些服务组件？
  - DHCP服务，分配1P地址、定位引导程序
  - TFTP服务,提供引导程序下载
@@ -2931,7 +2932,27 @@ dhclient-d	#临时获取IP地址
  - 主板支持从网卡启动
 
 
+#### 配置dhcpd服务
 
+ * 装软件包 dhcp
+ * 配置文件 /etc/dhcp/dhcpd.conf
+ * 起服务dhcpd
+
+```shell
+vim /etc/dhcp/dhcpd.conf
+	:r /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example
+	subnet 192.168.4.0 netmask 255.255.255.0 {
+		range 192.168.4.100 192.168.4.200;
+		option domain-name-servers 192.168.4.10;
+		option routers 192.168.4.254;	#网关
+		default-lease-time 600;	#租约时间600秒
+		max-lease-time 7200;	#最大祖约时间
+
+		next-server 192.168.4.10;	#指定下一台服务器的IP地址
+		filename "pxelinux.0";	#网卡引导文件（网络装机说明书，二进制文件）
+	}
+systemctl restart dhcpd
+```
 
 
 
