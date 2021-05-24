@@ -2842,6 +2842,68 @@ nalookup www.tedu.cn 192.168.4.207
 ```
 
 
+## 批量装机PXE
+### 部署DHCP服务器
+#### DHCP概述及原理
+
+ * Dynamic Host Configuration Protocol
+
+
+动态主机配置协议，由IETF (Internet网络工程师任务小组)组织制定，用来简化主机地址分配管理。
+
+
+主要分配以下入网参数：
+
+> IP地址/子网掩码/广播地址
+> 默认网关地址、DNS服务器地址
+
+
+ * DHCP地址分配的四次会话
+
+> -DISCOVERY -> OFFER - REQUEST ->ACK
+
+
+ * 服务端基本概念
+
+> 租期：允许客户机租用IP地址的时间期限，单位为秒
+> 作用域：分配给客户机的IP地址所在的网段
+> 地址池：用来动态分配的IP地址的范围
+
+
+
+#### 配置 dhcpd 地址分配服务
+
+ * 装软件包dhcp
+ * 配置文件 /etc/dhcp/dhcpd.conf
+ * 起服务 dhcpd
+
+```shell
+vim /etc/dhcp/dhcpd.conf
+	subnet 192.168.4.0 netmask 255.255.255.0 {	//声明网段
+		range 192.168.4.10 192.168.4.200;	//IP范围
+	}
+	netstat -antpu I grep dhcpd	//确认结果
+	udp	0	00.0.0.0:67	0.0.0.0:*	8380/dhcpd
+```
+
+
+```shell
+yum -y install dhcp
+vim /etc/dhcp/dhcpd.conf
+	:r /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example
+	subnet 192.168.4.0 netmask 255.255.255.0 {
+		range 192.168.4.100 192.168.4.200;
+		option domain-name-servers 192.168.4.10;
+		option routers 192.168.4.254;	#网关
+		default-lease-time 600;	#租约时间600秒
+		max-lease-time 7200;	#最大祖约时间
+	}
+systemctl restart dhcpd
+ss -anptu | grep 67
+
+#svr7
+dhclient-d	#测试dhcp服务端状态
+```
 
 
 
