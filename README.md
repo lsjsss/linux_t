@@ -2481,21 +2481,21 @@ systemctl restart named	#重启服务
 nslookup tts.baidu.com	#测试结果
 ```
 
-### 主/从DNS服务器
+## 主/从DNS服务器
 
-#### 主域名服务器
+### 主域名服务器
 
 特定DNS区域的官方服务器，具有唯一性
 
 负责维护该区域内所有的“域名 <--> IP地址”记录
 
-#### 从域名服务器
+### 从域名服务器
 
 也称为`辅助域名服务器`，可以没有
 
 其维护的“域名 <--> IP地址”记录取决于主域名服务器
 
-#### 主/从DNS应用场景
+### 主/从DNS应用场景
 案例环境
 主DNS服务器的IP地址为 192.168.4.7/24
 
@@ -2590,7 +2590,7 @@ vim /etc/resolv.conf
 nslookup www.tedu.cn    #会首先解析到主服务器
 ```
 
-### 基础邮件服务
+## 基础邮件服务
 电子邮件通信
 
 
@@ -2603,7 +2603,7 @@ nslookup www.tedu.cn    #会首先解析到主服务器
 > 处理用户收到的邮件 -- 投递到邮箱 
 
 
-#### 配置邮件服务器的DNS
+### 配置邮件服务器的DNS
 
 服务器端（svr7）构建DNS服务器
 
@@ -2645,9 +2645,9 @@ host mail.example.com	#查看邮件服务器解析
 ```
 
 
-#### 构建邮件服务器
+### 构建邮件服务器
 
-##### 邮件服务搭建
+#### 邮件服务搭建
 
 ```shell
 rpm -q postfix
@@ -2669,7 +2669,7 @@ useradd shoujianren	#收件用户
 yum -y install mailx	#安装邮件收发包
 ```
 
-##### 交互式mail命令
+#### 交互式mail命令
 
 语法格式：
 
@@ -2689,7 +2689,7 @@ mail -u xln	#查看邮件
 	q
 ```
 
-##### 非交互式mail命令
+#### 非交互式mail命令
 
 语法格式：
 
@@ -2701,9 +2701,9 @@ mail -u shoujianren	#检查邮件
 ```
 
 
-### 分离解析概述
+## 分离解析概述
 
-#### 分离解析：
+### 分离解析：
 
 当收到客户机的DNS查询请求的时候
 
@@ -2723,7 +2723,7 @@ mail -u shoujianren	#检查邮件
 > 针对不同的客户机就近提供服务器
 
 
-#### BIND的view视图
+### BIND的view视图
 
 匹配原则：由上到下
 
@@ -2745,7 +2745,7 @@ view "铁通" {
 ```
 
 
-#### 分离解析实例
+### 分离解析实例
 
 服务端（svr）7操作:
 
@@ -2807,7 +2807,7 @@ nslookup www.tedu.cn
 ```
 
 
-### 缓存DNS概述
+## 缓存DNS概述
 作用：缓存解析记录，加快解析速度
 
 
@@ -2822,7 +2822,7 @@ nslookup www.tedu.cn
 > ISP服务商的公共DNS服务器
 
 
-#### 构建缓存服务器
+### 构建缓存服务器
 
 客户端（pc207）
 ```shell
@@ -2842,16 +2842,181 @@ nalookup www.tedu.cn 192.168.4.207
 ```
 
 
+## 批量装机PXE
+### 部署DHCP服务器
+#### DHCP概述及原理
+
+ * Dynamic Host Configuration Protocol
+
+
+动态主机配置协议，由IETF (Internet网络工程师任务小组)组织制定，用来简化主机地址分配管理。
+
+
+主要分配以下入网参数：
+
+> IP地址/子网掩码/广播地址
+> 默认网关地址、DNS服务器地址
+
+
+ * DHCP地址分配的四次会话
+
+> -DISCOVERY -> OFFER - REQUEST ->ACK
+
+
+ * 服务端基本概念
+
+> 租期：允许客户机租用IP地址的时间期限，单位为秒
+> 作用域：分配给客户机的IP地址所在的网段
+> 地址池：用来动态分配的IP地址的范围
 
 
 
+#### 配置 dhcpd 地址分配服务
+
+ * 装软件包dhcp
+ * 配置文件 /etc/dhcp/dhcpd.conf
+ * 起服务 dhcpd
+
+```shell
+vim /etc/dhcp/dhcpd.conf
+	subnet 192.168.4.0 netmask 255.255.255.0 {	//声明网段
+		range 192.168.4.10 192.168.4.200;	//IP范围
+	}
+	netstat -antpu I grep dhcpd	//确认结果
+	udp	0	00.0.0.0:67	0.0.0.0:*	8380/dhcpd
+```
 
 
+```shell
+yum -y install dhcp
+vim /etc/dhcp/dhcpd.conf
+	:r /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example
+	subnet 192.168.4.0 netmask 255.255.255.0 {
+		range 192.168.4.100 192.168.4.200;
+		option domain-name-servers 192.168.4.10;
+		option routers 192.168.4.254;	#网关
+		default-lease-time 600;	#租约时间600秒
+		max-lease-time 7200;	#最大祖约时间
+	}
+systemctl restart dhcpd
+ss -anptu | grep 67
+
+#svr7
+dhclient-r	#临时释放IP地址
+dhclient-d	#临时获取IP地址
+```
+
+### 网络装机的优势
+ * 规模化：同时装配多台主机
+ * 自动化：装系统、配置各种服务
+ * 远程实现：不需要光盘、U盘等物理安装介质
+
+#### 什么是PXE网络
+ * PXE，Pre-boot eXecution Environment
+ - 预启动执行环境在操作系统之前运行
+ - 可用于远程安装
+
+ * 工作模式
+ - PXE client集成在网卡的启动芯片中
+ - 当计算机引导时，从网卡芯片中把PXE client调入内存执行，获取PXE server配置、显示菜单，根据用户选择将远程引导程序下载到本机运行
+
+#### PXE组件及过程分析
+
+ * 需要哪些服务组件？
+ - DHCP服务，分配1P地址、定位引导程序
+ - TFTP服务,提供引导程序下载
+ - HTTP服务（或FTP/NFS），提供yum安装源
+
+ * 客户机应具备的条件
+ - 网卡芯片必须支持PXE协议
+ - 主板支持从网卡启动
 
 
+#### 配置dhcpd服务
+
+ * 装软件包 dhcp
+ * 配置文件 /etc/dhcp/dhcpd.conf
+ * 起服务dhcpd
+
+```shell
+vim /etc/dhcp/dhcpd.conf
+	:r /usr/share/doc/dhcp-4.2.5/dhcpd.conf.example
+	subnet 192.168.4.0 netmask 255.255.255.0 {
+		range 192.168.4.100 192.168.4.200;
+		option domain-name-servers 192.168.4.10;
+		option routers 192.168.4.254;	#网关
+		default-lease-time 600;	#租约时间600秒
+		max-lease-time 7200;	#最大祖约时间
+
+		next-server 192.168.4.10;	#指定下一台服务器的IP地址
+		filename "pxelinux.0";	#网卡引导文件（网络装机说明书，二进制文件）
+	}
+systemctl restart dhcpd
+```
 
 
+### 部署TFTP服务
 
+#### 启用TFTP服务端
+ * TFTP，Trivial File Transfer Protocol
+ - 小文件传输协议，UDP 69端口
+ - 主要用来传送小文件，不支持认证和复杂FTP操作
+ - 默认资源目录：/var/lib/tftpboot 
+
+```shell
+yum -y install tftp-server
+systemctl restart tftp
+ss -anptu | grep 69
+```
+
+#### 部署引导文件pxelinux.0
+```shell
+yum provides */pxelinux.0	#//查找产生的软件包
+yum -y install syslinux
+ls /usr/share/syslinux
+rpm -ql syslinux | grep pxelinux.0	#查看软件相应的安装内容
+cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/
+```
+
+#### 部署菜单文件
+
+```shell
+mkdir /var/lib/tftpboot/pxelinux.cfg
+ls /var/lib/tftpboot/
+cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
+ls /var/lib/tftpboot/pxelinux.cfg
+```
+
+
+#### 部署引导程序
+
+```shell
+cp /mnt/isolinux/vesamenu.c32	 /mnt/isolinux/splash.png /mnt/isolinux/vmlinuz /mnt/isolinux/initrd.img /var/lib/tftpboot	#图形模块
+ls /var/lib/tftpboot/
+```
+
+#### 修改菜单文件
+
+```shell
+vim /var/lib/tftpboot/pxelinux.cfg/default
+	#1行
+	default vesamenu.c32	#默认加载图形模块
+	timeout 600	#默认读秒时间1/10
+
+	#10行
+	menu background splash.png
+	menu title Centos7	#装机界面标题
+
+	#61行
+	label linux	#菜单名
+		menu label ^Install CentOS 7	#菜单显示内容
+		menu default	#默认进入菜单
+		kernel vmlinuz	#默认进入菜单
+		append initrd=initrd.img	#加载的驱动程序
+
+setenforce 0
+systemctl stop firewalld.service
+```
 
 
 

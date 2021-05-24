@@ -1,0 +1,568 @@
+[root@A ~]# setenforce 0
+[root@A ~]# systemctl stop firewalld.service 
+[root@A ~]# rpm -q httpd
+未安装软件包 httpd 
+[root@A ~]# yum -y install httpd
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+正在解决依赖关系
+--> 正在检查事务
+---> 软件包 httpd.x86_64.0.2.4.6-80.el7.centos 将被 安装
+--> 正在处理依赖关系 httpd-tools = 2.4.6-80.el7.centos，它被软件包 httpd-2.4.6-80.el7.centos.x86_64 需要
+--> 正在处理依赖关系 /etc/mime.types，它被软件包 httpd-2.4.6-80.el7.centos.x86_64 需要
+--> 正在处理依赖关系 libaprutil-1.so.0()(64bit)，它被软件包 httpd-2.4.6-80.el7.centos.x86_64 需要
+--> 正在处理依赖关系 libapr-1.so.0()(64bit)，它被软件包 httpd-2.4.6-80.el7.centos.x86_64 需要
+--> 正在检查事务
+---> 软件包 apr.x86_64.0.1.4.8-3.el7_4.1 将被 安装
+---> 软件包 apr-util.x86_64.0.1.5.2-6.el7 将被 安装
+---> 软件包 httpd-tools.x86_64.0.2.4.6-80.el7.centos 将被 安装
+---> 软件包 mailcap.noarch.0.2.1.41-2.el7 将被 安装
+--> 解决依赖关系完成
+
+依赖关系解决
+
+======================================================================================================================
+ Package                      架构                    版本                                 源                    大小
+======================================================================================================================
+正在安装:
+ httpd                        x86_64                  2.4.6-80.el7.centos                  mnt                  2.7 M
+为依赖而安装:
+ apr                          x86_64                  1.4.8-3.el7_4.1                      mnt                  103 k
+ apr-util                     x86_64                  1.5.2-6.el7                          mnt                   92 k
+ httpd-tools                  x86_64                  2.4.6-80.el7.centos                  mnt                   89 k
+ mailcap                      noarch                  2.1.41-2.el7                         mnt                   31 k
+
+事务概要
+======================================================================================================================
+安装  1 软件包 (+4 依赖软件包)
+
+总下载量：3.0 M
+安装大小：10 M
+Downloading packages:
+----------------------------------------------------------------------------------------------------------------------
+总计                                                                                   11 MB/s | 3.0 MB  00:00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  正在安装    : apr-1.4.8-3.el7_4.1.x86_64                                                                        1/5 
+  正在安装    : apr-util-1.5.2-6.el7.x86_64                                                                       2/5 
+  正在安装    : httpd-tools-2.4.6-80.el7.centos.x86_64                                                            3/5 
+  正在安装    : mailcap-2.1.41-2.el7.noarch                                                                       4/5 
+  正在安装    : httpd-2.4.6-80.el7.centos.x86_64                                                                  5/5 
+  验证中      : httpd-tools-2.4.6-80.el7.centos.x86_64                                                            1/5 
+  验证中      : apr-1.4.8-3.el7_4.1.x86_64                                                                        2/5 
+  验证中      : mailcap-2.1.41-2.el7.noarch                                                                       3/5 
+  验证中      : httpd-2.4.6-80.el7.centos.x86_64                                                                  4/5 
+  验证中      : apr-util-1.5.2-6.el7.x86_64                                                                       5/5 
+
+已安装:
+  httpd.x86_64 0:2.4.6-80.el7.centos                                                                                  
+
+作为依赖被安装:
+  apr.x86_64 0:1.4.8-3.el7_4.1       apr-util.x86_64 0:1.5.2-6.el7      httpd-tools.x86_64 0:2.4.6-80.el7.centos     
+  mailcap.noarch 0:2.1.41-2.el7     
+
+完毕！
+[root@A ~]# 
+[root@A ~]# yum -y install dhcp
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+正在解决依赖关系
+--> 正在检查事务
+---> 软件包 dhcp.x86_64.12.4.2.5-68.el7.centos 将被 安装
+--> 解决依赖关系完成
+
+依赖关系解决
+
+======================================================================================================================
+ Package                架构                     版本                                     源                     大小
+======================================================================================================================
+正在安装:
+ dhcp                   x86_64                   12:4.2.5-68.el7.centos                   mnt                   513 k
+
+事务概要
+======================================================================================================================
+安装  1 软件包
+
+总下载量：513 k
+安装大小：1.4 M
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  正在安装    : 12:dhcp-4.2.5-68.el7.centos.x86_64                                                                1/1 
+  验证中      : 12:dhcp-4.2.5-68.el7.centos.x86_64                                                                1/1 
+
+已安装:
+  dhcp.x86_64 12:4.2.5-68.el7.centos                                                                                  
+
+完毕！
+[root@A ~]# rpm -q dhcp
+dhcp-4.2.5-68.el7.centos.x86_64
+[root@A ~]# systemctl restart dhcp
+Failed to restart dhcp.service: Unit not found.
+[root@A ~]# systemctl restart dhcpd
+dhcpd6.service  dhcpd.service   
+[root@A ~]# systemctl restart dhcpd
+Job for dhcpd.service failed because the control process exited with error code. See "systemctl status dhcpd.service" and "journalctl -xe" for details.
+[root@A ~]# 
+[root@A ~]# rpm -q dhcp
+dhcp         dhcp-common  dhcp-libs    
+[root@A ~]# rpm -q dhcp
+dhcp-4.2.5-68.el7.centos.x86_64
+[root@A ~]# vim /etc/dhcp/dhcpd.conf 
+[root@A ~]# systemctl restart dhcpd
+[root@A ~]# ss -qnptu | grep 67
+ss: invalid option -- 'q'
+Usage: ss [ OPTIONS ]
+       ss [ OPTIONS ] [ FILTER ]
+   -h, --help          this message
+   -V, --version       output version information
+   -n, --numeric       don't resolve service names
+   -r, --resolve       resolve host names
+   -a, --all           display all sockets
+   -l, --listening     display listening sockets
+   -o, --options       show timer information
+   -e, --extended      show detailed socket information
+   -m, --memory        show socket memory usage
+   -p, --processes     show process using socket
+   -i, --info          show internal TCP information
+   -s, --summary       show socket usage summary
+   -b, --bpf           show bpf filter socket information
+   -E, --events        continually display sockets as they are destroyed
+   -Z, --context       display process SELinux security contexts
+   -z, --contexts      display process and socket SELinux security contexts
+   -N, --net           switch to the specified network namespace name
+
+   -4, --ipv4          display only IP version 4 sockets
+   -6, --ipv6          display only IP version 6 sockets
+   -0, --packet        display PACKET sockets
+   -t, --tcp           display only TCP sockets
+   -S, --sctp          display only SCTP sockets
+   -u, --udp           display only UDP sockets
+   -d, --dccp          display only DCCP sockets
+   -w, --raw           display only RAW sockets
+   -x, --unix          display only Unix domain sockets
+       --vsock         display only vsock sockets
+   -f, --family=FAMILY display sockets of type FAMILY
+       FAMILY := {inet|inet6|link|unix|netlink|vsock|help}
+
+   -K, --kill          forcibly close sockets, display what was closed
+   -H, --no-header     Suppress header line
+
+   -A, --query=QUERY, --socket=QUERY
+       QUERY := {all|inet|tcp|udp|raw|unix|unix_dgram|unix_stream|unix_seqpacket|packet|netlink|vsock_stream|vsock_dgram}[,QUERY]
+
+   -D, --diag=FILE     Dump raw information about TCP sockets to FILE
+   -F, --filter=FILE   read filter information from FILE
+       FILTER := [ state STATE-FILTER ] [ EXPRESSION ]
+       STATE-FILTER := {all|connected|synchronized|bucket|big|TCP-STATES}
+         TCP-STATES := {established|syn-sent|syn-recv|fin-wait-{1,2}|time-wait|closed|close-wait|last-ack|listen|closing}
+          connected := {established|syn-sent|syn-recv|fin-wait-{1,2}|time-wait|close-wait|last-ack|closing}
+       synchronized := {established|syn-recv|fin-wait-{1,2}|time-wait|close-wait|last-ack|closing}
+             bucket := {syn-recv|time-wait}
+                big := {established|syn-sent|fin-wait-{1,2}|closed|close-wait|last-ack|listen|closing}
+[root@A ~]# 
+[root@A ~]# ss -anptu | grep 67
+udp    UNCONN     0      0         *:67                    *:*                   users:(("dhcpd",pid=54729,fd=7))
+udp    UNCONN     0      0      *%virbr0:67                    *:*                   users:(("dnsmasq",pid=1662,fd=3))
+[root@A ~]# vim /etc/dhcp/dhcpd.conf 
+[root@A ~]# cat /etc/dhcp/dhcpd.conf\
+> ^C
+[root@A ~]# cat /etc/dhcp/dhcpd.conf
+#
+# DHCP Server Configuration file.
+#   see /usr/share/doc/dhcp*/dhcpd.conf.example
+#   see dhcpd.conf(5) man page
+
+
+subnet 192.168.4.0 netmask 255.255.255.0 {
+  range 192.168.4.100 192.168.4.200;
+  option domain-name-servers 192.168.4.10;
+  option routers 192.168.4.254;
+  default-lease-time 600;
+  max-lease-time 7200;
+  next-server 192.168.4.10;
+  filename "pxelinux.0";
+}
+[root@A ~]# systemctl restart dhcpd
+[root@A ~]# yum -y install tftp-server.x86_64 
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+正在解决依赖关系
+--> 正在检查事务
+---> 软件包 tftp-server.x86_64.0.5.2-22.el7 将被 安装
+--> 解决依赖关系完成
+
+依赖关系解决
+
+======================================================================================================================
+ Package                        架构                      版本                           源                      大小
+======================================================================================================================
+正在安装:
+ tftp-server                    x86_64                    5.2-22.el7                     mnt                     47 k
+
+事务概要
+======================================================================================================================
+安装  1 软件包
+
+总下载量：47 k
+安装大小：64 k
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  正在安装    : tftp-server-5.2-22.el7.x86_64                                                                     1/1 
+  验证中      : tftp-server-5.2-22.el7.x86_64                                                                     1/1 
+
+已安装:
+  tftp-server.x86_64 0:5.2-22.el7                                                                                     
+
+完毕！
+[root@A ~]# systemctl restart tftp
+[root@A ~]# ss - anptu | head -69
+Error: an inet prefix is expected rather than "-".
+Cannot parse dst/src address.
+[root@A ~]# ss - anqtu | head -69
+Error: an inet prefix is expected rather than "-".
+Cannot parse dst/src address.
+[root@A ~]# ss -anptu | head -69
+Netid  State      Recv-Q Send-Q Local Address:Port               Peer Address:Port              
+udp    UNCONN     0      0         *:5353                  *:*                   users:(("avahi-daemon",pid=685,fd=12))
+udp    UNCONN     0      0      127.0.0.1:323                   *:*                   users:(("chronyd",pid=689,fd=1))
+udp    UNCONN     0      0         *:52877                 *:*                   users:(("avahi-daemon",pid=685,fd=13))
+udp    UNCONN     0      0         *:854                   *:*                   users:(("rpcbind",pid=687,fd=7))
+udp    UNCONN     0      0      192.168.122.1:53                    *:*                   users:(("dnsmasq",pid=1662,fd=5))
+udp    UNCONN     0      0         *:67                    *:*                   users:(("dhcpd",pid=55155,fd=7))
+udp    UNCONN     0      0      *%virbr0:67                    *:*                   users:(("dnsmasq",pid=1662,fd=3))
+udp    UNCONN     0      0         *:111                   *:*                   users:(("rpcbind",pid=687,fd=6))
+udp    UNCONN     0      0       ::1:323                  :::*                   users:(("chronyd",pid=689,fd=2))
+udp    UNCONN     0      0        :::854                  :::*                   users:(("rpcbind",pid=687,fd=10))
+udp    UNCONN     0      0        :::69                   :::*                   users:(("in.tftpd",pid=55264,fd=0),("systemd",pid=1,fd=23))
+udp    UNCONN     0      0        :::111                  :::*                   users:(("rpcbind",pid=687,fd=9))
+tcp    LISTEN     0      128       *:111                   *:*                   users:(("rpcbind",pid=687,fd=8))
+tcp    LISTEN     0      5      192.168.122.1:53                    *:*                   users:(("dnsmasq",pid=1662,fd=6))
+tcp    LISTEN     0      128       *:22                    *:*                   users:(("sshd",pid=1105,fd=3))
+tcp    LISTEN     0      128    127.0.0.1:631                   *:*                   users:(("cupsd",pid=1100,fd=12))
+tcp    LISTEN     0      100    127.0.0.1:25                    *:*                   users:(("master",pid=1335,fd=13))
+tcp    LISTEN     0      128    127.0.0.1:6010                  *:*                   users:(("sshd",pid=3933,fd=9))
+tcp    ESTAB      0      0      192.168.4.10:22                 192.168.4.1:57741               users:(("sshd",pid=3933,fd=3))
+tcp    LISTEN     0      128      :::111                  :::*                   users:(("rpcbind",pid=687,fd=11))
+tcp    LISTEN     0      128      :::22                   :::*                   users:(("sshd",pid=1105,fd=4))
+tcp    LISTEN     0      128     ::1:631                  :::*                   users:(("cupsd",pid=1100,fd=11))
+tcp    LISTEN     0      100     ::1:25                   :::*                   users:(("master",pid=1335,fd=14))
+tcp    LISTEN     0      128     ::1:6010                 :::*                   users:(("sshd",pid=3933,fd=8))
+[root@A ~]# 
+[root@A ~]# yum provides */pxelinux.0
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+mnt/filelists_db                                                                               | 6.9 MB  00:00:00     
+syslinux-4.05-13.el7.x86_64 : Simple kernel loader which boots from a FAT filesystem
+源    ：mnt
+匹配来源：
+文件名    ：/usr/share/syslinux/pxelinux.0
+
+
+
+syslinux-tftpboot-4.05-13.el7.x86_64 : SYSLINUX modules in /var/lib/tftpboot, available for network booting
+源    ：mnt
+匹配来源：
+文件名    ：/var/lib/tftpboot/pxelinux.0
+
+
+
+[root@A ~]# yum -y install syslinux
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+正在解决依赖关系
+--> 正在检查事务
+---> 软件包 syslinux.x86_64.0.4.05-13.el7 将被 安装
+--> 解决依赖关系完成
+
+依赖关系解决
+
+======================================================================================================================
+ Package                     架构                      版本                              源                      大小
+======================================================================================================================
+正在安装:
+ syslinux                    x86_64                    4.05-13.el7                       mnt                    989 k
+
+事务概要
+======================================================================================================================
+安装  1 软件包
+
+总下载量：989 k
+安装大小：2.3 M
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  正在安装    : syslinux-4.05-13.el7.x86_64                                                                       1/1 
+  验证中      : syslinux-4.05-13.el7.x86_64                                                                       1/1 
+
+已安装:
+  syslinux.x86_64 0:4.05-13.el7                                                                                       
+
+完毕！
+[root@A ~]# rpm -ql syslinux | grep pxelinux.0
+/usr/share/syslinux/gpxelinux.0
+/usr/share/syslinux/pxelinux.0
+[root@A ~]# cp /usr/share/syslinux/pxelinux.0  /var/lib/tftpboot/
+[root@A ~]# ls /var/lib/tftpboot/
+pxelinux.0
+[root@A ~]# history 
+    1  poweroff
+    2  echo A.tedu.cn >/etc/hostname 
+    3  hostname A.tedu.cn
+    4  exit
+    5  setenforce 0
+    6  systemctl stop firewalld.service 
+    7  rpm -q httpd
+    8  yum -y install httpd
+    9  yum -y install dhcp
+   10  rpm -q dhcp
+   11  systemctl restart dhcp
+   12  systemctl restart dhcpd
+   13  rpm -q dhcp
+   14  vim /etc/dhcp/dhcpd.conf 
+   15  systemctl restart dhcpd
+   16  ss -qnptu | grep 67
+   17  ss -anptu | grep 67
+   18  vim /etc/dhcp/dhcpd.conf 
+   19  cat /etc/dhcp/dhcpd.conf\
+   20  cat /etc/dhcp/dhcpd.conf
+   21  systemctl restart dhcpd
+   22  yum -y install tftp-server.x86_64 
+   23  systemctl restart tftp
+   24  ss - anptu | head -69
+   25  ss - anqtu | head -69
+   26  ss -anptu | head -69
+   27  yum provides */pxelinux.0
+   28  yum -y install syslinux
+   29  rpm -ql syslinux | grep pxelinux.0
+   30  cp /usr/share/syslinux/pxelinux.0  /var/lib/tftpboot/
+   31  ls /var/lib/tftpboot/
+   32  history 
+[root@A ~]# mkdir /var/lib/tftpboot/pxelinux.cfg
+[root@A ~]# ls /var/lib/tftpboot/
+pxelinux.0  pxelinux.cfg
+[root@A ~]# cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
+[root@A ~]# ls /var/lib/tftpboot/pxelinux.cfg/
+default
+[root@A ~]# vim /var/lib/tftpboot/pxelinux.cfg/default 
+[root@A ~]# cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
+[root@A ~]# ls /var/lib/tftpboot/
+initrd.img  pxelinux.cfg  vesamenu.c32
+pxelinux.0  splash.png    vmlinuz
+[root@A ~]# ls /var/lib/
+AccountsService  fprint     net-snmp        samba
+alsa             games      NetworkManager  selinux
+alternatives     gdm        nfs             setroubleshoot
+authconfig       geoclue    os-prober       stateless
+bluetooth        gssproxy   PackageKit      systemd
+chrony           hyperv     plymouth        tftpboot
+color            initramfs  polkit-1        tpm
+colord           iscsi      postfix         tuned
+dav              libvirt    pulse           udisks2
+dbus             lldpad     rasdaemon       unbound
+dhclient         logrotate  rpcbind         upower
+dhcpd            machines   rpm             vmware
+dnsmasq          misc       rpm-state       xkb
+flatpak          mlocate    rsyslog         yum
+[root@A ~]# 
+[root@A ~]# history 
+    1  poweroff
+    2  echo A.tedu.cn >/etc/hostname 
+    3  hostname A.tedu.cn
+    4  exit
+    5  setenforce 0
+    6  systemctl stop firewalld.service 
+    7  rpm -q httpd
+    8  yum -y install httpd
+    9  yum -y install dhcp
+   10  rpm -q dhcp
+   11  systemctl restart dhcp
+   12  systemctl restart dhcpd
+   13  rpm -q dhcp
+   14  vim /etc/dhcp/dhcpd.conf 
+   15  systemctl restart dhcpd
+   16  ss -qnptu | grep 67
+   17  ss -anptu | grep 67
+   18  vim /etc/dhcp/dhcpd.conf 
+   19  cat /etc/dhcp/dhcpd.conf\
+   20  cat /etc/dhcp/dhcpd.conf
+   21  systemctl restart dhcpd
+   22  yum -y install tftp-server.x86_64 
+   23  systemctl restart tftp
+   24  ss - anptu | head -69
+   25  ss - anqtu | head -69
+   26  ss -anptu | head -69
+   27  yum provides */pxelinux.0
+   28  yum -y install syslinux
+   29  rpm -ql syslinux | grep pxelinux.0
+   30  cp /usr/share/syslinux/pxelinux.0  /var/lib/tftpboot/
+   31  ls /var/lib/tftpboot/
+   32  history 
+   33  mkdir /var/lib/tftpboot/pxelinux.cfg
+   34  ls /var/lib/tftpboot/
+   35  cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
+   36  ls /var/lib/tftpboot/pxelinux.cfg/
+   37  vim /var/lib/tftpboot/pxelinux.cfg/default 
+   38  cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
+   39  ls /var/lib/tftpboot/
+   40  ls /var/lib/
+   41  history 
+[root@A ~]# vim /var/lib/tftpboot/pxelinux.cfg/default 
+[root@A ~]# vim /var/lib/tftpboot/pxelinux.cfg/default 
+[root@A ~]# vim /var/lib/tftpboot/pxelinux.cfg/default 
+[root@A ~]# vim /var/lib/tftpboot/pxelinux.cfg/default 
+[root@A ~]# systemctl restart dhcpd
+[root@A ~]# systemctl restart tftp
+[root@A ~]# setenforce 0
+[root@A ~]# vim /var/lib/tftpboot/pxelinux.cfg/default 
+[root@A ~]# yum -y install httpd
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+软件包 httpd-2.4.6-80.el7.centos.x86_64 已安装并且是最新版本
+无须任何处理
+[root@A ~]# systemctl restart httpd
+[root@A ~]# mkdir /var/www/html/centos
+[root@A ~]# mount /dev/cdrom /var/www/html/centos/
+mount: /dev/sr0 写保护，将以只读方式挂载
+[root@A ~]# yum -y install system-config-kickstart.noarch 
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+正在解决依赖关系
+--> 正在检查事务
+---> 软件包 system-config-kickstart.noarch.0.2.9.7-1.el7 将被 安装
+--> 正在处理依赖关系 system-config-keyboard >= 1.3.1，它被软件包 system-config-kickstart-2.9.7-1.el7.noarch 需要
+--> 正在处理依赖关系 system-config-language，它被软件包 system-config-kickstart-2.9.7-1.el7.noarch 需要
+--> 正在处理依赖关系 system-config-date，它被软件包 system-config-kickstart-2.9.7-1.el7.noarch 需要
+--> 正在检查事务
+---> 软件包 system-config-date.noarch.0.1.10.6-2.el7.centos 将被 安装
+--> 正在处理依赖关系 system-config-date-docs，它被软件包 system-config-date-1.10.6-2.el7.centos.noarch 需要
+--> 正在处理依赖关系 gnome-python2-canvas，它被软件包 system-config-date-1.10.6-2.el7.centos.noarch 需要
+---> 软件包 system-config-keyboard.noarch.0.1.4.0-4.el7 将被 安装
+--> 正在处理依赖关系 system-config-keyboard-base = 1.4.0-4.el7，它被软件包 system-config-keyboard-1.4.0-4.el7.noarch 需要
+---> 软件包 system-config-language.noarch.0.1.4.0-9.el7 将被 安装
+--> 正在处理依赖关系 usermode-gtk，它被软件包 system-config-language-1.4.0-9.el7.noarch 需要
+--> 正在检查事务
+---> 软件包 gnome-python2-canvas.x86_64.0.2.28.1-14.el7 将被 安装
+--> 正在处理依赖关系 gnome-python2(x86-64) = 2.28.1-14.el7，它被软件包 gnome-python2-canvas-2.28.1-14.el7.x86_64 需要
+--> 正在处理依赖关系 libgnomecanvas(x86-64) >= 2.8.0，它被软件包 gnome-python2-canvas-2.28.1-14.el7.x86_64 需要
+--> 正在处理依赖关系 libgnomecanvas-2.so.0()(64bit)，它被软件包 gnome-python2-canvas-2.28.1-14.el7.x86_64 需要
+--> 正在处理依赖关系 libart_lgpl_2.so.2()(64bit)，它被软件包 gnome-python2-canvas-2.28.1-14.el7.x86_64 需要
+---> 软件包 system-config-date-docs.noarch.0.1.0.11-4.el7 将被 安装
+--> 正在处理依赖关系 rarian-compat，它被软件包 system-config-date-docs-1.0.11-4.el7.noarch 需要
+---> 软件包 system-config-keyboard-base.noarch.0.1.4.0-4.el7 将被 安装
+---> 软件包 usermode-gtk.x86_64.0.1.111-5.el7 将被 安装
+--> 正在检查事务
+---> 软件包 gnome-python2.x86_64.0.2.28.1-14.el7 将被 安装
+---> 软件包 libart_lgpl.x86_64.0.2.3.21-10.el7 将被 安装
+---> 软件包 libgnomecanvas.x86_64.0.2.30.3-8.el7 将被 安装
+---> 软件包 rarian-compat.x86_64.0.0.8.1-11.el7 将被 安装
+--> 正在处理依赖关系 rarian = 0.8.1-11.el7，它被软件包 rarian-compat-0.8.1-11.el7.x86_64 需要
+--> 正在处理依赖关系 rarian，它被软件包 rarian-compat-0.8.1-11.el7.x86_64 需要
+--> 正在处理依赖关系 librarian.so.0()(64bit)，它被软件包 rarian-compat-0.8.1-11.el7.x86_64 需要
+--> 正在检查事务
+---> 软件包 rarian.x86_64.0.0.8.1-11.el7 将被 安装
+--> 解决依赖关系完成
+
+依赖关系解决
+
+===============================================================
+ Package                  架构   版本                源   大小
+===============================================================
+正在安装:
+ system-config-kickstart  noarch 2.9.7-1.el7         mnt 348 k
+为依赖而安装:
+ gnome-python2            x86_64 2.28.1-14.el7       mnt  47 k
+ gnome-python2-canvas     x86_64 2.28.1-14.el7       mnt  34 k
+ libart_lgpl              x86_64 2.3.21-10.el7       mnt  67 k
+ libgnomecanvas           x86_64 2.30.3-8.el7        mnt 226 k
+ rarian                   x86_64 0.8.1-11.el7        mnt  98 k
+ rarian-compat            x86_64 0.8.1-11.el7        mnt  66 k
+ system-config-date       noarch 1.10.6-2.el7.centos mnt 619 k
+ system-config-date-docs  noarch 1.0.11-4.el7        mnt 527 k
+ system-config-keyboard   noarch 1.4.0-4.el7         mnt  33 k
+ system-config-keyboard-base
+                          noarch 1.4.0-4.el7         mnt 103 k
+ system-config-language   noarch 1.4.0-9.el7         mnt 133 k
+ usermode-gtk             x86_64 1.111-5.el7         mnt 109 k
+
+事务概要
+===============================================================
+安装  1 软件包 (+12 依赖软件包)
+
+总下载量：2.4 M
+安装大小：8.5 M
+Downloading packages:
+---------------------------------------------------------------
+总计                               42 MB/s | 2.4 MB  00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  正在安装    : libart_lgpl-2.3.21-10.el7.x86_64          1/13 
+  正在安装    : libgnomecanvas-2.30.3-8.el7.x86_64        2/13 
+  正在安装    : gnome-python2-2.28.1-14.el7.x86_64        3/13 
+  正在安装    : gnome-python2-canvas-2.28.1-14.el7.x86    4/13 
+  正在安装    : system-config-keyboard-base-1.4.0-4.el    5/13 
+  正在安装    : system-config-keyboard-1.4.0-4.el7.noa    6/13 
+  正在安装    : usermode-gtk-1.111-5.el7.x86_64           7/13 
+  正在安装    : system-config-language-1.4.0-9.el7.noa    8/13 
+  正在安装    : rarian-0.8.1-11.el7.x86_64                9/13 
+  正在安装    : rarian-compat-0.8.1-11.el7.x86_64        10/13 
+  正在安装    : system-config-date-docs-1.0.11-4.el7.n   11/13 
+  正在安装    : system-config-date-1.10.6-2.el7.centos   12/13 
+  正在安装    : system-config-kickstart-2.9.7-1.el7.no   13/13 
+  验证中      : libgnomecanvas-2.30.3-8.el7.x86_64        1/13 
+  验证中      : system-config-date-docs-1.0.11-4.el7.n    2/13 
+  验证中      : system-config-language-1.4.0-9.el7.noa    3/13 
+  验证中      : rarian-compat-0.8.1-11.el7.x86_64         4/13 
+  验证中      : system-config-kickstart-2.9.7-1.el7.no    5/13 
+  验证中      : gnome-python2-canvas-2.28.1-14.el7.x86    6/13 
+  验证中      : system-config-keyboard-1.4.0-4.el7.noa    7/13 
+  验证中      : rarian-0.8.1-11.el7.x86_64                8/13 
+  验证中      : usermode-gtk-1.111-5.el7.x86_64           9/13 
+  验证中      : libart_lgpl-2.3.21-10.el7.x86_64         10/13 
+  验证中      : system-config-keyboard-base-1.4.0-4.el   11/13 
+  验证中      : system-config-date-1.10.6-2.el7.centos   12/13 
+  验证中      : gnome-python2-2.28.1-14.el7.x86_64       13/13 
+
+已安装:
+  system-config-kickstart.noarch 0:2.9.7-1.el7                 
+
+作为依赖被安装:
+  gnome-python2.x86_64 0:2.28.1-14.el7                         
+  gnome-python2-canvas.x86_64 0:2.28.1-14.el7                  
+  libart_lgpl.x86_64 0:2.3.21-10.el7                           
+  libgnomecanvas.x86_64 0:2.30.3-8.el7                         
+  rarian.x86_64 0:0.8.1-11.el7                                 
+  rarian-compat.x86_64 0:0.8.1-11.el7                          
+  system-config-date.noarch 0:1.10.6-2.el7.centos              
+  system-config-date-docs.noarch 0:1.0.11-4.el7                
+  system-config-keyboard.noarch 0:1.4.0-4.el7                  
+  system-config-keyboard-base.noarch 0:1.4.0-4.el7             
+  system-config-language.noarch 0:1.4.0-9.el7                  
+  usermode-gtk.x86_64 0:1.111-5.el7                            
+
+完毕！
+[root@A ~]# yum -y install system-config-kickstart
+已加载插件：fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+软件包 system-config-kickstart-2.9.7-1.el7.noarch 已安装并且是最新版本
+无须任何处理
+[root@A ~]# system-config-kickstart 
+Could not open display because no X server is running.
+Try running 'system-config-kickstart --help' for a list of options.
+[root@A ~]# 
+Connection closed by foreign host.
+
+Disconnected from remote host(A) at 11:31:42.
+
+Type `help' to learn how to use Xshell prompt.
