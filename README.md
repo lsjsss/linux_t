@@ -2902,7 +2902,8 @@ systemctl restart dhcpd
 ss -anptu | grep 67
 
 #svr7
-dhclient-d	#测试dhcp服务端状态
+dhclient-r	#临时释放IP地址
+dhclient-d	#临时获取IP地址
 ```
 
 
