@@ -2954,6 +2954,19 @@ vim /etc/dhcp/dhcpd.conf
 systemctl restart dhcpd
 ```
 
+### 部署TFTP服务
+
+#### 启用TFTP服务端
+ * TFTP，Trivial File Transfer Protocol
+ - 小文件传输协议，UDP 69端口
+ - 主要用来传送小文件，不支持认证和复杂FTP操作
+ - 默认资源目录：/var/lib/tftpboot 
+
+```shell
+yum -y install tftp-server
+systemctl restart tftp
+ss -anptu | grep 69
+```
 
 
 
