@@ -3013,6 +3013,9 @@ vim /var/lib/tftpboot/pxelinux.cfg/default
 		menu default	#默认进入菜单
 		kernel vmlinuz	#默认进入菜单
 		append initrd=initrd.img	#加载的驱动程序
+
+setenforce 0
+systemctl stop firewalld.service
 ```
 
 
