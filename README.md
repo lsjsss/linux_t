@@ -2968,6 +2968,9 @@ systemctl restart tftp
 ss -anptu | grep 69
 ```
 
+
+#### 部署引导文件pxelinux.0
+
 ```shell
 yum provides */pxelinux.0	#//查找产生的软件包
 yum -y install syslinux
@@ -2976,7 +2979,15 @@ rpm -ql syslinux | grep pxelinux.0	#查看软件相应的安装内容
 cp /usr/share/syslinux/pxelinux/pxelinux.0 /var/lib/tftproot/
 ```
 
+#### 部署菜单文件
 
+```shell
+mkdir /var/lib/tftproot/pxelinux.cfg
+ls /var/lib/tftproot/
+cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
+ls /var/lib/tftproot/pxelinux.cfg
+vim /var/lib/tftpboot/pxelinux.cfg/default
+```
 
 
 
