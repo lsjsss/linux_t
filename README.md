@@ -2997,6 +2997,23 @@ ls /var/lib/tftpboot/
 
 #### 修改菜单文件
 
+```shell
+vim /var/lib/tftpboot/pxelinux.cfg/default
+	#1行
+	default vesamenu.c32	#默认加载图形模块
+	timeout 600	#默认读秒时间1/10
+
+	#10行
+	menu background splash.png
+	menu title Centos7	#装机界面标题
+
+	#61行
+	label linux	#菜单名
+		menu label ^Install CentOS 7	#菜单显示内容
+		menu default	#默认进入菜单
+		kernel vmlinuz	#默认进入菜单
+		append initrd=initrd.img	#加载的驱动程序
+```
 
 
 
