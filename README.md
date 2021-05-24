@@ -2968,6 +2968,13 @@ systemctl restart tftp
 ss -anptu | grep 69
 ```
 
+```shell
+yum provides */pxelinux.0	#//查找产生的软件包
+yum -y install syslinux
+ls /usr/share/syslinux
+rpm -ql syslinux | grep pxelinux.0	#查看软件相应的安装内容
+cp /usr/share/syslinux/pxelinux/pxelinux.0 /var/lib/tftproot/
+```
 
 
 
