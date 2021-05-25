@@ -3097,7 +3097,7 @@ cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
 cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
 vim /var/lib/tftpboot/pxelinux.cfg/default 
 
-	default vesamenu.c33
+	default vesamenu.c32
 	timeout 600
 	
 	display boot.msg
@@ -3107,7 +3107,7 @@ vim /var/lib/tftpboot/pxelinux.cfg/default
 	# the menu itself for as long as the screen remains in graphics mode.
 	menu clear
 	menu background splash.png
-	menu title PXE Server
+	menu title Tedu PXE Server
 	menu vshift 8
 	menu rows 18
 	menu margin 8
@@ -3158,11 +3158,10 @@ vim /var/lib/tftpboot/pxelinux.cfg/default
 	menu separator # insert an empty line
 	
 	label linux
-	  menu label ^Install CentOS 7
+	  menu label Install CentOS 7
+	  menu default
 	  kernel vmlinuz
-	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet
-	 append initrd=initrd.img
-	
+	  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg 	
 	
 systemctl restart dhcpd
 systemctl restart tftp
