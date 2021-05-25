@@ -3063,7 +3063,6 @@ yum -y install dhcp
 systemctl restart dhcpd
 rpm -q dhcp
 rpm -q dhcp
-vim /etc/dhcp/dhcpd.conf 
 systemctl restart dhcpd
 ss -anptu | grep 67
 vim /etc/dhcp/dhcpd.conf 
@@ -3095,8 +3094,8 @@ cp /usr/share/syslinux/pxelinux.0  /var/lib/tftpboot/
 mkdir /var/lib/tftpboot/pxelinux.cfg
 cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
 cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
-vim /var/lib/tftpboot/pxelinux.cfg/default 
 
+vim /var/lib/tftpboot/pxelinux.cfg/default 
 	default vesamenu.c32
 	timeout 600
 	
@@ -3161,27 +3160,27 @@ vim /var/lib/tftpboot/pxelinux.cfg/default
 	  menu label Install CentOS 7
 	  menu default
 	  kernel vmlinuz
-	  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg 	
-	
+	  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg
+
+#修改yum仓库标识
+vim /etc/yum.repos.d/mnt.repo 
+	[development]
+	name=Centos7.5
+	baseurl=file:///mnt
+	enabled=1
+	gpgcheck=0
+
 systemctl restart dhcpd
 systemctl restart tftp
 setenforce 0
- yum -y install httpd
+yum -y install httpd
 systemctl restart httpd
 mkdir /var/www/html/centos
 mount /dev/cdrom /var/www/html/centos/
 yum -y install system-config-kickstart.noarch 
 yum -y install system-config-kickstart
-system-config-kickstart 
 
-
-yum -y install system-config-kickstart.noarch 
-
-#修改yum仓库标识
-	[development]
-	...
-
-system-config-kicstart
+system-config-kickstart
 	#基本配置 - 时区 - Asia/Shanghai
 	#基本配置 - Root密码 - 1
 	#基本配置 - 确认密码 - 1
@@ -3198,7 +3197,6 @@ system-config-kicstart
 	#防火墙配置 - SELinux： 禁用
 	#软件包选择 - 系统- 基本
 	文件 - 保存
-
 ```
 
 
