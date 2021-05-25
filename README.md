@@ -3018,14 +3018,40 @@ setenforce 0
 systemctl stop firewalld.service
 ```
 
+### 部署 WEB 服务器
+#### 搭建httpd服务
+
+```shell
+#安装软件包 httpd
+yum -y install httpd
+
+#挂载光盘内容并启动 httpd 服务
+mkdir /var/www/html/centos
+mount /dev/cdrom /var/www/html/centos
+systemctl restart httpd
+firefox http://192.168.4.7/centos
+```
 
 
+#### 生成应答文件
 
+```shell
+#图形工具 system-config-kickstart 进行生成应答文件
+yum -y install system-config-kickstart 
 
+#运行
+system-config-kickstart
 
+vim /etc/yum.repos.d/centos.repo 
+    [development] 
+    name=CentOS7.5
+    baseurl=file:///dvd 
+    enabled=1 
+    gpgcheck=0 
 
-
-
+#再次运行 点击 "软件包选择(Package Selection)" 查看是否可以进行选择（可以进行选择）
+system-config-kickstart
+```
 
 
 
