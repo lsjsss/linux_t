@@ -3018,8 +3018,15 @@ setenforce 0
 systemctl stop firewalld.service
 ```
 
+#### 搭建httpd服务
 
-
+```shell
+yum -y install httpd
+mkdir /var/www/html/centos
+mount /dev/cdrom /var/www/html/centos
+systemctl restart httpd
+firefox http://192.168.4.7/centos
+```
 
 
 
