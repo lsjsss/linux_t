@@ -3055,7 +3055,23 @@ system-config-kickstart
 
 
 PXE网络装机
+
 ```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 
+nmcli connection up ens33 
+mount /dev/cdrom /mnt
+vim /etc/yum.repos.d/mnt.repo
+	[mnt]
+	name=Centos7.5
+	baseurl=file:///mnt
+	gpgcheck=0
+	enabled=1
+
+vim /etc/yum.repos.d/mnt.repo
+rm -rf /etc/yum.repos.d/C*
+yum clean all 
+yum repolist
+
 setenforce 0
 systemctl stop firewalld.service 
 yum -y install httpd
@@ -3066,13 +3082,6 @@ rpm -q dhcp
 systemctl restart dhcpd
 ss -anptu | grep 67
 vim /etc/dhcp/dhcpd.conf 
-
-	#
-	# DHCP Server Configuration file.
-	#   see /usr/share/doc/dhcp*/dhcpd.conf.example
-	#   see dhcpd.conf(5) man page
-	
-	
 	subnet 192.168.4.0 netmask 255.255.255.0 {
 	  range 192.168.4.100 192.168.4.200;
 	  option domain-name-servers 192.168.4.10;
@@ -3106,7 +3115,7 @@ vim /var/lib/tftpboot/pxelinux.cfg/default
 	# the menu itself for as long as the screen remains in graphics mode.
 	menu clear
 	menu background splash.png
-	menu title Tedu PXE Server
+	menu title CentOS 7
 	menu vshift 8
 	menu rows 18
 	menu margin 8
@@ -3157,10 +3166,66 @@ vim /var/lib/tftpboot/pxelinux.cfg/default
 	menu separator # insert an empty line
 	
 	label linux
-	  menu label Install CentOS 7
+	  menu label ^Install CentOS 7
 	  menu default
 	  kernel vmlinuz
 	  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg
+	
+	label check
+	  menu label Test this ^media & install CentOS 7
+	  menu default
+	  kernel vmlinuz
+	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 rd.live.check quiet
+	
+	menu separator # insert an empty line
+	
+	# utilities submenu
+	menu begin ^Troubleshooting
+	  menu title Troubleshooting
+	
+	label vesa
+	  menu indent count 5
+	  menu label Install CentOS 7 in ^basic graphics mode
+	  text help
+		Try this option out if you're having trouble installing
+		CentOS 7.
+	  endtext
+	  kernel vmlinuz
+	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 xdriver=vesa nomodeset quiet
+	
+	label rescue
+	  menu indent count 5
+	  menu label ^Rescue a CentOS system
+	  text help
+		If the system will not boot, this lets you access files
+		and edit config files to try to get it booting again.
+	  endtext
+	  kernel vmlinuz
+	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 rescue quiet
+	
+	label memtest
+	  menu label Run a ^memory test
+	  text help
+		If your system is having issues, a problem with your
+		system's memory may be the cause. Use this utility to
+		see if the memory is working correctly.
+	  endtext
+	  kernel memtest
+	
+	menu separator # insert an empty line
+	
+	label local
+	  menu label Boot from ^local drive
+	  localboot 0xffff
+	
+	menu separator # insert an empty line
+	menu separator # insert an empty line
+	
+	label returntomain
+	  menu label Return to ^main menu
+	  menu exit
+	
+	menu end
 
 #修改yum仓库标识
 vim /etc/yum.repos.d/mnt.repo 
@@ -3187,7 +3252,7 @@ system-config-kickstart
 	#基本配置 - 安装后重启 - v
 	#安装方法 - HTTP - v
 	#HTTP服务器 - 192.168.4.10
-	#HTTP目录 - /centos
+	#HTTP目录 - centos
 	#引导装载程序选项 - 安装新引导装载程序
 	#分区信息 - 清除主引导记录 - v
 	#分区信息 - 初始化磁盘标签 - v
@@ -3197,6 +3262,8 @@ system-config-kickstart
 	#防火墙配置 - SELinux： 禁用
 	#软件包选择 - 系统- 基本
 	文件 - 保存
+
+cp /root/ks.cfg /var/www/html/ks.cfg
 ```
 
 
