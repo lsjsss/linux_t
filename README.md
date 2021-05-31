@@ -3264,6 +3264,16 @@ system-config-kickstart
 	文件 - 保存
 
 cp /root/ks.cfg /var/www/html/ks.cfg
+
+
+###
+
+vim /etc/selinux/config 
+	SELINUX=disabled
+
+systemctl enable dhcpd
+systemctl enable tftp
+systemctl enable httpd
 ```
 
 
