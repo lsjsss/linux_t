@@ -6922,7 +6922,7 @@ nslookup www.tedu.cn
 
 案例
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0520/110049_8a3c3bb9_5698809.png "屏幕截图.png")
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210601185635109.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDM0MDEyOQ==,size_16,color_FFFFFF,t_70)
 
 web 服务器和 DNS 服务结合（web 服务器做需要开启基于域名的虚拟主机，DNS 需要使用分离解析技术）
 
