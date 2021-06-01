@@ -3125,41 +3125,22 @@ yum -y install system-config-kickstart
 #编辑配置文件
 vim /var/www/html/ks.cfg
 
-#platform=x86, AMD64, 或 Intel EM64T
-#version=DEVEL
-# Install OS instead of upgrade
 install
-# Keyboard layouts
 keyboard 'us'
-# Root password
 rootpw --iscrypted $1$6/ldzaKw$dsdWMg2fX1l40RTZ2BoN50
-# Use network installation
 url --url="http://192.168.4.10/centos"
-# System language
 lang en_US
-# System authorization information
 auth  --useshadow  --passalgo=sha512
-# Use graphical install
 graphical
 firstboot --disable
-# SELinux configuration
 selinux --disabled
-
-# Firewall configuration
 firewall --disabled
-# Network information
 network  --bootproto=dhcp --device=eth0
-# Reboot after installation
 reboot
-# System timezone
 timezone Asia/Shanghai
-# System bootloader configuration
 bootloader --location=mbr
-# Clear the Master Boot Record
 zerombr
-# Partition clearing information
 clearpart --all --initlabel
-# Disk partitioning information
 part / --fstype="xfs" --grow --size=1
 
 %packages
@@ -3167,7 +3148,9 @@ part / --fstype="xfs" --grow --size=1
 
 %end
 
+
 #########################################################
+#法二
 
 system-config-kickstart
 	#基本配置 - 时区 - Asia/Shanghai
@@ -3191,6 +3174,7 @@ cp /root/ks.cfg /var/www/html/ks.cfg
 
 ##
 
+#设置永久关闭
 vim /etc/selinux/config 
 	SELINUX=disabled
 
