@@ -3057,15 +3057,16 @@ system-config-kickstart
 ## PXE网络装机
 
 ```shell
-nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 
-nmcli connection up ens33 
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes
+nmcli connection up ens33
 mount /dev/cdrom /mnt
+
 vim /etc/yum.repos.d/mnt.repo
-	[mnt]
+	[development]
 	name=Centos7.5
 	baseurl=file:///mnt
-	gpgcheck=0
 	enabled=1
+	gpgcheck=0
 
 rm -rf /etc/yum.repos.d/C*
 yum clean all 
@@ -3080,6 +3081,7 @@ rpm -q dhcp
 rpm -q dhcp
 systemctl restart dhcpd
 ss -anptu | grep 67
+
 vim /etc/dhcp/dhcpd.conf 
 	subnet 192.168.4.0 netmask 255.255.255.0 {
 	  range 192.168.4.100 192.168.4.200;
@@ -3104,135 +3106,11 @@ cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
 cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
 
 vim /var/lib/tftpboot/pxelinux.cfg/default 
-	default vesamenu.c32
-	timeout 600
-	
-	display boot.msg
-	
-	# Clear the screen when exiting the menu, instead of leaving the menu displayed.
-	# For vesamenu, this means the graphical background is still displayed without
-	# the menu itself for as long as the screen remains in graphics mode.
-	menu clear
-	menu background splash.png
-	menu title CentOS 7
-	menu vshift 8
-	menu rows 18
-	menu margin 8
-	#menu hidden
-	menu helpmsgrow 15
-	menu tabmsgrow 13
-	
-	# Border Area
-	menu color border * #00000000 #00000000 none
-	
-	# Selected item
-	menu color sel 0 #ffffffff #00000000 none
-	
-	# Title bar
-	menu color title 0 #ff7ba3d0 #00000000 none
-	
-	# Press [Tab] message
-	menu color tabmsg 0 #ff3a6496 #00000000 none
-	
-	# Unselected menu item
-	menu color unsel 0 #84b8ffff #00000000 none
-	
-	# Selected hotkey
-	menu color hotsel 0 #84b8ffff #00000000 none
-	
-	# Unselected hotkey
-	menu color hotkey 0 #ffffffff #00000000 none
-	
-	# Help text
-	menu color help 0 #ffffffff #00000000 none
-	
-	# A scrollbar of some type? Not sure.
-	menu color scrollbar 0 #ffffffff #ff355594 none
-	
-	# Timeout msg
-	menu color timeout 0 #ffffffff #00000000 none
-	menu color timeout_msg 0 #ffffffff #00000000 none
-	
-	# Command prompt text
-	menu color cmdmark 0 #84b8ffff #00000000 none
-	menu color cmdline 0 #ffffffff #00000000 none
-	
-	# Do not display the actual menu unless the user presses a key. All that is displayed is a timeout message.
-	
-	menu tabmsg Press Tab for full configuration options on menu items.
-	
-	menu separator # insert an empty line
-	menu separator # insert an empty line
-	
 	label linux
 	  menu label ^Install CentOS 7
 	  menu default
 	  kernel vmlinuz
 	  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg
-	
-	label check
-	  menu label Test this ^media & install CentOS 7
-	  menu default
-	  kernel vmlinuz
-	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 rd.live.check quiet
-	
-	menu separator # insert an empty line
-	
-	# utilities submenu
-	menu begin ^Troubleshooting
-	  menu title Troubleshooting
-	
-	label vesa
-	  menu indent count 5
-	  menu label Install CentOS 7 in ^basic graphics mode
-	  text help
-		Try this option out if you're having trouble installing
-		CentOS 7.
-	  endtext
-	  kernel vmlinuz
-	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 xdriver=vesa nomodeset quiet
-	
-	label rescue
-	  menu indent count 5
-	  menu label ^Rescue a CentOS system
-	  text help
-		If the system will not boot, this lets you access files
-		and edit config files to try to get it booting again.
-	  endtext
-	  kernel vmlinuz
-	  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 rescue quiet
-	
-	label memtest
-	  menu label Run a ^memory test
-	  text help
-		If your system is having issues, a problem with your
-		system's memory may be the cause. Use this utility to
-		see if the memory is working correctly.
-	  endtext
-	  kernel memtest
-	
-	menu separator # insert an empty line
-	
-	label local
-	  menu label Boot from ^local drive
-	  localboot 0xffff
-	
-	menu separator # insert an empty line
-	menu separator # insert an empty line
-	
-	label returntomain
-	  menu label Return to ^main menu
-	  menu exit
-	
-	menu end
-
-#修改yum仓库标识
-vim /etc/yum.repos.d/mnt.repo 
-	[development]
-	name=Centos7.5
-	baseurl=file:///mnt
-	enabled=1
-	gpgcheck=0
 
 systemctl restart dhcpd
 systemctl restart tftp
@@ -3243,6 +3121,53 @@ mkdir /var/www/html/centos
 mount /dev/cdrom /var/www/html/centos/
 yum -y install system-config-kickstart.noarch 
 yum -y install system-config-kickstart
+
+#编辑配置文件
+vim /var/www/html/ks.cfg
+
+#platform=x86, AMD64, 或 Intel EM64T
+#version=DEVEL
+# Install OS instead of upgrade
+install
+# Keyboard layouts
+keyboard 'us'
+# Root password
+rootpw --iscrypted $1$6/ldzaKw$dsdWMg2fX1l40RTZ2BoN50
+# Use network installation
+url --url="http://192.168.4.10/centos"
+# System language
+lang en_US
+# System authorization information
+auth  --useshadow  --passalgo=sha512
+# Use graphical install
+graphical
+firstboot --disable
+# SELinux configuration
+selinux --disabled
+
+# Firewall configuration
+firewall --disabled
+# Network information
+network  --bootproto=dhcp --device=eth0
+# Reboot after installation
+reboot
+# System timezone
+timezone Asia/Shanghai
+# System bootloader configuration
+bootloader --location=mbr
+# Clear the Master Boot Record
+zerombr
+# Partition clearing information
+clearpart --all --initlabel
+# Disk partitioning information
+part / --fstype="xfs" --grow --size=1
+
+%packages
+@base
+
+%end
+
+#########################################################
 
 system-config-kickstart
 	#基本配置 - 时区 - Asia/Shanghai
@@ -3264,8 +3189,7 @@ system-config-kickstart
 
 cp /root/ks.cfg /var/www/html/ks.cfg
 
-
-###
+##
 
 vim /etc/selinux/config 
 	SELINUX=disabled
