@@ -3054,8 +3054,24 @@ system-config-kickstart
 ```
 
 
-PXE网络装机
+## PXE网络装机
+
 ```shell
+nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes
+nmcli connection up ens33
+mount /dev/cdrom /mnt
+
+vim /etc/yum.repos.d/mnt.repo
+	[development]
+	name=Centos7.5
+	baseurl=file:///mnt
+	enabled=1
+	gpgcheck=0
+
+rm -rf /etc/yum.repos.d/C*
+yum clean all 
+yum repolist
+
 setenforce 0
 systemctl stop firewalld.service 
 yum -y install httpd
@@ -3065,14 +3081,8 @@ rpm -q dhcp
 rpm -q dhcp
 systemctl restart dhcpd
 ss -anptu | grep 67
-vim /etc/dhcp/dhcpd.conf 
 
-	#
-	# DHCP Server Configuration file.
-	#   see /usr/share/doc/dhcp*/dhcpd.conf.example
-	#   see dhcpd.conf(5) man page
-	
-	
+vim /etc/dhcp/dhcpd.conf 
 	subnet 192.168.4.0 netmask 255.255.255.0 {
 	  range 192.168.4.100 192.168.4.200;
 	  option domain-name-servers 192.168.4.10;
@@ -3096,79 +3106,11 @@ cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
 cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
 
 vim /var/lib/tftpboot/pxelinux.cfg/default 
-	default vesamenu.c32
-	timeout 600
-	
-	display boot.msg
-	
-	# Clear the screen when exiting the menu, instead of leaving the menu displayed.
-	# For vesamenu, this means the graphical background is still displayed without
-	# the menu itself for as long as the screen remains in graphics mode.
-	menu clear
-	menu background splash.png
-	menu title Tedu PXE Server
-	menu vshift 8
-	menu rows 18
-	menu margin 8
-	#menu hidden
-	menu helpmsgrow 15
-	menu tabmsgrow 13
-	
-	# Border Area
-	menu color border * #00000000 #00000000 none
-	
-	# Selected item
-	menu color sel 0 #ffffffff #00000000 none
-	
-	# Title bar
-	menu color title 0 #ff7ba3d0 #00000000 none
-	
-	# Press [Tab] message
-	menu color tabmsg 0 #ff3a6496 #00000000 none
-	
-	# Unselected menu item
-	menu color unsel 0 #84b8ffff #00000000 none
-	
-	# Selected hotkey
-	menu color hotsel 0 #84b8ffff #00000000 none
-	
-	# Unselected hotkey
-	menu color hotkey 0 #ffffffff #00000000 none
-	
-	# Help text
-	menu color help 0 #ffffffff #00000000 none
-	
-	# A scrollbar of some type? Not sure.
-	menu color scrollbar 0 #ffffffff #ff355594 none
-	
-	# Timeout msg
-	menu color timeout 0 #ffffffff #00000000 none
-	menu color timeout_msg 0 #ffffffff #00000000 none
-	
-	# Command prompt text
-	menu color cmdmark 0 #84b8ffff #00000000 none
-	menu color cmdline 0 #ffffffff #00000000 none
-	
-	# Do not display the actual menu unless the user presses a key. All that is displayed is a timeout message.
-	
-	menu tabmsg Press Tab for full configuration options on menu items.
-	
-	menu separator # insert an empty line
-	menu separator # insert an empty line
-	
 	label linux
-	  menu label Install CentOS 7
+	  menu label ^Install CentOS 7
 	  menu default
 	  kernel vmlinuz
 	  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg
-
-#修改yum仓库标识
-vim /etc/yum.repos.d/mnt.repo 
-	[development]
-	name=Centos7.5
-	baseurl=file:///mnt
-	enabled=1
-	gpgcheck=0
 
 systemctl restart dhcpd
 systemctl restart tftp
@@ -3180,6 +3122,36 @@ mount /dev/cdrom /var/www/html/centos/
 yum -y install system-config-kickstart.noarch 
 yum -y install system-config-kickstart
 
+#编辑配置文件
+vim /var/www/html/ks.cfg
+
+install
+keyboard 'us'
+rootpw --iscrypted $1$6/ldzaKw$dsdWMg2fX1l40RTZ2BoN50
+url --url="http://192.168.4.10/centos"
+lang en_US
+auth  --useshadow  --passalgo=sha512
+graphical
+firstboot --disable
+selinux --disabled
+firewall --disabled
+network  --bootproto=dhcp --device=eth0
+reboot
+timezone Asia/Shanghai
+bootloader --location=mbr
+zerombr
+clearpart --all --initlabel
+part / --fstype="xfs" --grow --size=1
+
+%packages
+@base
+
+%end
+
+
+#########################################################
+#法二
+
 system-config-kickstart
 	#基本配置 - 时区 - Asia/Shanghai
 	#基本配置 - Root密码 - 1
@@ -3187,7 +3159,7 @@ system-config-kickstart
 	#基本配置 - 安装后重启 - v
 	#安装方法 - HTTP - v
 	#HTTP服务器 - 192.168.4.10
-	#HTTP目录 - /centos
+	#HTTP目录 - centos
 	#引导装载程序选项 - 安装新引导装载程序
 	#分区信息 - 清除主引导记录 - v
 	#分区信息 - 初始化磁盘标签 - v
@@ -3197,6 +3169,18 @@ system-config-kickstart
 	#防火墙配置 - SELinux： 禁用
 	#软件包选择 - 系统- 基本
 	文件 - 保存
+
+cp /root/ks.cfg /var/www/html/ks.cfg
+
+##
+
+#设置永久关闭
+vim /etc/selinux/config 
+	SELINUX=disabled
+
+systemctl enable dhcpd
+systemctl enable tftp
+systemctl enable httpd
 ```
 
 
