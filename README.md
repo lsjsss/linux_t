@@ -3054,7 +3054,7 @@ system-config-kickstart
 ```
 
 
-PXE网络装机
+## PXE网络装机
 
 ```shell
 nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 
@@ -3067,7 +3067,6 @@ vim /etc/yum.repos.d/mnt.repo
 	gpgcheck=0
 	enabled=1
 
-vim /etc/yum.repos.d/mnt.repo
 rm -rf /etc/yum.repos.d/C*
 yum clean all 
 yum repolist
