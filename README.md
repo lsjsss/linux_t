@@ -6328,6 +6328,7 @@ b. 自定义yum仓库内容
     setenforce 0
     systemctl stop firewalld.services	#关闭防火墙
     
+    yum -y install httpd
     vim /etc/httpd/conf.d/nsd01.conf
         <VirtualHost *:80>
         	ServerName server0.example.com
@@ -6350,8 +6351,11 @@ b. 自定义yum仓库内容
     
     systemctl restart httpd
     
-    
     #客户端测试
+    echo 192.168.4.10 server0.example.com >> /etc/hosts
+    echo 192.168.4.10 www0.example.com >> /etc/hosts
+    echo 192.168.4.10 webapp0.example.com >> /etc/hosts
+    
     curl server0.example.com
     curl www0.example.com
     curl webapp0.example.com
