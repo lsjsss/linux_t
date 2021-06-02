@@ -2204,7 +2204,7 @@ ls /abc
 ```shell
 vim /etc/fstab
 192.168.4.7:/test /abc nfs defaults,_netdev 0 0
-mount /abc
+umount /abc
 mount -a
 df -h
 ```
@@ -3076,8 +3076,6 @@ setenforce 0
 systemctl stop firewalld.service 
 yum -y install httpd
 yum -y install dhcp
-systemctl restart dhcpd
-rpm -q dhcp
 rpm -q dhcp
 systemctl restart dhcpd
 ss -anptu | grep 67
@@ -3148,6 +3146,11 @@ part / --fstype="xfs" --grow --size=1
 
 %end
 
+
+
+systemctl restart httpd.service 
+systemctl restart dhcpd.service 
+systemctl restart tftp.service
 
 #########################################################
 #法二
@@ -6328,6 +6331,7 @@ b. 自定义yum仓库内容
     setenforce 0
     systemctl stop firewalld.services	#关闭防火墙
     
+    yum -y install httpd
     vim /etc/httpd/conf.d/nsd01.conf
         <VirtualHost *:80>
         	ServerName server0.example.com
@@ -6350,8 +6354,11 @@ b. 自定义yum仓库内容
     
     systemctl restart httpd
     
-    
     #客户端测试
+    echo 192.168.4.10 server0.example.com >> /etc/hosts
+    echo 192.168.4.10 www0.example.com >> /etc/hosts
+    echo 192.168.4.10 webapp0.example.com >> /etc/hosts
+    
     curl server0.example.com
     curl www0.example.com
     curl webapp0.example.com
@@ -6470,7 +6477,7 @@ b. 自定义yum仓库内容
     mkdir /nfs
     mount 192.168.4.7:/public /nfs
     df -h
-    ls /abc
+    ls /nfs
     ```
 
 
@@ -6480,7 +6487,8 @@ b. 自定义yum仓库内容
 
 ```shell
 vim /etc/fstab
-192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+    192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+
 mount /abc
 mount -a
 df -h
@@ -7049,26 +7057,205 @@ curl www.qq.com
 curl www.163.com
 ```
 
+## 6.2 练习
+### 案例19：普通NFS共享的实现
+1. 只读的方式共享目录 /public，只允许192.168.4.0网段访问
+
+    ```shell
+    rpm -q nfs-utils
+    yum -y install nfs-utils
+    mkdir /public
+    touch /public/p1.txt
+    
+    echo "/public *(ro)" >> /etc/exports
+    ```
+
+2. 可读写共享目录/protected，允许所有人访问
+
+    ```shell
+    mkdir /protected
+    touch /protected/p2.txt
+    echo "/protected 192.168.4.0/24(rw,no_root_squash)" >> /etc/exports
+    
+    systemctl restart nfs-server
+    systemctl enable nfs-server
+    systemctl stop firewall.service
+    ```
+
+3. 在虚拟机 B上访问NFS共享目录
+3.1. 将A 的 /public 挂到本地 /nfsmount
+
+    ```shell
+    #虚拟机B操作
+    yum -y install nfs-utils
+    showmount -e 192.168.4.10
+    
+    mkdir /nfsmount
+    mount 192.168.4.10:/public /nfsmount
+    df -h
+    ls /nfsmount
+    ```
+
+
+4. 这些文件系统在系统启动时自动挂载
+4.1. 将/protected实现触发挂载到/abc/mynfs下
+
+    ```sehll
+    mkdir -p /abc/mynfs
+    
+    echo "192.168.4.10:/public /nfsmount nfs defaults,_netdev 0 0" >> /etc/fstab
+    echo "192.168.4.10:/protected /abc/mynfs nfs defaults,_netdev 0 0" >> /etc/fstab
+    
+    umount /nfsmount
+    mount -a
+    df -h
+    ```
 
 
 
+### 案例20：iscsi磁盘共享
+
+0. 配置 虚拟机A提供 iSCSI 服务，要求如下：
+1. 磁盘名为iqn.2020-08.tedu.cn:server0
+2. 服务端口为 3260
+3. 使用 store（后端存储的名称） 作其后端卷，其大小为 3GiB
+4. 配置客户端ACL为iqn.2020-08.tedu.cn:desktop0
+5. 配置虚拟机B使用 虚拟机svr7提供 iSCSI 服务
+
+```shell
+partprobe /dev/sdc
+lsblk
+yum -y install targetcli
+systemctl stop firewalld
+targetcli
+	ls
+	backstores/block create dev=/dev/sdc1 name=store
+	iscsi/ create iqn.2020-08.tedu.cn:server0
+	iscsi/iqn.2020-08.tedu.cn:server0/tpg1/luns create /backstores/block/store
+	iscsi/iqn.2020-08.tedu.cn:server0/tpg1/acls create iqn.2020-08.tedu.cn:desktop0
+	ls
+	exit
+systemctl restart target.service
+```
+
+```shell
+#虚拟机B
+yum -y install iscsi-initiator-utils
+rpm -q iscsi-initiator-utils
+
+echo "InitiatorName=iqn.2020-08.tedu.cn:desktop0" > /etc/iscsi/initiatorname.iscsi
+
+systemctl restart iscsid
+iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.10 --discover
+
+systemctl restart iscsi	
+systemctl enable iscsi	
+
+systemctl restart iscsi
+	
+lsblk
+```
 
 
+### 案例21：NTP时间同步
+0. 在虚拟机A设置ntp时间同步
+1. 设置时间服务器上层与0.centos.pool.ntp.org同步
+2. 设置本地服务器层数为10
+3. 允许192.168.4.0/24网络的主机同步时间
+4. 客户端B验证时间是否同步
+
+```shell
+yum -y install chrony
+rpm -qc chrony	#查看配置文件（.conf结尾的文件）
+
+vim /etc/chrony.conf
+	server 0.centos.pool.ntp.org iburst	#网络标准时间服务器（快速同步）
+	allow 192.168.4.0/24	#允许同步时间的主机网络段
+	local statum 10	#访问层数
+
+systemctl restart chronyd	#重启时间同步服务
+
+setenforce 0
+systemctl stop firewalld	#关闭防火墙
+```
 
 
+```shell
+#虚拟机B
+vim /etc/chrony.conf
+	server 192.168.4.10 iburst	#指定要同步时间的服务器（192.168.4.7）
+systemctl restart chronyd	#重启时间同步服务
+chronyc sources -v	#验证时间是否同步成功
+```
 
 
+### 案例22：利用FTP服务实现网络yum源
+1. 虚拟机A构建ftp服务
+
+    ```shell
+    yum -y install vsftpd
+    systemctl restart vsftpd
+    ```
 
 
+2. 利用ftp服务提供Centos7光盘内容，自定义yum仓库内容
+
+    ```shell
+    ls /var/ftp/
+    mkdir /var/ftp/centos
+    mount /dev/cdrom /var/ftp/centos/
+    ls /var/ftp//centos/
+    firefox ftp://192.168.4.10/centos
+    
+    #虚拟机软件-toos.tar.gz -> /root
+    tar -xf tools.tar.gz
+    ls tools/other/
+    mkdir /var/ftp/other/
+    cp tools/other/* /var/ftp/other/
+    ls /var/ftp/other
+    createrepo /var/ftp/other/
+    ls /var/ftp/other
+    ```
+
+3. 利用虚拟机B进行测试，并安装软件包sl
 
 
-
-
-
-
-
-
-
-
-
-> 如有侵权，请联系作者删除
+    ```shell
+    vim /etc/yum.repos.d/mnt.repo
+    	[centos]
+    	name=Centos7.5
+    	baseurl=ftp://192.168.4.10/centos
+    	gpgcheck=0
+    	[myrpm]
+    	name=myyum
+    	baseurl=ftp://192.168.4.10/other
+    	gpgcheck=0
+    
+    yum clean all
+    yum repolist
+    
+    yum -y install sl
+    sl
+    ```
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    > 如有侵权，请联系作者删除
