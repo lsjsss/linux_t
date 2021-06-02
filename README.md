@@ -3076,8 +3076,6 @@ setenforce 0
 systemctl stop firewalld.service 
 yum -y install httpd
 yum -y install dhcp
-systemctl restart dhcpd
-rpm -q dhcp
 rpm -q dhcp
 systemctl restart dhcpd
 ss -anptu | grep 67
