@@ -6474,7 +6474,7 @@ b. 自定义yum仓库内容
     mkdir /nfs
     mount 192.168.4.7:/public /nfs
     df -h
-    ls /abc
+    ls /nfs
     ```
 
 
@@ -6484,7 +6484,8 @@ b. 自定义yum仓库内容
 
 ```shell
 vim /etc/fstab
-192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+    192.168.4.7:/test /abc nfs defaults,_netdev 0 0
+
 mount /abc
 mount -a
 df -h
