@@ -7188,35 +7188,51 @@ chronyc sources -v	#验证时间是否同步成功
 
 ### 案例22：利用FTP服务实现网络yum源
 1、虚拟机A构建ftp服务
+
+    ```shell
+    yum -y install vsftpd
+    systemctl restart vsftpd
+    ```
+
+
 2、利用ftp服务提供Centos7光盘内容，自定义yum仓库内容
+
+    ```shell
+    ls /var/ftp/
+    mkdir /var/ftp/centos
+    mount /dev/cdrom /var/ftp/centos/
+    ls /var/ftp//centos/
+    firefox ftp://192.168.4.10/centos
+    
+    #虚拟机软件-toos.tar.gz -> /root
+    tar -xf tools.tar.gz
+    ls tools/other/
+    mkdir /var/ftp/other/
+    cp tools/other/* /var/ftp/other/
+    ls /var/ftp/other
+    createrepo /var/ftp/other/
+    ls /var/ftp/other
+    ```
+
 3、利用虚拟机B进行测试，并安装软件包sl
 
 
     ```shell
-    setenforce 0	#SELinux运行模式切换 0宽松 1强制
-    	/etc/selinux/config	#永久配置
-    getenforce	#查看
-    ststemctl stop firewall
-    
-    mount /dev/cdrom /mnt
     vim /etc/yum.repos.d/mnt.repo
-    	[mnt]
+    	[centos]
     	name=Centos7.5
-    	baseurl=file:///mnt
+    	baseurl=ftp://192.168.4.10/centos
     	gpgcheck=0
-    	enabled=1
-
-    rm -rf /etc/yum.repos.d/C*
+    	[myrpm]
+    	name=myyum
+    	baseurl=ftp://192.168.4.10/other
+    	gpgcheck=0
+    
     yum clean all
     yum repolist
     
-    yum -y install vsftpd
-    systemctl start vsftpd
-    systemctl status vsftpd #查看服务运行状态
-    
-    firewall-cmd --set-default-zone=trusted 
-    
-    curl ftp://192.168.4.7
+    yum -y install sl
+    sl
     ```
     
     
