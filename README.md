@@ -3149,6 +3149,11 @@ part / --fstype="xfs" --grow --size=1
 %end
 
 
+
+systemctl restart httpd.service 
+systemctl restart dhcpd.service 
+systemctl restart tftp.service
+
 #########################################################
 #法二
 
