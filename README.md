@@ -7067,7 +7067,7 @@ curl www.163.com
     mkdir /public
     touch /public/p1.txt
     
-    echo "/public 192.168.4.0/24(ro)" >> /etc/exports
+    echo "/public *(ro)" >> /etc/exports
     ```
 
 2. 可读写共享目录/protected，允许所有人访问
