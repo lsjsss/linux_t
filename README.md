@@ -2204,7 +2204,7 @@ ls /abc
 ```shell
 vim /etc/fstab
 192.168.4.7:/test /abc nfs defaults,_netdev 0 0
-mount /abc
+umount /abc
 mount -a
 df -h
 ```
