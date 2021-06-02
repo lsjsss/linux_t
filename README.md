@@ -7187,7 +7187,7 @@ chronyc sources -v	#验证时间是否同步成功
 
 
 ### 案例22：利用FTP服务实现网络yum源
-1、虚拟机A构建ftp服务
+1. 虚拟机A构建ftp服务
 
     ```shell
     yum -y install vsftpd
@@ -7195,7 +7195,7 @@ chronyc sources -v	#验证时间是否同步成功
     ```
 
 
-2、利用ftp服务提供Centos7光盘内容，自定义yum仓库内容
+2. 利用ftp服务提供Centos7光盘内容，自定义yum仓库内容
 
     ```shell
     ls /var/ftp/
@@ -7214,7 +7214,7 @@ chronyc sources -v	#验证时间是否同步成功
     ls /var/ftp/other
     ```
 
-3、利用虚拟机B进行测试，并安装软件包sl
+3. 利用虚拟机B进行测试，并安装软件包sl
 
 
     ```shell
