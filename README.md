@@ -3217,7 +3217,7 @@ echo "subnet 192.168.4.0 netmask 255.255.255.0 {
   default-lease-time 600;
   max-lease-time 7200;
   next-server 192.168.4.10;
-  filename "pxelinux.0";
+  filename \"pxelinux.0\";
 }" > /etc/dhcp/dhcpd.conf 
 
 systemctl restart dhcpd
@@ -3234,13 +3234,13 @@ cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img 
 
 sed -i '61d' /var/lib/tftpboot/pxelinux.cfg/default 
 sed -i '61d' /var/lib/tftpboot/pxelinux.cfg/default 
-sed -i '61d' /var/lib/tftpboot/pxelinux.cfg/default 
-sed -i '61d' /var/lib/tftpboot/pxelinux.cfg/default 
+sed -i '61d' /var/lib/tftpboot/pxelinux.cfg/default
+sed -i '61d' /var/lib/tftpboot/pxelinux.cfg/default
 
-echo "label linux
-  menu default
-  kernel vmlinuz
-  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg" >> /var/lib/tftpboot/pxelinux.cfg/default 
+sed -i "61a label linux" /var/lib/tftpboot/pxelinux.cfg/default 
+sed -i "62a   menu default" /var/lib/tftpboot/pxelinux.cfg/default 
+sed -i "63a   kernel vmlinuz" /var/lib/tftpboot/pxelinux.cfg/default 
+sed -i "64a   append initrd=initrd.img ks=http://192.168.4.10/ks.cfg" /var/lib/tftpboot/pxelinux.cfg/default 
 
 systemctl restart dhcpd
 systemctl restart tftp
@@ -3255,7 +3255,7 @@ yum -y install system-config-kickstart
 echo "install
 keyboard 'us'
 rootpw --iscrypted $1$6/ldzaKw$dsdWMg2fX1l40RTZ2BoN50
-url --url="http://192.168.4.10/centos"
+url --url=\"http://192.168.4.10/centos\"
 lang en_US
 auth  --useshadow  --passalgo=sha512
 graphical
@@ -3268,7 +3268,7 @@ timezone Asia/Shanghai
 bootloader --location=mbr
 zerombr
 clearpart --all --initlabel
-part / --fstype="xfs" --grow --size=1
+part / --fstype=\"xfs\" --grow --size=1
 
 %packages
 @base
