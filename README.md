@@ -3396,7 +3396,24 @@ mysql -uroot -p123456
 ```
 
 
+## 连接 mySQL 服务
 
+* 客户端连接MySQL服务的方法
+	- 命令行
+	- 图形工具软件(软件自带图形界面、web页面)
+	- 编写脚本(php, Java, python ..)
+
+* 使用 mysql 命令
+	- mysql -h服务器IP -u用户名 -p密码 [数据库名]
+	- quit 或 exit #退出
+
+登录时直接切换到mysql库
+
+```shell
+mysql -uroot -p123456 mysql
+	#查看当前所处的数据库
+	select database();
+```
 
 
 
