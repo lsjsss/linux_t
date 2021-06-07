@@ -3301,18 +3301,55 @@ systemctl restart tftp.service
 
 ### 专业术语
 * DB (DataBase)
-    - 数据库
-    - 依照某种数据模型进行组织并存放到存储器的数据集合
+- 数据库
+- 依照某种数据模型进行组织并存放到存储器的数据集合
 
 * DBMS (DataBase Management System)
-    - 数据库管理系统
-    - 用来操纵和管理数据库的服务软件
+- 数据库管理系统
+- 用来操纵和管理数据库的服务软件
 
 * DBS (DataBase System)
-    - 数据库系统:即DB+DBMS
-    - 指带有数据库并整合了数据库管理软件的计算机系统
+- 数据库系统:即DB+DBMS
+- 指带有数据库并整合了数据库管理软件的计算机系统
 
 
+### 相关参数
+* 软件安装后自动创建相关目录与文件
+
+| 文件 | 说明 |
+| -- | -- |
+| /etc/my.cnf | 主配置文件 |
+| /var/ib/mysql | 数据库目录 |
+| 默认端口号 | 3306 |
+| 进程名 | mysąld |
+| 传输协议 | TCР |
+| 进程所有者 | mysql |
+| 进程所属组 | mysql |
+| 错误日志文件 | /var/log/mysqld.log |
+
+
+###环境准备
+
+1. 创建新虚拟机1台
+2. 关闭firewalld
+3. 禁用SELinux
+4. 配置yum源
+5. 配置IP地址192.168.4.50
+6. 软件mysq-5.7.1
+7. tar官网地址 http://dev.mysql.com/downloads/mysql
+
+
+```shell
+systemctl stop firewalld.service 
+setenforce 0
+tar -xf mysql-5.7.17.tar
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+systemctl start mysqld
+systemctl enable mysqld
+netstat -anptu | grep :3306
+ls /var/lib/mysql
+```
 
 
 
