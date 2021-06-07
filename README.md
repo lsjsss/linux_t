@@ -3445,7 +3445,7 @@ mysql -uroot -p123456 mysql
 
 * 可以创建多个库,通过库名区分
 
-```mysql
+```shell
 show databases;	//显示已有的库
 select user();	//显示连接用户
 use 库名;	//切换库
