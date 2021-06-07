@@ -3455,7 +3455,22 @@ show tables;	//显示已有的表
 drop database 库名;	//删除库
 ```
 
+```shell
+create database bbsdb;
+create database BBSDB
+show databases;
+#删除库
+drop database BBSDB;
 
+#切换库
+use bbsdb;
+#显示当前所在库
+select databse();
+#显示连接用户
+select user();
+#显示已有的表
+show tables;
+```
 
 
 
