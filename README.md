@@ -3282,19 +3282,241 @@ systemctl restart tftp.service
 
 
 
+# 数据库
+
+### 常见软件
+
+主流操作系统：Unix, Linux, Windows
+
+| 软件名 | 开源 | 跨平台 | 厂商 |
+| -- | -- | -- | -- |
+| Oracle | 否 | 是 | 甲骨文 |
+| MysQL | 是 | 是 | 甲骨文 |
+| SQL Server | 否 | 否 | 微软 |
+| DB2 | 否 | 是 | IBM |
+| Redis | 是 | 是 | 开源软件 |
+| Memcached | 是 | 是 | 开源软件 |
+| MongoDB | 是 | 是 | 开源软件 |
+
+
+### 专业术语
+* DB (DataBase)
+- 数据库
+- 依照某种数据模型进行组织并存放到存储器的数据集合
+
+* DBMS (DataBase Management System)
+- 数据库管理系统
+- 用来操纵和管理数据库的服务软件
+
+* DBS (DataBase System)
+- 数据库系统:即DB+DBMS
+- 指带有数据库并整合了数据库管理软件的计算机系统
+
+
+### 相关参数
+* 软件安装后自动创建相关目录与文件
+
+| 文件 | 说明 |
+| -- | -- |
+| /etc/my.cnf | 主配置文件 |
+| /var/ib/mysql | 数据库目录 |
+| 默认端口号 | 3306 |
+| 进程名 | mysąld |
+| 传输协议 | TCР |
+| 进程所有者 | mysql |
+| 进程所属组 | mysql |
+| 错误日志文件 | /var/log/mysqld.log |
+
+
+### 环境准备
+
+1. 创建新虚拟机1台
+2. 关闭firewalld
+3. 禁用SELinux
+4. 配置yum源
+5. 配置IP地址192.168.4.50
+6. 软件mysq-5.7.1
+7. tar官网地址 http://dev.mysql.com/downloads/mysql
+
+
+```shell
+systemctl stop firewalld.service 
+setenforce 0
+tar -xf mysql-5.7.17.tar
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+systemctl start mysqld
+systemctl enable mysqld
+netstat -anptu | grep :3306
+ls /var/lib/mysql
+```
+
+### 连接数据库，使用初始密码登录并重置密码
+
+```sql
+grep password /var/log/mysqld.log
+mysql -uroot -p'qg1wpZ;G+deg'
+	show databases;    -- 报错,需要重置密码
+	alter user root@localhost identified by "123Qqq...";    -- 重置密码
+	show databases;	    -- 成功
+	exit
+mysql -uroot -p123Qqq...
+```
+
+修改密码策略
+
+| 策略名称 | 验证方式 |
+| -- | -- |
+| LoW(0) | 长度 |
+| MEDIUM(1) | 长度；数字，小写/大写，和特殊字符 |
+| STRONG (2) | 长度；数字，小写/大写和特殊字符；字典文件 |
+
+
+```shell
+#永久配置
+vim /etc/my.cnf
+	[mysqld]
+	validate_password_policy=0
+	validate_password_length=6
+```
+
+```sql
+mysql -uroot -p123Qqq...
+	show variables like "%password%";    -- 查看变量
+	set global validate_password_policy=0;    -- 修改密码策略
+	set global validate_password_length=6;    -- 修改密码长度
+	alter user root@localhost identified by "123456";    -- 重置密码
+	exit
+mysql -uroot -p123456
+```
+
+
+## 连接 mySQL 服务
+
+* 客户端连接MySQL服务的方法
+	- 命令行
+	- 图形工具软件(软件自带图形界面、web页面)
+	- 编写脚本(php, Java, python ..)
+
+* 使用 mysql 命令
+	- mysql -h服务器IP -u用户名 -p密码 [数据库名]
+	- quit 或 exit #退出
+
+登录时直接切换到mysql库
+
+```sql
+mysql -uroot -p123456 mysql
+	select database();    -- 查看当前所处的数据库
+```
+
+
+### 数据存储流程
+
+* 客户端把数据存储到数据库服务器上的步骤
+	- 连接数据库服务器
+	- 建库(类似于文件夹)
+	- 建表(类似于文件夹)
+	- 插入记录(类似于文件内容)
+	- 断开连接
+
+
+### SQL命令使用规则
+
+* SQL命令不区分字母大小写(密码、变量值除外)
+* 每条SQL命令以 `;` 结束
+* 默认命令不支持 `Tab键` 自动补齐
+* `\c` 终止sql命令
+
+### 常用的SQL命令分类
+* 管理数据库使用SQL (结构化查询语言)
+* DDL 数据定义语言如：create、alter、drop
+* DML 数据操作语言如：insert、update、delete
+* DCL 数据控制语言如：grant、revoke
+* DTL 数据事务语言如：commit、rollback、savepoint
+
+## mysql基本操作
+> 库管理命令：库类似于文件夹,用来存储表
+
+* 可以创建多个库,通过库名区分
+
+```sql
+show databases;	-- 显示已有的库
+select user();	-- 显示连接用户
+use 库名;	-- 切换库
+select database();	-- 显示当前所在的库
+create database 库名;	-- 创建新库
+show tables;	-- 显示已有的表
+drop database 库名;	-- 删除库
+```
+
+```sql
+mysql -uroot -p123456 mysql
+
+create database bbsdb;
+create database BBSDB
+show databases;
+drop database BBSDB;    -- 删除库
+use bbsdb;    -- 切换库
+select databse();    -- 显示当前所在库
+select user();    -- 显示连接用户
+show tables;    -- 显示已有的表
+```
 
 
 
+### 表管理命令
+
+#### 创建表
+
+* 表存储数据的文件
+
+```sql
+create table 库名.表名(
+	字段名1 类型(宽度),
+	字段名2 类型(宽度)
+	.......
+) DEFAULT CHARSET=utf8;	-- 指定中文字符集,可以给字段慰值中文
+```
+
+```sql
+mysql -uroot -p123456 mysql
+
+use bbsdb;
+select database();
+create table user(name char(10), age int, homedir char(20));
+show tables;
+desc user;
+select * from bbsdb.user;
+select * from user;
+insert into bbsdb.user values("tom", 18, "beijing");
+select * from user;
+insert into user values("abc", 20,"chifeng");
+select * from user;
+select name from user; 
+select name,age from user;
+```
 
 
+#### 修改、删除表
 
-
-
-
-
-
-
-
+```sql
+update bbsdb.user set homedir="china";
+select * from user;	-- 更新表数据
+delete from bbsdb.user;	-- 删除表数据,但表还在
+show tables;
+select * from user;
+drop table bbsdb.user;	-- 删除表
+show tables;
+create table user(name char(10), age int, homedir char(20));
+show tables;
+show create table bbsdb.user\G
+create table 学生表(姓名 char(15), 地址 varchar(20)) DEFAULT CHARSET=utf8; -- 设置字符集为utf8,支持中文
+show tables;
+show tables;
+desc 学生表;
+insert into 学生表 values("张三峰", "武当山");
+select * from 学生表;
+```
 
 
 
