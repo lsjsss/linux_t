@@ -3353,15 +3353,12 @@ ls /var/lib/mysql
 
 ### 连接数据库，使用初始密码登录并重置密码
 
-```shell
+```sql
 grep password /var/log/mysqld.log
 mysql -uroot -p'qg1wpZ;G+deg'
-	#报错,需要重置密码
-	show databases;
-	#重置密码
-	alter user root@localhost identified by "123Qqq...";
-	#成功
-	show databases;	
+	show databases;    -- 报错,需要重置密码
+	alter user root@localhost identified by "123Qqq...";    -- 重置密码
+	show databases;	    -- 成功
 	exit
 mysql -uroot -p123Qqq...
 ```
@@ -3381,16 +3378,14 @@ vim /etc/my.cnf
 	[mysqld]
 	validate_password_policy=0
 	validate_password_length=6
+```
 
+```sql
 mysql -uroot -p123Qqq...
-	#查看变量
-	show variables like "%password%";
-	#修改密码策略
-	set global validate_password_policy=0;
-	#修改密码长度
-	set global validate_password_length=6;
-	#重置密码
-	alter user root@localhost identified by "123456";
+	show variables like "%password%";    -- 查看变量
+	set global validate_password_policy=0;    -- 修改密码策略
+	set global validate_password_length=6;    -- 修改密码长度
+	alter user root@localhost identified by "123456";    -- 重置密码
 	exit
 mysql -uroot -p123456
 ```
@@ -3409,10 +3404,9 @@ mysql -uroot -p123456
 
 登录时直接切换到mysql库
 
-```shell
+```sql
 mysql -uroot -p123456 mysql
-	#查看当前所处的数据库
-	select database();
+	select database();    -- 查看当前所处的数据库
 ```
 
 
@@ -3446,30 +3440,26 @@ mysql -uroot -p123456 mysql
 * 可以创建多个库,通过库名区分
 
 ```sql
-show databases;	//显示已有的库
-select user();	//显示连接用户
-use 库名;	//切换库
-select database();	//显示当前所在的库
-create database 库名;	//创建新库
-show tables;	//显示已有的表
-drop database 库名;	//删除库
+show databases;	-- 显示已有的库
+select user();	-- 显示连接用户
+use 库名;	-- 切换库
+select database();	-- 显示当前所在的库
+create database 库名;	-- 创建新库
+show tables;	-- 显示已有的表
+drop database 库名;	-- 删除库
 ```
 
 ```sql
+mysql -uroot -p123456 mysql
+
 create database bbsdb;
 create database BBSDB
 show databases;
-#删除库
-drop database BBSDB;
-
-#切换库
-use bbsdb;
-#显示当前所在库
-select databse();
-#显示连接用户
-select user();
-#显示已有的表
-show tables;
+drop database BBSDB;    -- 删除库
+use bbsdb;    -- 切换库
+select databse();    -- 显示当前所在库
+select user();    -- 显示连接用户
+show tables;    -- 显示已有的表
 ```
 
 
@@ -3485,10 +3475,12 @@ create table 库名.表名(
 	字段名1 类型(宽度),
 	字段名2 类型(宽度)
 	.......
-) DEFAULT CHARSET=utf8;	//指定中文字符集,可以给字段慰值中文
+) DEFAULT CHARSET=utf8;	-- 指定中文字符集,可以给字段慰值中文
 ```
 
 ```sql
+mysql -uroot -p123456 mysql
+
 use bbsdb;
 select database();
 create table user(name char(10), age int, homedir char(20));
