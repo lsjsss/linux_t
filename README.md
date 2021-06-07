@@ -3416,6 +3416,44 @@ mysql -uroot -p123456 mysql
 ```
 
 
+### 数据存储流程
+
+* 客户端把数据存储到数据库服务器上的步骤
+	- 连接数据库服务器
+	- 建库(类似于文件夹)
+	- 建表(类似于文件夹)
+	- 插入记录(类似于文件内容)
+	- 断开连接
+
+
+### SQL命令使用规则
+
+* SQL命令不区分字母大小写(密码、变量值除外)
+* 每条SQL命令以 `;` 结束
+* 默认命令不支持 `Tab键` 自动补齐
+* `\c` 终止sql命令
+
+### 常用的SQL命令分类
+* 管理数据库使用SQL (结构化查询语言)
+* DDL 数据定义语言如：create、alter、drop
+* DML 数据操作语言如：insert、update、delete
+* DCL 数据控制语言如：grant、revoke
+* DTL 数据事务语言如：commit、rollback、savepoint
+
+## mysql基本操作
+> 库管理命令：库类似于文件夹,用来存储表
+
+* 可以创建多个库,通过库名区分
+
+```mysql
+show databases;	//显示已有的库
+select user();	//显示连接用户
+use 库名;	//切换库
+select database();	//显示当前所在的库
+create database 库名;	//创建新库
+show tables;	//显示已有的表
+drop database 库名;	//删除库
+```
 
 
 
