@@ -3466,7 +3466,7 @@ show tables;    -- 显示已有的表
 
 ### 表管理命令
 
-#### 建表
+#### 创建表
 
 * 表存储数据的文件
 
@@ -3497,6 +3497,26 @@ select name,age from user;
 ```
 
 
+#### 修改、删除表
+
+```sql
+update bbsdb.user set homedir="china";
+select * from user;	-- 更新表数据
+delete from bbsdb.user;	-- 删除表数据,但表还在
+show tables;
+select * from user;
+drop table bbsdb.user;	-- 删除表
+show tables;
+create table user(name char(10), age int, homedir char(20));
+show tables;
+show create table bbsdb.user\G
+create table 学生表(姓名 char(15), 地址 varchar(20)) DEFAULT CHARSET=utf8; -- 设置字符集为utf8,支持中文
+show tables;
+show tables;
+desc 学生表;
+insert into 学生表 values("张三峰", "武当山");
+select * from 学生表;
+```
 
 
 
