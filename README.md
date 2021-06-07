@@ -3282,6 +3282,36 @@ systemctl restart tftp.service
 
 
 
+# 数据库
+
+### 常见软件
+
+主流操作系统：Unix, Linux, Windows
+
+| 软件名 | 开源 | 跨平台 | 厂商 |
+| -- | -- | -- | -- |
+| Oracle | 否 | 是 | 甲骨文 |
+| MysQL | 是 | 是 | 甲骨文 |
+| SQL Server | 否 | 否 | 微软 |
+| DB2 | 否 | 是 | IBM |
+| Redis | 是 | 是 | 开源软件 |
+| Memcached | 是 | 是 | 开源软件 |
+| MongoDB | 是 | 是 | 开源软件 |
+
+
+### 专业术语
+* DB (DataBase)
+- 数据库
+- 依照某种数据模型进行组织并存放到存储器的数据集合
+
+* DBMS (DataBase Management System)
+- 数据库管理系统
+- 用来操纵和管理数据库的服务软件
+
+* DBS (DataBase System)
+- 数据库系统:即DB+DBMS
+- 指带有数据库并整合了数据库管理软件的计算机系统
+
 
 
 
