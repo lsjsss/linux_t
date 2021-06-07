@@ -3328,7 +3328,7 @@ systemctl restart tftp.service
 | 错误日志文件 | /var/log/mysqld.log |
 
 
-###环境准备
+### 环境准备
 
 1. 创建新虚拟机1台
 2. 关闭firewalld
@@ -3350,6 +3350,51 @@ systemctl enable mysqld
 netstat -anptu | grep :3306
 ls /var/lib/mysql
 ```
+
+### 连接数据库，使用初始密码登录并重置密码
+
+```shell
+grep password /var/log/mysqld.log
+mysql -uroot -p'qg1wpZ;G+deg'
+	#报错,需要重置密码
+	show databases;
+	#重置密码
+	alter user root@localhost identified by "123Qqq...";
+	#成功
+	show databases;	
+	exit
+mysql -uroot -p123Qqq...
+```
+
+修改密码策略
+
+| 策略名称 | 验证方式 |
+| -- | -- |
+| LoW(0) | 长度 |
+| MEDIUM(1) | 长度；数字，小写/大写，和特殊字符 |
+| STRONG (2) | 长度；数字，小写/大写和特殊字符；字典文件 |
+
+
+```shell
+#永久配置
+vim /etc/my.cnf
+	[mysqld]
+	validate_password_policy=0
+	validate_password_length=6
+
+mysql -uroot -p123Qqq...
+	#查看变量
+	show variables like "%password%";
+	#修改密码策略
+	set global validate_password_policy=0;
+	#修改密码长度
+	set global validate_password_length=6;
+	#重置密码
+	alter user root@localhost identified by "123456";
+	exit
+mysql -uroot -p123456
+```
+
 
 
 
