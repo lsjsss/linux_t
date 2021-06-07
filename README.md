@@ -3445,7 +3445,7 @@ mysql -uroot -p123456 mysql
 
 * 可以创建多个库,通过库名区分
 
-```shell
+```sql
 show databases;	//显示已有的库
 select user();	//显示连接用户
 use 库名;	//切换库
@@ -3455,7 +3455,7 @@ show tables;	//显示已有的表
 drop database 库名;	//删除库
 ```
 
-```shell
+```sql
 create database bbsdb;
 create database BBSDB
 show databases;
@@ -3474,7 +3474,35 @@ show tables;
 
 
 
+### 表管理命令
 
+#### 建表
+
+* 表存储数据的文件
+
+```sql
+create table 库名.表名(
+	字段名1 类型(宽度),
+	字段名2 类型(宽度)
+	.......
+) DEFAULT CHARSET=utf8;	//指定中文字符集,可以给字段慰值中文
+```
+
+```sql
+use bbsdb;
+select database();
+create table user(name char(10), age int, homedir char(20));
+show tables;
+desc user;
+select * from bbsdb.user;
+select * from user;
+insert into bbsdb.user values("tom", 18, "beijing");
+select * from user;
+insert into user values("abc", 20,"chifeng");
+select * from user;
+select name from user; 
+select name,age from user;
+```
 
 
 
