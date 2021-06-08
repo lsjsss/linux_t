@@ -7597,6 +7597,7 @@ mysql -uroot -ptarena
 
 ```sql
 create database test;
+use test;
 ```
 
 3. 在数据库test下创建一个名为stu的表，表记录包含如下内容：
@@ -7641,7 +7642,6 @@ show tables;
 drop database test;
 show databases;
 ```
-
 
     
     
