@@ -7604,7 +7604,7 @@ use test;
       学号，姓名，性别，手机号，通信地址  （注：性别用enum类型）
 
 ```sql
-create table stu(学号 varchar(10), 姓名 varchar(10), 性别 enum('男','女'), 手机号 bigint(11), 通信地址 varchar(20)) DEFAULT CHARSET=utf8;
+create table stu(学号 char(10), 姓名 char(15), 性别 enum('男','女'), 手机号 char(11), 通信地址 varchar(20)) DEFAULT CHARSET=utf8;
 ```
 
 4. 往stu表里添加如下记录：
