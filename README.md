@@ -7552,7 +7552,97 @@ chronyc sources -v	#验证时间是否同步成功
     sl
     ```
     
-    
+
+## 6.8 练习
+### 案例1：构建mysql服务
+1. 虚拟机svr7上构建mysql数据库服务
+
+```shell
+systemctl stop firewalld.service 
+setenforce 0
+tar -xf mysql-5.7.17.tar
+yum -y install mysql-community-*.rpm
+systemctl start mysqld
+systemctl enable mysqld
+```
+
+2. 数据库管理员密码设置为tarena
+
+```shell
+vim /etc/my.cnf
+	validate_password_policy=0
+	validate_password_length=6
+
+grep password /var/log/mysqld.log
+```
+
+```sql
+mysql -uroot -p'mysqld.log中的密码'
+	set global validate_password_policy=0;
+	set global validate_password_length=6;
+	alter user root@localhost identified by "tarena";
+	exit
+mysql -uroot -ptarena
+```
+
+### 案例2：数据库基本原理
+1. 使用mysql命令连接数据库，并查看连接用户
+
+```sql
+mysql -uroot -ptarena
+	select user();
+```
+
+2. 创建数据库名为test
+
+```sql
+create database test;
+```
+
+3. 在数据库test下创建一个名为stu的表，表记录包含如下内容：
+      学号，姓名，性别，手机号，通信地址  （注：性别用enum类型）
+
+```sql
+create table stu(学号 varchar(10), 姓名 varchar(10), 性别 enum('男','女'), 手机号 bigint(11), 通信地址 varchar(20)) DEFAULT CHARSET=utf8;
+```
+
+4. 往stu表里添加如下记录：
+
+| 学号 | 姓名 | 性别 | 手机号 | 通信地址 |
+| -- | -- | -- | -- | -- |
+| NSD131201 | 张三 | 男 | 13012345678 | 朝阳区劲松南路 |
+| SD131202 | 李四 | 男 | 18722223333 | 海淀区北三环西路 |
+| NSD131203 | 韩梅梅 | 女 | 18023445678 | 东城区珠市口 |
+
+```sql
+insert into stu values("NSD131201","张三","男",13012345678,"朝阳区劲松南路");
+insert into stu values("NSD131202","李四","男",18722223333,"海淀区北三环西路");
+insert into stu values("NSD131203","韩梅梅","女",18023445678,"东城区珠市口");
+select * from stu;
+```
+
+5. 删除stu表记录
+
+```sql
+delete from test.stu;
+select * from stu;
+```
+
+6. 删除stu表
+
+```sql
+drop table test.stu;
+show tables;
+```
+
+7. 删除test库
+
+```sql
+drop database test;
+show databases;
+```
+
+
     
     
     
