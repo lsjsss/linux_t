@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
+    <expand />
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="4.23 update" />
+    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="4.23 update">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,6 +35,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/数据库" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -60,6 +49,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\githubgit\linux_t\数据库" />
       <recent name="F:\githubgit\linux_t\云计算网络应用管理" />
     </key>
   </component>
@@ -76,6 +66,8 @@
       <workItem from="1617777847302" duration="263000" />
       <workItem from="1617803803993" duration="341000" />
       <workItem from="1617804165595" duration="1174000" />
+      <workItem from="1623196891643" duration="2596000" />
+      <workItem from="1623247325312" duration="628000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -98,7 +90,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617808045166</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="6.8 update sql D1">
+      <created>1623122365645</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1623122365645</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,17 +117,18 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="4.7" />
-    <option name="LAST_COMMIT_MESSAGE" value="4.7" />
+    <MESSAGE value="6.8 update sql D1" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.8 update sql D1" />
   </component>
   <component name="WindowStateProjectService">
     <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="256" y="72" key="#Project_Structure/0.0.1552.996@0.0.1552.996" timestamp="1617804171279" />
-    <state x="92" y="92" width="1368" height="812" key="DiffContextDialog" timestamp="1617807937263">
+    <state x="92" y="92" width="1368" height="812" key="DiffContextDialog" timestamp="1623122248128">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="92" y="92" width="1368" height="812" key="DiffContextDialog/0.0.1552.996@0.0.1552.996" timestamp="1617807937263" />
+    <state x="92" y="92" width="1368" height="812" key="DiffContextDialog/0.0.1552.996@0.0.1552.996" timestamp="1623122248128" />
     <state x="556" y="252" key="FileChooserDialogImpl" timestamp="1617804122585">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
@@ -157,15 +157,16 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="398" y="236" key="Vcs.Push.Dialog.v2" timestamp="1619135344260">
-      <screen x="0" y="0" width="1680" height="1020" />
-    </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1617850295907" />
-    <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1619135344260" />
-    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1617806684329">
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1623203626247">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623203626247" />
+    <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623201822742" />
+    <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623198343666">
+      <screen x="0" y="0" width="1680" height="1020" />
+    </state>
     <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1552.996@0.0.1552.996" timestamp="1617806684329" />
+    <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623198343666" />
     <state x="502" y="284" key="git4idea.merge.GitPullDialog" timestamp="1617803961890">
       <screen x="0" y="0" width="1552" height="996" />
     </state>

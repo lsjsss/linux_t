@@ -3069,7 +3069,8 @@ vim /etc/yum.repos.d/mnt.repo
 	gpgcheck=0
 
 rm -rf /etc/yum.repos.d/C*
-yum clean all 
+yum clean all
+
 yum repolist
 
 setenforce 0
