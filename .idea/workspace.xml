@@ -20,7 +20,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1qpY8oSTT5AjTbpZe6SYOsOm4GO" />
   <component name="ProjectLevelVcsManager">
@@ -157,10 +156,10 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1623203626247">
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1623248494706">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623203626247" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623248494706" />
     <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623201822742" />
     <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623198343666">
       <screen x="0" y="0" width="1680" height="1020" />
