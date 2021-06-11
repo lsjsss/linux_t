@@ -7,6 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="4.23 update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +68,8 @@
       <workItem from="1617804165595" duration="1174000" />
       <workItem from="1623196891643" duration="2596000" />
       <workItem from="1623247325312" duration="628000" />
+      <workItem from="1623298567233" duration="1219000" />
+      <workItem from="1623301966869" duration="895000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -96,7 +99,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623122365645</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="6.10 update">
+      <created>1623298637045</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1623298637045</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,7 +127,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="4.7" />
     <MESSAGE value="6.8 update sql D1" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.8 update sql D1" />
+    <MESSAGE value="6.10 update" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.10 update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
@@ -156,10 +167,10 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1623248494706">
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1623298639056">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623248494706" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623298639056" />
     <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623201822742" />
     <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623198343666">
       <screen x="0" y="0" width="1680" height="1020" />
