@@ -7798,7 +7798,252 @@ show databases;
 
     
     
+
+## 6.11练习
+### 案例1：构建mysql服务器
+要求如下：
+1. 在虚拟机svr7上构建mysql服务
+
+```sql
+systemctl stop firewalld.service 
+setenforce 0
+tar -xf mysql-5.7.17.tar
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+systemctl start mysqld
+systemctl enable mysqld
+netstat -anptu | grep :3306
+ls /var/lib/mysql
+```
+
+2. 设置数据库管理员root本机登录密码为redhat
+
+```shell
+vim /etc/my.cnf
+	validate_password_policy=0
+	validate_password_length=6
+
+grep password /var/log/mysqld.log
+```
+
+```sql
+mysql -uroot -p'mysqld.log中的密码'
+	show variables like "%password%"; 
+	set global validate_password_policy=0;
+	set global validate_password_length=6;
+	alter user root@localhost identified by "redhat";
+	exit
+mysql -uroot -predhat
+```
+
+### 案例2：SQL命令练习
+1. 连接到数据库
+
+```sql
+mysql -uroot -predhat
+```
+
+2. 查看所有的数据库
+
+```sql
+show databases;
+```
+
+3. 创建数据库名为tedu，test
+
+
+```sql
+create database tedu;
+create database test;
+```
+
+4. 切换到数据库tedu
+
+
+```sql
+use tedu;
+```
+
+5. 显示当前在哪个数据库
+
+
+```sql
+select database();
+```
+
+6. 显示连接的用户
+
+
+```sql
+select user();
+```
+
+7. 删除数据库tedu
+
+```sql
+drop database tedu;
+show databases;
+```
+
+8. 创建stu表，表字段包含name，homedir
+
+```sql
+create table stu(name char(10), homedir varchar(20));
+```
+
+9. 往stu表里添加记录为jim，usa；lilei，china
+
+
+```sql
+insert into stu values("jim", "usa");
+insert into stu values("lilei", "china");
+```
+
+10. 查看表记录
+
+
+```sql
+select * from stu;
+```
+
+11. 只查看name字段
+
+
+```sql
+select name from stu;
+```
+
+12. 将homedir表记录值改为beijing
+
+
+```sql
+date stu set homedir="beijing";
+select * from stu;
+```
+
+13. 删除表记录
+
+```sql
+delete from stu;
+```
+
+14. 删除stu表
+
+```sql
+drop table stu;
+```
+
+### 案例3：练习数据类型的使用
+1. 根据如下的表结构创建对应的表并插入记录
+
+表-1
+
+| Field    | Type        | Null | Key | Default | Extra |
+| -- | -- | -- | -- | -- | -- |
+| name     | char(5)     | YES  |     | NULL    |       |
+| mail     | varchar(10) | YES  |     | NULL    |       |
+| homeaddr | varchar(50) | YES  |     | NULL    |       |
+
+
+表-2
+
+| Field   | Type       | Null | Key | Default | Extra |
+| -- | -- | -- | -- | -- | -- |
+| stu_num | int(11)    | YES  |     | NULL    |       |
+| name    | char(5)    | YES  |     | NULL    |       |
+| age     | tinyint(4) | YES  |     | NULL    |       |
+| pay     | float      | YES  |     | NULL    |       |
+| money   | float(5,2) | YES  |     | NULL    |       |
+
+表-3
+
+| Field     | Type     | Null | Key | Default | Extra |
+| -- | -- | -- | -- | -- | -- |
+| name      | char(10) | YES  |     | NULL    |       |
+| you_start | year(4)  | YES  |     | NULL    |       |
+| up_time   | time     | YES  |     | NULL    |       |
+| birthday  | date     | YES  |     | NULL    |       |
+| party     | datetime | YES  |     | NULL    |       |
+
+表-4
+
+| Field | Type | Null | Key | Default | Extra |
+| -- | -- | -- | -- | -- | -- |
+| name  | char(5) | YES  |     | NULL    |       |
+| likes | set('cat','game','film','music') | YES  |     | NULL    |       |
+| sex   | enum('boy','girl','no') | YES  |     | NULL    |       |
+
+注：表3插入记录要求如下：
+1. 所有字段值自定义
+
+    ```sql
+    create table b1(name char(5), mail varchar(10), homeaddr varchar(50));
+    create table b2(stu_num int(11), name char(5), age tinyint(4), pay float, money float(5,2));
+    create table b3(name char(10), you_start year(4), up_time time, birthday date, party datetime);
+    create table b4(name char(5), likes set(`cat`,`game`,`film`,`music`), sex enum(`boy`,`girl`,`no`));
+    ```
+
+2. 用时间函数进行赋值
+
+    ```sql
+    insert into b3 values('tom', year(now()), time(now()), curdate(), now());
+    ```
+
+### 案例4：表结构练习
+1. 按照表结构创建如下表，并插入记录
+
+    ```sql
+    create table b5(class char(9) DEFAULT NULL, name char(10) NOT NULL DEFAULT '', age tinyint(4) NOT NULL DEFAULT 19, likes set('a','b','c','d') DEFAULT 'a,b');
+    ```
+
+2. 只给class字段和name字段赋值
+
+    ```sql
+    insert into b5(class,name) values('class1','name1');
+    ```
+
+3. 在age字段后面添加字段值为性别（sex），默认值为boy
+
+    ```sql
+    alter table b5 add sex enum('boy', 'girl') default 'boy' after age;
+    ```
+
+4. 在表最前面添加学号（stu_id）字段
+
+    ```sql
+    alter table b5 add stu_id int(11) first;
+    ```
+
+5. 添加邮箱（email）字段，该字段不允许为空，默认值tarena@tedu.cn
+
+    ```sql
+    alte b5 add email varchar(30) not null default 'tarena@tedu.cn';
+    ```
+
+6. 修改sex字段类型，默认值为man
+
+    ```sql
+    alter table b5 modify sex enum('man','boy','girl') default 'man' after age;
+    desc b5;
+    ```
+
+7. 将email字段移到age字段后面，其他属性不变
     
+    ```sql
+    alter table b5 modify email varchar(30) not null default 'tarena@tedu.cn' after age;
+    ```
+
+8. 删除表字段email和stu_id
+
+    ```sql
+    alter table b5 drop email,drop stu_id;
+    ```
+
+9. 将该表名改为abc
+
+    ```sql
+    rename table b5 to abc;
+    ```
     
     
     
