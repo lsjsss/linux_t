@@ -3824,10 +3824,11 @@ add 字段名 类型(宽度) 约束条件 [after 字段名 | first];
 desc t1;
 alter table t1 add email varchar(30) not null default "stu@tedu.cn";
 desc t1;     —-  email字段在最下方
-select * from t1; # t1表中的数据也会多出一行，值为默认值
-
+select * from t1;     —- t1表中的数据也会多出一行，值为默认值
+```
 
 向 t1 表的最前面插入一个字段 stu_id, 约束条件采用默认系统设置
+
 ```sql
 alter table t1 add stu_id char(9) first;
 desc t1;     —-  stu_id字段位于表的首位
@@ -3835,56 +3836,117 @@ select * from t1;     —-  stu_id没有指定默认值，默认为NULL
 ```
 
 在 t1 表中的 name 字段后，插入一个新字段 sex，类型为枚举类型，默认值为：boy
+
 ```sql
 alter table t1 add sex enum("boy", "girl") default "boy" after name;
-desc t1; # sex字段位于name字段的后面
-select * from t1; #多出一列sex,默认值为boy
+desc t1;     —-  sex字段位于name字段的后面
+select * from t1;     —- 多出一列sex,默认值为boy
 ```
 
-#### 修改字段类型
-修改 t1 表的 sex 字段，设置默认值为 man
+### 修改字段类型
+
+#### 基本用法
+
+ - 修改的字段类型不能与已存储的数据冲突
+
 ```sql
-alter table t1 modify sex enum("man", "woman") default "man";#修改失败，字
-段里需要包含原表中的数据类型boy,否则冲突
-mysql> alter table t1 modify sex enum("man", "woman", "boy") default "man"; #修改
-成功，sex字段中存在和表中数据相同的类型'boy'5
-mysql> desc t1;
+alter table 库名.表名
+modify 字段名 类型(宽度) 约束条件 after 字段名 | first];
+```
+
+
+修改 t1 表的 sex 字段，设置默认值为 man
+
+```sql
+alter table t1 modify sex enum("man", "woman") default "man";#修改失败，字段里需要包含原表中的数据类型boy,否则冲突
+alter table t1 modify sex enum("man", "woman", "boy") default "man"; #修改成功，sex字段中存在和表中数据相同的类型'boy'5
+desc t1;
+```
+
 修改 t1 表中的 name 字段类型，修改为 varchar(15)
-mysql> desc t1;
-mysql> alter table t1 modify name varchar(15);
-mysql> desc t1;
-使用 modefy 实现字段值的位置调换
+
+```sql
+desc t1;
+alter table t1 modify name varchar(15);
+desc t1;
+```
+
+##### 使用 modefy 实现字段值的位置调换
+
 将 email 字段移到 sex 字段的后面
-mysql> alter table t1 modify email varchar(30) not null default "stu@tedu.cn" after
-sex;
-mysql> desc t1;
-mysql> select * from t1; #数据不发生变化
-2.4 删除字段
+
+
+alter table t1 modify email varchar(30) not null default "stu@tedu.cn" after sex;
+desc t1;
+select * from t1; #数据不发生变化
+
+
+### 删除字段
+#### 基本用法
+- 表中有多条记录时，所有列的此字段的值都会被删除
+    
+```sql
+after table 库名.表名 drop 字段名;
+```
+
+
 删除 t1 表中的字段 stu_id
-mysql> select * from t1;
-mysql> alter table t1 drop stu_id;
-mysql> select * from t1;
-mysql> desc t1;
+
+```sql
+select * from t1;
+alter table t1 drop stu_id;
+select * from t1;
+desc t1;
+```
+
 删除 t1 表中的多个字段(email 和 party)
-mysql> alter table t5 drop email,drop party;6
-2.5 修改字段名
+
+```sql
+alter table t5 drop email,drop party;6
+```
+
+### 修改字段名
+#### 基本用法
+
+```sql
+after table 库名.表名 change 原字段名 新字段名 类型 约束条件;
+```
+
+
 修改 t1 表中 s_year 的字段名，使用 change 命令将字段 s_year 的名字改为 abc
-mysql> alter table t1 change s_year abc year;
-2.6 修改表名
+
+```sql
+alter table t1 change s_year abc year;
+```
+
+
+### 修改表名
+#### 基本用法
+ - 表对应的文件名，也被改变
+ - 表记录不受影响
+
+```sql
+after table 表名 rename 新表名;
+```
+
 使用rename命令来修改t5表的表名为stuinfo
-mysql> alter table t1 rename stuinfo;
-mysql> show tables;
-3. Mysql 键值概述
+
+```sql
+alter table t1 rename stuinfo;
+show tables;
+```
 
 
+## Mysql 键值概述
 
+根据数据存储要求，选择键值
 
-
-
-
-
-
-
+| index | 普通索引 |
+| —- | —- |
+| unique | 唯一索引 |
+| fulltext | 全文索引 |
+| primary key | 主键 |
+| foreign key | 外键 |
 
 
 
