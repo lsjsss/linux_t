@@ -3581,9 +3581,10 @@ select * from t3;3
 
 ##### 浮点型：存储有小数点的数
 
-类型 | 名称 | 有符号范围 | 无符号范围
-float | 单精度 | -3.402823466E+38到1.175494351E-38 | -1.175494351E-38到3.402823466E+38
-double | 双精度 | -1.7976931348623157E+308到2.2250738585072014E-308 | -22250738585072014E-308 到1.7976931348623157E+308
+| 类型 | 名称 | 有符号范围 | 无符号范围 |
+| —- | —- | —- | —- |
+| float | 单精度 | -3.402823466E+38到1.175494351E-38 | -1.175494351E-38到3.402823466E+38 |
+| double | 双精度 | -1.7976931348623157E+308到2.2250738585072014E-308 | -22250738585072014E-308 到1.7976931348623157E+308 |
 
 ```sql
 float(7,2)  -- 7 指整个浮点数的最大位数，2 指 7 位数字中有两位是小数位, 则取值范围 为：
@@ -3591,20 +3592,23 @@ float(7,2)  -- 7 指整个浮点数的最大位数，2 指 7 位数字中有两�
 float(5,3)     -- 5 指整个浮点数的最大位数，3 指 5 位数字中有三位是小数位, 则取值范围为：-
 99.999 ~ 99.999
 float(数字 1,数字 2)    -- 数字 1：总的位数 数字 2：小数位的个数
+```
+
+```sql
 create table t4(name char(10), pay float(5,2));
 insert into t4 values("john", 1000.88); -- 失败，超出范围
 insert into t4 values("john", 999.88);  -- 成功
 insert into t4 values("john", -999.99); -- 成功
 select * from t4;
 insert into t4 values("john3", 218);    -- 存储整数，小数位默认补0
-
+```
 
 ### 日期时间类型
-#### 类型格式4
+#### 类型格式
 
 创建与日期时间相关的表，指定名称，年份，上课时间，生日，聚会时间
 
-```shell
+```sql
 create table t5(name char(15), s_year year, uptime time, birthday date, party datetime);
 insert into t5 values("bob", 1990,083000, 20231120, 20230214183000);
 select * from t5;
@@ -3614,193 +3618,263 @@ select * from t5;
 
 
 ```sql
-select curtime(); #获取当前的系统时间
-select curdate(); #获取当前的系统日期5
-select now(); #获取当前的系统日期和系统时间
-select year(now()); #从当前系统时间中只取出年份
-select month(now()); #从当前系统时间中只取出月份
-select day(now()); #从当前系统时间中只取出天数
-select date(now()); #从当前系统时间中只取出年月日
-select time(now()); #从当前系统时间中只取出时分秒
-根据时间函数在 t5 表中插入一条数据
-mysql> insert into t5 values("tom",2000,time(now()),curdate(),now());
-mysql> select * from t5;
-1.4.3 日期时间字段 datetime 与 timestamp 的区别
-关于日期时间字段：当未给 timestamp 字段赋值时，自动以当前系统时间赋值，而 datetime
-值为 NULL（空）
-创建 t6 表，指定姓名，约会时间，聚会时间，验证 timestamp 和 datetime 的区别
-mysql> create table t6(name char(10), meetting datetime, party timestamp);
-mysql> insert into t6 values("bob", now(), now()); #两个字段都有值
-mysql> select * from t6;
-t6 表中重新插入一条数据，只插入 name 和 metting 字段的值，party 字段采用默认值
-mysql> insert into t6(name,meetting) values("bob", 20231120224058);
-mysql> select * from t6; #party字段同样有值，字段类型为timestamp，用当前系统时间
-t6 表中重新插入一条数据，只插入 name 和 party 字段的值，meetting 字段采用默认值
-mysql> insert into t6(name,party) values("john", 19731001223000 );
-mysql> select * from t6; # meetting字段类型为datetime，没有指定时间，默认为空
-NULL)
-1.4.4 year 类型
+select curtime();     —- 获取当前的系统时间
+select curdate();     —- 获取当前的系统日期5
+select now();     —- 获取当前的系统日期和系统时间
+select year(now());     —- 从当前系统时间中只取出年份
+select month(now());     —- 从当前系统时间中只取出月份
+select day(now());     —- 从当前系统时间中只取出天数
+select date(now());     —- 从当前系统时间中只取出年月日
+select time(now());     —- 从当前系统时间中只取出时分秒
+```
+
+```sql
+—- 根据时间函数在 t5 表中插入一条数据
+insert into t5 values("tom",2000,time(now()),curdate(),now());
+select * from t5;
+```
+
+### 日期时间字段 datetime 与 timestamp 的区别
+
+关于日期时间字段：当未给timestamp字段赋值时，自动以当前系统时间赋值，而datetime值为NULL（空）
+
+```sql
+—- 创建 t6 表，指定姓名，约会时间，聚会时间，验证 timestamp 和 datetime 的区别
+create table t6(name char(10), meetting datetime, party timestamp);
+insert into t6 values("bob", now(), now());     —- 两个字段都有值
+select * from t6;
+```
+
+```sql
+—- t6 表中重新插入一条数据，只插入 name 和 metting 字段的值，party 字段采用默认值
+insert into t6(name,meetting) values("bob", 20231120224058);
+select * from t6;    —- party字段同样有值，字段类型为timestamp，用当前系统时间
+```
+
+```sql
+—- t6 表中重新插入一条数据，只插入 name 和 party 字段的值，meetting 字段采用默认值
+insert into t6(name,party) values("john", 19731001223000 );
+select * from t6;     —- meetting字段类型为datetime，没有指定时间，默认为空NULL)
+```
+
+
+### year 类型
+
 要求使用 4 位赋值6
+
 当使用 2 位数赋值时：01-99
+
 01 ~ 69 视为 2001 ~ 2069
+
 70 ~ 99 视为 1970 ~ 1999
-插入数据，只给 t5 表中的 s_year 字段赋值
-mysql> show tables;
-mysql> desc t5;
-mysql> select s_year from t5;
-mysql> insert into t5(s_year) values(03),(81);
-mysql> select s_year from t5; #查看t5表中s_year字段的数据，验证结果
-1.5 枚举类型
+
+
+```sql
+—- 插入数据，只给 t5 表中的 s_year 字段赋值
+show tables;
+desc t5;
+select s_year from t5;
+insert into t5(s_year) values(03),(81);
+select s_year from t5;     —- 查看t5表中s_year字段的数据，验证结果
+```
+
+### 枚举类型
+
 字段的值不能自己输入，必须在设置的范围内选择(有单选和多选之分)
-1.5.1 enum 单选
+
+#### enum 单选
+
 格式：字段名 enum（值 1，值 2，值 N）
+
 仅能在列表里选择一个值
-1.5.2 set 多选
+
+
+### set 多选
+
 格式：字段名 set(值 1，值 2，值 3)
+
 在列表里选择一个或多个值
-创建 t7 表，指定字段：姓名(name)，性别(sex)，爱好(likes)
-mysql> create table t7(name char(15), sex enum("boy", "girl", "no"), likes set("eat",
-"money", "game", "music"));
-mysql> desc t7;
-mysql> insert into t7 values('bob','boy','eat,game,music'); #成功
-mysql> select * from t7;7
-mysql> insert into t7 values('bob','man','girl,book'); #字段sex的类型中没有man,
-存储失败
-mysql> insert into t7 values('bob','no','girl,book'); #字段likes的类型中没有girl和
-book,存储失败，使用类型enum(单选)，set(多选)，值必须在其范围之内
-1.6 课后练习
-创建一个员工信息表为 stuinfo，表字段要求如下：（对应字段的数据类型自己考虑，表字段
-顺序没要求）
---员工 ID 号，姓名，年龄，性别，身高，出生日期，邮箱，手机号，入职时间，爱好，通信
-地址，学历，婚姻，工资，上班时
+
+```sql
+—- 创建 t7 表，指定字段：姓名(name)，性别(sex)，爱好(likes)
+create table t7(name char(15), sex enum("boy", "girl", "no"), likes set("eat","money", "game", "music"));
+desc t7;
+insert into t7 values('bob','boy','eat,game,music');     —- 成功
+Select * from t7;7
+insert into t7 values('bob','man','girl,book');     —- 字段sex的类型中没有man,存储失败
+insert into t7 values('bob','no','girl,book');     —- 字段likes的类型中没有girl和book,存储失败，使用类型enum(单选)，set(多选)，值必须在其范围之内
+
+## 约束条件：
+### 作用
+
+限制字段赋值
+
+```sql
+desc t1;
+
+Null Key Default Extra     —- 这四列为约束条件
+Null     —- 指是否允许为字段赋空值；
+         —-  YES，允许给字段赋空值，默认也是允许赋空值；
+         —-  NO， 不允许给字段赋空值；
+Key：键值
+Default    —- 当不给字段赋值时，则使用默认值，初始默认值为 NULL，可以修改
+Extra     —- 额外的设置, 例如：可以设置学号为自动增长的
+
+### 设置约束条件
+
+| null | 允许为空（默认设置） |
+| —- | —- |
+| not null | 不允许为 null（空）|
+| key | 键值类型 |
+| default | 设置默认值，缺省为 NULL |
+| extra | 额外设置 |
 
 
 
+#### 环境准备：
 
-            目录
-            1. 约束条件：............................................................................................................................. 1
-            1.1 作用.................................................................................................................................. 1
-            1.2 设置约束条件.................................................................................................................. 1
-            2. 修改表结构：......................................................................................................................... 3
-            2.1 语法结构：......................................................................................................................... 3
-            2.2 添加新字段...................................................................................................................... 3
-            2.3 修改字段类型.................................................................................................................. 4
-            2.4 删除字段.......................................................................................................................... 5
-            2.5 修改字段名...................................................................................................................... 6
-            2.6 修改表名.......................................................................................................................... 6
-            3. Mysql 键值概述：................................................................................................................. 61
-            1. 约束条件：
-            1.1 作用
-            限制字段赋值
-            mysql> desc t1;
-            Null Key Default Extra #这四列为约束条件
-            Null #指是否允许为字段赋空值；
-            #YES，允许给字段赋空值，默认也是允许赋空值；
-            #NO， 不允许给字段赋空值；
-            Key：键值
-            Default #当不给字段赋值时，则使用默认值，初始默认值为 NULL，可以修改
-            Extra #额外的设置, 例如：可以设置学号为自动增长的
-            1.2 设置约束条件
-            null 允许为空（默认设置）
-            not null 不允许为 null（空）
-            key 键值类型
-            default 设置默认值，缺省为 NULL
-            extra 额外设置
-            环境准备：
-            mysql> create database test;
-            mysql> use test;
-            mysql> create table t1(name char(15), s_year year, uptime time, birthday date, party
-            datetime);2
-            mysql> insert into t1 values("bob", 1990,083000, 20231120, 20230214183000);
-            mysql> insert into t1 values("tom",2000,time(now()),curdate(),now());
-            mysql> insert into t1(s_year) values(03),(81);
-            mysql> select * from t1;
-            mysql> create table t2(name char(15), sex enum("boy", "girl", "no"), likes set("eat",
-            "money", "game", "music"));
-            mysql> desc t2;
-            验证约束条件 Null,可以给字段赋空值
-            mysql> insert into t2 values ('bob','boy','eat,game');
-            mysql> select * from t2;
-            mysql> insert into t2 values (null,null,null); #t2表中可以插入null（没有数据）
-            mysql> select * from t2;
-            mysql> insert into t2(name) values ('tom'); #只给name字段赋值，其他字段会使用默认
-            值赋值
-            mysql> select * from t2;
-            建表时指定字段值不为空和设置默认值
-            mysql> create table t3( name char(10) not null, age tinyint unsigned default 18, class
-            char(8) not null default 'NSD2006');
-            mysql> desc t3;
-            mysql> insert into t3(name) values("john");#只插入name字段，则其他字段采用默认值
-            mysql> select * from t3;
-            向 t3 表中插入数据，所有字段自己定义，可以不使用默认值
-            mysql> insert into t3 values("tom", 29, "nsd2003");
-            mysql> select * from t3;
-            验证 null 值和"null"值
-            #null 指的是没有任何的数据3
-            #"null" 指的是有数据，但数据的内容为"null"
-            mysql> desc t3;
-            mysql> insert into t3 values(null,null,null); #name字段不能为空，存储失败
-            mysql> insert into t3 values("null",null,null); #给name字段加引号，不代表
-            空值，而是代表字符串，存储失败，class 字段不能为空
-            mysql> insert into t3 values("null",null,""); #class字段直接加引号，不为空，是0个字符
-            mysql> select * from t3;
-            2. 修改表结构：
-            2.1 语法结构：
-            用法： mysql> alter table 库名.表名 执行动作;
-            执行动作：
-            add：添加新字段
-            modify：修改字段类型
-            drop：删除字段
-            change：修改字段名
-            rename：修改表名
-            2.2 添加新字段4
-            向 t1 表中插入一个字段 email, 不为空，默认值为"stu@tedu.cn"，不指定表字段的位置，默
-            认会插入到表的最后
-            mysql> desc t1;
-            mysql> alter table t1 add email varchar(30) not null default "stu@tedu.cn";
-            mysql> desc t1; #email字段在最下方
-            mysql> select * from t1; # t1表中的数据也会多出一行，值为默认值
-            向 t1 表的最前面插入一个字段 stu_id, 约束条件采用默认系统设置
-            mysql> alter table t1 add stu_id char(9) first;
-            mysql> desc t1; # stu_id字段位于表的首位
-            mysql> select * from t1; # stu_id没有指定默认值，默认为NULL
-            在 t1 表中的 name 字段后，插入一个新字段 sex，类型为枚举类型，默认值为：boy
-            mysql> alter table t1 add sex enum("boy", "girl") default "boy" after name;
-            mysql> desc t1; # sex字段位于name字段的后面
-            mysql> select * from t1; #多出一列sex,默认值为boy
-            2.3 修改字段类型
-            修改 t1 表的 sex 字段，设置默认值为 man
-            mysql> alter table t1 modify sex enum("man", "woman") default "man";#修改失败，字
-            段里需要包含原表中的数据类型boy,否则冲突
-            mysql> alter table t1 modify sex enum("man", "woman", "boy") default "man"; #修改
-            成功，sex字段中存在和表中数据相同的类型'boy'5
-            mysql> desc t1;
-            修改 t1 表中的 name 字段类型，修改为 varchar(15)
-            mysql> desc t1;
-            mysql> alter table t1 modify name varchar(15);
-            mysql> desc t1;
-            使用 modefy 实现字段值的位置调换
-            将 email 字段移到 sex 字段的后面
-            mysql> alter table t1 modify email varchar(30) not null default "stu@tedu.cn" after
-            sex;
-            mysql> desc t1;
-            mysql> select * from t1; #数据不发生变化
-            2.4 删除字段
-            删除 t1 表中的字段 stu_id
-            mysql> select * from t1;
-            mysql> alter table t1 drop stu_id;
-            mysql> select * from t1;
-            mysql> desc t1;
-            删除 t1 表中的多个字段(email 和 party)
-            mysql> alter table t5 drop email,drop party;6
-            2.5 修改字段名
-            修改 t1 表中 s_year 的字段名，使用 change 命令将字段 s_year 的名字改为 abc
-            mysql> alter table t1 change s_year abc year;
-            2.6 修改表名
-            使用rename命令来修改t5表的表名为stuinfo
-            mysql> alter table t1 rename stuinfo;
-            mysql> show tables;
-            3. Mysql 键值概述
+```sql
+create database test;
+use test;
+create table t1(name char(15), s_year year, uptime time, birthday date, party datetime);2
+insert into t1 values("bob", 1990,083000, 20231120, 20230214183000);
+insert into t1 values("tom",2000,time(now()),curdate(),now());
+insert into t1(s_year) values(03),(81);
+select * from t1;
+create table t2(name char(15), sex enum("boy", "girl", "no"), likes set("eat","money", "game", "music"));
+desc t2;
+```
+
+
+#### 验证约束条件 Null,可以给字段赋空值
+
+```sql
+insert into t2 values ('bob','boy','eat,game');
+select * from t2;
+insert into t2 values (null,null,null);     —-  t2表中可以插入null（没有数据）
+select * from t2;
+insert into t2(name) values ('tom');     —- 只给name字段赋值，其他字段会使用默认值赋值
+select * from t2;
+```
+
+#### 建表时指定字段值不为空和设置默认值
+
+```sql
+create table t3( name char(10) not null, age tinyint unsigned default 18, class char(8) not null default 'NSD2006');
+desc t3;
+insert into t3(name) values("john");     —- 只插入name字段，则其他字段采用默认值
+select * from t3;
+```
+
+
+#### 向t3表中插入数据，所有字段自己定义，可以不使用默认值
+
+```sql
+insert into t3 values("tom", 29, "nsd2003");
+select * from t3;
+```
+
+#### 验证 null 值和"null"值
+
+null 指的是没有任何的数据3
+"null" 指的是有数据，但数据的内容为"null"
+
+```sql
+desc t3;
+insert into t3 values(null,null,null);     —-  name字段不能为空，存储失败
+insert into t3 values("null",null,null);     —- 给name字段加引号，不代表空值，而是代表字符串，存储失败，class 字段不能为空
+insert into t3 values("null",null,"");     —-  class字段直接加引号，不为空，是0个字符
+select * from t3;
+```
+
+### 修改表结构：
+#### 语法结构：
+
+##### 用法：
+```sql
+alter table 库名.表名 执行动作;
+```
+
+#### 执行动作：
+
+> add：添加新字段
+>
+> modify：修改字段类型
+>
+> drop：删除字段
+>
+> change：修改字段名
+>
+> rename：修改表名
+
+
+### 添加新字段
+
+#### 用法
+    —- 新字段默认添加在字段末尾
+```sql
+alter table 库名.表名
+add 字段名 类型(宽度) 约束条件 [after 字段名 | first];
+```
+
+
+向 t1 表中插入一个字段 email, 不为空，默认值为"stu@tedu.cn"，不指定表字段的位置，默认会插入到表的最后
+
+```sql
+desc t1;
+alter table t1 add email varchar(30) not null default "stu@tedu.cn";
+desc t1;     —-  email字段在最下方
+select * from t1; # t1表中的数据也会多出一行，值为默认值
+
+
+向 t1 表的最前面插入一个字段 stu_id, 约束条件采用默认系统设置
+```sql
+alter table t1 add stu_id char(9) first;
+desc t1;     —-  stu_id字段位于表的首位
+select * from t1;     —-  stu_id没有指定默认值，默认为NULL
+```
+
+在 t1 表中的 name 字段后，插入一个新字段 sex，类型为枚举类型，默认值为：boy
+```sql
+alter table t1 add sex enum("boy", "girl") default "boy" after name;
+desc t1; # sex字段位于name字段的后面
+select * from t1; #多出一列sex,默认值为boy
+```
+
+#### 修改字段类型
+修改 t1 表的 sex 字段，设置默认值为 man
+```sql
+alter table t1 modify sex enum("man", "woman") default "man";#修改失败，字
+段里需要包含原表中的数据类型boy,否则冲突
+mysql> alter table t1 modify sex enum("man", "woman", "boy") default "man"; #修改
+成功，sex字段中存在和表中数据相同的类型'boy'5
+mysql> desc t1;
+修改 t1 表中的 name 字段类型，修改为 varchar(15)
+mysql> desc t1;
+mysql> alter table t1 modify name varchar(15);
+mysql> desc t1;
+使用 modefy 实现字段值的位置调换
+将 email 字段移到 sex 字段的后面
+mysql> alter table t1 modify email varchar(30) not null default "stu@tedu.cn" after
+sex;
+mysql> desc t1;
+mysql> select * from t1; #数据不发生变化
+2.4 删除字段
+删除 t1 表中的字段 stu_id
+mysql> select * from t1;
+mysql> alter table t1 drop stu_id;
+mysql> select * from t1;
+mysql> desc t1;
+删除 t1 表中的多个字段(email 和 party)
+mysql> alter table t5 drop email,drop party;6
+2.5 修改字段名
+修改 t1 表中 s_year 的字段名，使用 change 命令将字段 s_year 的名字改为 abc
+mysql> alter table t1 change s_year abc year;
+2.6 修改表名
+使用rename命令来修改t5表的表名为stuinfo
+mysql> alter table t1 rename stuinfo;
+mysql> show tables;
+3. Mysql 键值概述
 
 
 
