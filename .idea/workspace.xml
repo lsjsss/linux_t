@@ -7,7 +7,6 @@
   <component name="ChangeListManager">
     <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="4.23 update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +34,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/数据库" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/数据库开发技术" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -49,6 +48,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\githubgit\linux_t\数据库开发技术" />
       <recent name="F:\githubgit\linux_t\数据库" />
       <recent name="F:\githubgit\linux_t\云计算网络应用管理" />
     </key>
@@ -70,6 +70,8 @@
       <workItem from="1623247325312" duration="628000" />
       <workItem from="1623298567233" duration="1219000" />
       <workItem from="1623301966869" duration="895000" />
+      <workItem from="1623370032116" duration="226000" />
+      <workItem from="1623552086532" duration="1087000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -106,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1623298637045</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="6.11 update">
+      <created>1623370256554</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1623370256554</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,7 +137,8 @@
     <MESSAGE value="4.7" />
     <MESSAGE value="6.8 update sql D1" />
     <MESSAGE value="6.10 update" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.10 update" />
+    <MESSAGE value="6.11 update" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.11 update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
@@ -167,11 +177,11 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1623298639056">
-      <screen x="0" y="0" width="1552" height="996" />
+    <state x="398" y="236" key="Vcs.Push.Dialog.v2" timestamp="1623370258723">
+      <screen x="0" y="0" width="1680" height="1020" />
     </state>
     <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623298639056" />
-    <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623201822742" />
+    <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623370258723" />
     <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623198343666">
       <screen x="0" y="0" width="1680" height="1020" />
     </state>
