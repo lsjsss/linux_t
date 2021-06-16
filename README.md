@@ -4168,8 +4168,1184 @@ select * from gz;
 
 
 
+---
+echo A.tedu.cn > /etc/hostname
+cat /etc/hostname
+hostname A.tedu.cn
+exit
+nmcli connection  modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes
+nmcli connection up ens33 
+
+为本机第一张网卡添加ip地址 192.168.100.1、24
+ip address add 192.168.100.1/24 dev ens33
+
+利用ip命令添加路由，去往200.0.0.0/24 下一跳为192.168.100.10
+ip route add 200.0.0.0/24 via 192.168.100.10 dev ens33
+
+安装vsftpd软件包
+yum -y install vsftpd
+
+启动vsftpd服务 （systemctl restart vsftpd）
+systemctl restart vsftpd
+
+查看vsftpd服务监听的端口号
+netstat -anptu |grep vsftpd
+
+将tools.tar.gz包传到虚拟机A
+	ls
+
+将tools.tar.gz解压到/tools文件夹下
+mkdir /tools
+tar  -xf /root/tools.tar.gz -C /tools
 
 
+源码编译安装inotify-tools-3.13tar.gz，安装位置为/opt/abc
+createrepo /tools/tools/other/
+ls /tools/tools/
+ls /tools/tools/other/
+mount /dev/cdrom /mnt
+vim /etc/yum.repos.d/mnt.repo
+
+[mnt]
+name=1
+enabled=1
+gpgcheck=0
+baseurl=file:///mnt
+
+[mmmmmnt]
+name=1
+enabled=1
+gpgcheck=0
+baseurl=file:///tools/tools/other
+
+rm -rf /etc/yum.repos.d/C*
+ls /etc/yum.repos.d/
+yum clean all
+yum repolist 
+tar -xf /tools/tools/
+tar -xf /tools/tools/inotify-tools-3.13.tar.gz -C /opt
+cd /opt/inotify-tools-3.13/
+yum -y install gcc
+yum -y install make
+./configure --prefix=/opt/abc
+make
+make install
+ls /opt/abc/
+
+
+在虚拟机A上构建ftp服务
+安装vsftpd软件包
+yum -y install vsftpd
+
+查看有没有安装httpd
+rpm -p httpd
+
+启动httpd服务
+systemctl start httpd
+
+测试
+firefox http://192.168.4.10
+vim /var/www/html/index.html
+<marquee> <font color=red> <h1> i an king.
+
+firefox http://192.168.4.10
+yum -y install elinks
+elinks http://192.168.4.10
+elinks --dump http://192.168.4.10
+curl http://192.168.4.10
+
+
+启动vsftpd服务
+systemctl start vsftpd
+
+测试
+firefox ftp://192.168.4.10
+touch /var/ftp/a.txt
+firefox ftp://192.168.4.10
+
+关闭虚拟机A的selinux
+vim /etc/selinux/config 
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - SELinux security policy is enforced.
+#     permissive - SELinux prints warnings instead of enforcing.
+#     disabled - No SELinux policy is loaded.
+
+SELINUX=disabled
+
+# SELINUXTYPE= can take one of three two values:
+#     targeted - Targeted processes are protected,
+#     minimum - Modification of targeted policy. Only selected processes are protected. 
+#     mls - Multi Level Security protection.
+SELINUXTYPE=targeted 
+
+
+
+查看防火墙默认区域
+firewall-cmd --get-default-zone  
+
+svr7  ping 192.168.4.10	可以ping通
+        curl http://192.168.4.10  	拒绝访问
+        curl ftp://192.168.4.10	拒绝访问
+
+修改防火墙默认区域为trusted  		允许任何访问 （关闭防火墙）
+firewall-cmd --set-default-zone=trusted
+firewall-cmd --get-default-zone
+
+svr7  ping 192.168.4.10              可以ping通
+        curl http://192.168.4.10     可以访问
+        curl ftp://192.168.4.10 	可以访问
+
+修改防火墙默认区域为block		阻塞任何来访请求
+firewall-cmd --set-default-zone=block
+firewall-cmd --get-default-zone
+
+svr7  不可以ping通    但是有回应
+
+修改防火墙默认区域为drop  	丢弃任何来访数据包
+firewall-cmd --set-default-zone=drop
+firewall-cmd --get-default-zone
+
+不可以ping通，没有回应
+
+设置允许http协议通过public区域
+A  firewall-cmd --zone=public --add-service=http
+A  firewall-cmd --zone=public --list-all
+
+sev7  curl http://192.168.4.10
+          123	
+
+设置允许ftp协议通过public区域
+A    firewall-cmd --zone=public --add-service=ftp
+A    firewall-cmd --zone=public --list-all
+
+ser7  curl ftp://192.168.4.10
+
+
+永久设置允许ftp协议和http协议通过public区域（永久设置--permanent）
+firewall-cmd --permanent --zone=public --add-service=ftp
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --reload
+firewall-cmd --zone=public --list-all
+
+srv7测试
+curl ftp://192.168.4.10	可以访问
+curl http://192.168.4.10	可以访问
+
+拒绝svr7访问本机所有服务
+firewall-cmd -zone=block -add-source=192.168.4.7
+
+sev7测试
+curl ftp://192.168.4.10	失败
+curl http://192.168.4.10	失败
+
+删除规则
+firewall-cmd -zone=block --remove-source=192.168.4.7
+
+sev7测试
+curl ftp://192.168.4.10	可以访问
+curl http://192.168.4.10	可以访问
+
+
+seten tab   0   宽松
+
+
+
+网络yum
+虚拟机A
+利用web服务共享光盘所有内容，默认共享位置为：/var/www/html
+yum -y install httpd
+systemctl start httpd
+mkdir /var/www/html/nsd
+mount /dev/cdrom /var/www/html/nsd
+firewall-cmd --set-default-zone=trusted
+setenforce 0
+
+sev7
+vim /etc/yum.repos.d/mnt.repo
+[mnt]
+name=Centos7.5
+baseurl=http://192.168.4.10/nsd
+enabled=1
+gpgcheck=0
+firewall-cmd --set-default-zone=teusted
+setenforce 0
+yum clean all
+yun repolist
+
+
+
+构建网络yum
+利用FTP服务实现yum源提供
+1 svr7构建vsftpd服务
+服务器：
+	setenforce 0 
+	getenforce
+	systemctl stop firewalld	关闭防火墙
+	yum -y install vsftpd
+	mkdir /var/ftp/ftpyum
+	mount /dev/cdrom /var/ftp/nsd
+	systemctl start vsftpd
+客户端：
+	setenforce 0
+	getenforce
+	systemctl stop firewalld	关闭防火墙
+	vim /etc/yum.repos.d/mnt.repo
+	[mnt]
+	name=Centos7.5
+	baseurl=ftp://192.168.4.7/nsd
+	enabled=1
+	gpgcheck=0
+
+	yum clean all
+	yum repolist
+2 利用vsftpd服务提供如下内容
+   Centos7光盘内容
+   自定义yum仓库内容
+3 利用pc207进行测试
+
+
+
+
+
+
+高级远程管理
+实现svr7远程管理pc207，无密码验证
+ssh-keygen	生成公私钥
+ls /root/.ssh	--查看	
+ssh-copy-id root@192.168.4.207  --传递公钥
+验证：ssh root@192.168.4.207
+
+将svr7的/home目录拷贝到pc207的/opt目录下
+上传操作：scp -r /home root@192.168.4.207:/opt
+ls /opt
+
+将svr7的/etc/passwd文件拷贝到tom用户的家目录下，以用户tom的密码验证（用户tom密码为redhat）
+ssh root@192.168.4.207
+useradd tom
+echo redhat | passwd --stdin tom
+scp /etc/passwd tom@192.168.4.207:/home/tom
+ls /home/tom
+
+
+
+
+
+
+NTP时间同步
+svr7
+rpm -q chrony
+rpm -qc chrony			查看配置文件
+vim /etc/chrony.conf
+3 #server 0.centos.pool.ntp.org iburst
+4 #server 1.centos.pool.ntp.org iburst
+5 #server 2.centos.pool.ntp.org iburst
+6 #server 3.centos.pool.ntp.org iburst
+26 allow 0.0.0.0/0
+29 local stratum 10
+systemctl restart chronyd
+setenforce 0
+systemctl stop firewalld		关闭防火墙
+
+
+客户端操作pc207
+vim /etc/chrony.conf
+3 #server 192.168.4.7 iburst
+4 #server 1.centos.pool.ntp.org iburst
+5 #server 2.centos.pool.ntp.org iburst
+6 #server 3.centos.pool.ntp.org iburst
+systemctl restart chronyd
+chronys sources -v			出现^*为成功
+
+
+
+
+
+
+查看分区   lsdlk
+分区 fdisk /dev
+n
+p
+
+
+
+
+
+安装服务端软件包targetcli
+svr7   yum -y install targetcli
+
+运行targetcli命令进行配置
+targetcli
+ls
+
+1.创建后端存储
+backstores/block create dev=/dev/sdb1 name=nsd
+ls
+
+2.创建磁盘组target
+iscsi/ create iqn.2019-09.cn.tedu:server
+ls
+
+3.进行lun关联
+iscsi/iqn.2019-09.cn.tedu:server/tpg1/luns create /backstores/block/nsd
+ls
+
+4.设置访问控制（acl）设置 客户端声称的名字
+iscsi/iqn.2019-09.cn.tedu:server/tpg1/acls create iqn.2019-09.cn.tedu:client
+ls />exit
+
+重启服务并加入开机自启
+	systemctl restart target.service
+	systemctl enable target.service
+
+
+
+
+1.安装客户端软件 iscsi-initiator-utils
+pc207   yum -y install iscsi-initiator-utils
+rpm -q iscsi-initiator-utils
+
+2.修改配置文件，指定客户端声称的名字
+pc207 vim /etc/iscsi/initiatorname.iscsi
+InitiatorName=iqn.2019-09.cn.tedu:client
+
+3.重起iscsid服务，仅仅是刷新客户端声称的名字
+pc207 systemctl restart iscsid
+
+4.利用命令发现服务端共享存储
+pc207  man iscsiadm 		#iscsiadm man帮助查看
+全文查找/example 按n向下跳转匹配
+pc207  iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
+
+重启iscsi服务，使用共享存储
+systemctl restart iscsi
+lsblk
+
+
+
+
+
+配置iscsi服务端
+配置svr7提供iscsi服务，磁盘名为iqn.2016-02.com.example:svr7,服务端口为3206，使用store作其后端卷，其大小为3GiB
+配置iscsi客户端
+配置pc207使其能连接上svr7提供的iqn.2016-02.com.example:svr7,iscsi设备在系统启动的期间自动加载，块设备iscsi上包含一个大小为2100MiB的分区，并格式化为ext4
+文件系统 此分区挂载在/mnt/data上，同时在系统启动的期间自动挂载
+
+
+
+
+ISCSI练习
+为svr7添加一块10G硬盘
+在svr7操作，采用MBR分区模式利用/dev/sdb划分一个主分区，大小为5G
+在svr7创建iscsi服务，磁盘名为iqn.2020-05.com.example:server,服务端口号为3260，使用nsd做后端卷，大小为5G
+在pc207上连接使用服务端提供的iqn.2020-05.com.example:server,并且利用共享过来的磁盘划分一个主分区，大小为2G，
+格式化xfs文件系统类型，挂载到/data文件夹下
+
+
+
+构建独立的web服务器：
+服务端svr7操作
+安装httpd软件包
+yum -y install httpd
+书写页面文件内容
+echo abc > /var/www/html/index.html
+启动服务
+systemctl restart httpd 
+
+客户端pc207测试
+curl http://192.168.4.7
+
+服务端操作svr7
+修改主配置文件/etc/httpd/conf/httpd.conf,改变网页文件存放路径
+vim /etc/httpd/conf/httpd.conf
+/DocumentRoot  
+/var/www/myweb
+mkdir /var/www/myweb
+echo wo shi myweb > /var/www/myweb/index.html
+systemctl restart httpd
+
+pc207
+curl http://192.168.4.7
+
+svr7修改配置文件/etc/httpd/conf/httpd.conf,改变监听端口号
+/etc/httpd/conf/httpd.conf
+Listen   8080
+systemctl restart httpd
+netstat -antpu | grep httpd
+
+pc207
+curl http://192.168.4.7
+curl http://192.168.4.7:8080
+
+
+
+对/webapp目录允许任何人访问
+服务端操作svr7
+修改主配置文件/etc/httpd/conf/httpd.conf,改变网页文件存放路径
+vim /etc/httpd/conf/httpd.conf
+/DocumentRoot  
+/webapp
+mkdir /webapp
+echo wo shi myweb > /webapp/index.html
+systemctl restart httpd
+
+pc207
+curl http://192.168.4.7
+
+
+
+服务端操作svr7
+修改主配置文件/etc/httpd/conf/httpd.conf,改变网页文件存放路径
+vim /etc/httpd/conf/httpd.conf
+<Directory  "/webapp">	#新添加
+Require all granted		对/webapp目录允许任何人访问
+</Directory>
+systemctl restart httpd
+
+pc207 curl http://192.168.4.7
+
+
+
+svr7操作
+vim /etc/httpd/conf.d/nsd01.conf
+<VirtualHost *:80>
+	ServerName www.qq.com
+	DocumentRoot /var/www/qq
+</VirtualHost>
+<VirtualHost *:80>
+	ServerName www.baidu.com
+	DocumentRoot /var/www/baidu
+</VirtualHost>
+
+mkdir /var/www/qq /var/www/baidu
+echo "wo shi qq " > /var/www/qq/index.html
+echo "wo shi baidu" > /var/www/baidu/index.html
+systemctl restart httpd
+
+pc207
+vim /etc/hosts
+192.168.4.7 www.qq.com www.baidu.com
+curl www.qq.com
+curl www.baidu.com
+
+
+
+多区域DNS服务
+修改主配置文件，在下面新添加
+svr7
+vim /etc/named.conf
+.....
+
+zone "baidu.com" IN {
+	type master;
+	file "baidu.com.zone";
+};
+
+cp -p /var/named/tedu.cn.zone /var/named/baidu.com.zone
+vim /var/named/baidu.com.zone
+
+.....
+
+baidu.com.	NS svr7
+svr7	A	192.168.4.7
+www	A	10.20.30.40
+
+systemctl restart named
+
+
+pc207
+nslookup www.tedu.cn
+nslookup www.baidu.com
+
+
+泛域名解析
+svr7
+vim /var/named/baidu.com.zone
+.....
+
+*   A  10.20.30.40
+
+systemctl restart named
+
+
+pc207
+nslookup www.baidu.com
+
+
+
+构建DNS服务器
+svr7
+yum -y install bind bind-chroot
+vim /etc/named.conf
+options {
+	directory "/var/named"
+};
+zone "example.com" IN {
+	type master;
+	file "example.com.zone";
+};
+cp -p /var/named/named.localhost /var/named/example.com.zone
+vim /var/named/example.com.zone
+$TTL 1D
+@       IN SOA  @ rname.invalid. (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+example.com.	NS	svr7
+example.com.	MX	10	mail		#MX邮件交换记录，10为第几台邮件服务器
+svr7		A	192.168.4.7
+mail		A	192.168.4.207
+
+systemctl restart named
+
+pc207
+echo nameserver 192.168.4.7 > /etc/resolv.conf
+yum -y install bind-utils
+host -t MX example.com		#查看在example.com域中邮件服务器是谁
+rpm -q postfix
+vim /etc/postfix/main.cf
+
+99 myorigin = example.com
+116 inet_interfaces = all
+164 mydestination = example.com
+
+systemctl restart postfix
+useradd yg
+useradd xln
+yum -y install mailx
+
+mail交互式语法格式：
+mail -s 邮件标题	-r 发件人	  收件人
+mail非交互式语法格式：
+echo  邮件内容 |  mail  -s  邮件标题     -r   发件人   收件人
+
+mail -s 'test01' -r yg xln
+mail -u xln
+echo "yg" | mail -s 'test02' -r yg xln
+mail -u xln
+
+
+分离解析
+svr7
+vim /etc/named.conf
+options {
+	directoy "/var/named"
+};
+view "VIP" {
+	math-clients {192.168.4.207;};
+	zone "tedu.cn" IN {
+	type master;
+	file "tedu.cn.zone";
+};
+};
+view "other" {
+	math-clients {any;};
+	zone "tedu.cn" IN {
+	type master;
+	file "tedu.cn.other";
+};
+};
+cp -p /var/named/named.localhost /var/named/tedu.cn.zone
+vim /var/named/tedu.cn.zone
+.....
+tedu.cn.	NS	svr7
+svr7	A	192.168.4.7
+www	A	192.168.4.100
+cp -p /var/named/tedu.cn.zone /var/named/tedu.cn.other
+vim /var/named/tedu.cn.other
+....
+tedu.cn.	NS	svr7
+svr7	A	192.168.4.7
+www	A	1.2.3.4
+
+systemctl restart named
+
+
+
+搭建PXE服务端
+mount /dev/cdrom /mnt
+vim /etc/yum.repos.d/mnt.repo
+
+[development]
+name=Centos7.5
+enabled=1
+gpgcheck=0
+baseurl=file:///mnt
+
+setenforce 0
+ systemctl stop firewalld.service 
+ rpm -q httpd
+
+ yum -y install httpd
+ yum -y install dhcp
+rpm -q dhcp
+
+ systemctl restart dhcpd
+
+ rpm -q dhcp
+
+ vim /etc/dhcp/dhcpd.conf 
+ systemctl restart dhcpd
+ ss -anptu | grep 67
+ vim /etc/dhcp/dhcpd.conf 
+cat /etc/dhcp/dhcpd.conf
+#
+# DHCP Server Configuration file.
+#   see /usr/share/doc/dhcp*/dhcpd.conf.example
+#   see dhcpd.conf(5) man page
+
+
+subnet 192.168.4.0 netmask 255.255.255.0 {
+  range 192.168.4.100 192.168.4.200;
+  option domain-name-servers 192.168.4.10;
+  option routers 192.168.4.254;
+  default-lease-time 600;
+  max-lease-time 7200;
+  next-server 192.168.4.10;
+  filename "pxelinux.0";
+}
+
+
+
+ systemctl restart dhcpd
+ yum -y install tftp-server.x86_64 
+systemctl restart tftp
+ ss -anptu | head -69
+ yum provides */pxelinux.0
+ yum -y install syslinux
+ rpm -ql syslinux | grep pxelinux.0
+
+
+cp /usr/share/syslinux/pxelinux.0  /var/lib/tftpboot/
+ ls /var/lib/tftpboot/
+
+mkdir /var/lib/tftpboot/pxelinux.cfg
+ ls /var/lib/tftpboot/
+
+ cp /mnt/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
+ls /var/lib/tftpboot/pxelinux.cfg/
+
+ vim /var/lib/tftpboot/pxelinux.cfg/default            
+
+
+
+label linux
+  menu label Install CentOS 7
+  menu default
+  kernel vmlinuz
+  append initrd=initrd.img ks=http://192.168.4.10/ks.cfg 
+
+
+ cp /mnt/isolinux/vesamenu.c32 /mnt/isolinux/splash.png /mnt/isolinux/initrd.img /mnt/isolinux/vmlinuz /var/lib/tftpboot/
+ ls /var/lib/tftpboot/
+
+
+
+ systemctl restart dhcpd
+ systemctl restart tftp
+
+
+ yum -y install httpd
+systemctl restart httpd
+ mkdir /var/www/html/centos
+ mount /dev/cdrom /var/www/html/centos/
+
+ yum -y install system-config-kickstart.noarch 
+ yum -y install system-config-kickstart
+ system-config-kickstart 
+
+
+     	
+
+基本时区	   shanghai
+root密码   A
+确认密码   A
+安装方法   HTTP
+HTTP服务器   192.168.4.10
+HTTP目录	     centos
+引导装载程序选项        安装新引导装载程序
+分区信息      清除主引导记录
+分区信息	   初始化磁盘标签
+分区信息      添加  挂载点：/
+分区信息      添加  使用磁盘上全部未用空间
+网络配置     添加网络配置   网络设备  eth0
+防火墙配置     SELinux：禁用
+软件包选择      系统  基本
+文件   保存
+cp /root/ks.cfg /var/www/html/ks.cfg
+
+systemctl restart dhcpd
+systemctl restart tftp
+ systemctl restart httpd
+
+
+
+
+
+
+
+
+
+
+
+数据库
+数据库
+数据库
+默认端口号  3306
+svr7
+
+
+
+setenforce 0
+systemctl stop firewalld.service 
+tar -xf mysql-5.7.17.tar 
+ls
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+ls /etc/my.cnf
+ls /var/lib/mysql
+systemctl start mysqld
+systemctl enable mysqld		-- enable开机自启
+netstat -anptu | grep :3306
+
+
+链接数据库用初始密码登录
+
+grep password /var/log/mysqld.log
+mysql -uroot -p' '
+mysql>
+show databases;
+alter user root@"localhost" identified by "123qqq...A";
+show databases;
+exit
+
+修改密码策略
+查找相关密码的策略
+mysql>
+show variables like "%password%";		-- 过滤密码字样的，%匹配0个或者多个
+set global validate_password_policy=0;		-- 修改密码策略
+set global validate_password_length=6;		-- 修改密码长度
+alter user root@"localhost" identified by "tarena";
+
+永久修改密码策略
+vim /etc/my.cnf
+[mysqld]
+validate_password_policy=0
+validate_password_length=6
+
+systemctl restart mysqld
+mysql -uroot -ptarena
+mysql>
+alter user root@"localhost" identified by "123456";
+exit
+
+mysql -uroot -p123456
+
+
+链接数据库
+mysql -h服务端ip地址   -u用户名    -p密码 [数据库名]
+
+svr7
+mysql -uroot -p'123456' mysql
+mysql>
+select database();		-- 查看当前在哪个数据库下
+create database bbsdb;	-- 创建库
+create database BBSDB;	
+show databases;		-- 查看库
+drop database BBSDB;	-- 删除库
+use bbsdb;		-- 切换库
+select database();		-- 显示当前所在库
+select user();		-- 显示链接用户
+show tables;		-- 显示已有表
+
+
+mysql>
+use bbsdb;
+Database changed
+
+select database();
+create table user(name char(10),age int, homedir char(20));		-- 创建表
+show tables;
+desc user;			-- 查看表结构
+select * from bbsdb.user;
+select * from user;
+insert into bbsdb.user values("tom",18,"beijing");		-- 插入记录
+select * from user;
+insert into user values ("abc",20,"chifeng");
+select * from user;			--查看添加完成的表
+select name from user;		-- 只查name字段
+select name,age,from user;		-- 只查name和age字段
+
+update bbsdb.user set homedir="china";		-- 更新表数据
+select * from user;
+delete from bbsdb.user;			-- 删除表数据，但表还在
+show tables;
+select * from user;
+drop table bbsdb.user;			-- 删除表
+show tables;
+create table user(name char(10),age int, homedir char(20));
+show tables;
+show create table bbsdb.user\G
+create table 学生表(姓名 char(15),地址 varchar(20)) DEFAULT CHARSET=utf8;	-- 设置字符集为utf8,支持中文
+show tables;
+show tables;
+desc 学生表；
+insert into 学生表 values("张三丰","武当山");
+select * from 学生表;
+
+
+
+
+
+
+案例1：构建mysql服务
+1、虚拟机svr7上构建mysql数据库服务
+
+setenforce 0
+systemctl stop firewalld.service 
+tar -xf mysql-5.7.17.tar 
+ls
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+ls /etc/my.cnf
+ls /var/lib/mysql
+systemctl start mysqld
+systemctl enable mysqld		
+netstat -anptu | grep :3306
+
+
+2、数据库管理员密码设置为tarena
+
+grep password /var/log/mysqld.log
+mysql -uroot -p' '
+mysql>
+show databases;
+alter user root@"localhost" identified by "123qqq...A";
+show databases;
+exit
+show variables like "%password%";		
+set global validate_password_policy=0;		
+set global validate_password_length=6;		
+alter user root@"localhost" identified by "tarena";
+
+
+案例2：数据库基本原理
+  1）使用mysql命令连接数据库，并查看连接用户
+	select user();
+  2）创建数据库名为test
+	create database test;
+  3）在数据库test下创建一个名为stu的表，表记录包含如下内容：
+      学号，姓名，性别，手机号，通信地址  （注：性别用enum类型）
+	create table stu(学号 char(20),姓名 char(15),性别 char(2),手机号 char(20),通信地址 varchar(20)) DEFAULT CHARSET=utf8;
+  4）往stu表里添加如下记录：
+       NSD131201  张三   男    13012345678   朝阳区劲松南路
+       NSD131202  李四   男    18722223333   海淀区北三环西路
+       NSD131203  韩梅梅  女    18023445678   东城区珠市口	
+	
+insert into test.stu values("NSD131201","张三","男",13012345678,"朝阳区劲松南路");
+insert into test.stu values("NSD131202","李四","男",18722223333,"海淀区北三环西路");
+insert into test.stu values("NSD131203","韩梅梅","女",18023445678," 东城区珠市口");
+
+  5）删除stu表记录
+
+delete from bbsdb.user;			
+show tables;
+
+  6）删除stu表
+
+drop table bbsdb.user;
+show tables;
+
+  7）删除test库
+
+drop database test;
+show databases;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tinyint unsigned	(小数四舍五入为整数，正整数）
+tinyint		（整数）
+float(6,2)		(自然数）
+
+
+时间日期字段用法
+
+
+create table t5(name char(10),s_year year,uptime time,birthday date,party datetime);
+desc t5;
+insert into t5 values ('bob',1990,08000,20231120,202030214183000);
+select * from t5;
+select curtime();				--获取当前系统时间
+select curdate();				--获取当前系统日期
+select now();				--获取当前系统日期和时间
+select year(now());				--从当前系统时间中只取出年份
+select month(now());				--从当前系统时间中只取出月份
+select day(now());				--从当前系统时间中只取出天数
+select date(now());				--从当前系统中只取出年月日
+select time(now());				--从当前系统中只取出时分秒
+insert into t5 values ('tom',2000,time(now()),curdate(),now());		--利用时间函数插入表记录
+select * from t5;
+create table t6(name char(10),meeting datetime,party timestamp);
+desc t6;
+insert into t6 values('bob',now(),now());
+select * from t6;
+insert into t6(name,meeting) values ('bob',20230214103000);		--当未给timestamp字段赋值时，自动以当前系统时间赋值
+select * from t6;
+insert into t6(name,party) values ('tom',19730701083000);		--当未给datetime字段赋值时，为NULL（空）
+select * from t6;
+desc t5;
+select s_year from t5;
+insert into t5(s_year) values(03),(81);
+select s_year from t5;
+
+
+
+
+enum  set字段用法
+
+create table t7(name char(10),sex enum('boy','girl'),likes set('eat','money','play','game','music'));
+desc t7;
+insert into t7 values ('bob','boy','eat,money');
+select * from t7;
+
+
+
+insert into t2 values (null,null,null);	--插入全为空
+insert into t2(name) values('tom')	--name字段不为空，其余为空
+
+create table t3(name char(10) not null,age tinyint unsigned default 18,class char(8) not null default 'NSD2006');
+desc t3;
+insert into t3(name) values('zs');
+select * from t3;			--显示name字段，其余自动赋值
+insert into t3 values ('tom',29,'NSD2007');
+select * from t3;			--正常赋值
+insert into t3 values (null,null,null);	--失败，name字段不允许为空
+insert into t3 values ("null",null,null);	--失败，class字段不允许为空
+insert into t3 values ("null",null,"");	--null用引号引起来代表是普通字符，直接加引号，不为空，是0个字符
+select * from t3;
+  
+
+
+desc t1;
+向t1表添加字段email，不指定字段位置，默认插入到表的最后
+alter table t1 add email varchar(30) not null default "stu@tedu.cn";
+desc t1;
+
+
+向t1表最前面添加字段stu_id
+alter table t1 add stu_id char(9) first;
+desc t1;
+
+
+向t1表中name字段后插入新字段sex
+alter table t1 add sex enum('boy','girl') default 'boy' after name;
+desc t1;
+
+
+
+使用modify修改t1表的sex字段，设置默认值为man
+alter table t1 modify sex enum('man','woman','boy')default 'man';	--字段里需要包含原表中的数据类型boy，否则冲突
+desc t1;
+select * from t1;
+desc t1;
+
+
+
+修改t1表中的name字段类型，修改为varchar
+alter table t1 modify name varchar(15);
+desc t1;
+
+
+将email字段移动到sex字段的后面，其他不变
+alter table t1 modify email varchar(30) not null default 'stu@tedu.cn' after sex;
+desc t1;
+select * from t1;		--数据不发生变化
+
+
+
+
+删除t1表中的stu_id字段
+alter table t1 drop stu_id;
+desc t1;
+select * from t1;
+
+
+删除t1表中的多个字段（email和party）
+alter table t1 drop email,drop party;
+desc t1; 
+select * from t1;
+
+
+
+修改t1表的name字段名称改为abc
+desc t1;
+alter table t1 change name abc varchar;
+desc t1;
+
+
+
+将t1表重命名为stuinfo
+alter table t1 rename stuinfo;
+show tables;
+desc stuinfo;
+
+
+
+
+index  		普通索引
+unique 		唯一索引
+fulltext  		全文索引
+primary key	主键
+foreign  key 	外键
+
+
+查看索引
+show index from t1\G;
+
+创建索引
+create table t1( name char(15),class char(9), sex enum('boy','girl'), index(name),index(class) );
+
+create table t2(name char(16),pay float(5,2));
+desc t2;
+create index xxx on t2(name);
+desc t2;
+
+
+删除索引
+drop index name on t1;
+desc t1;
+show index from t1\G;
+
+
+
+
+
+
+主键
+create table t3(name char(16) primary key,age int);
+desc t3;
+insert into t3 values ('bob',29);
+mysql> insert into t3 values ('bob',39);
+ERROR 1062 (23000): Duplicate entry 'bob' for key 'PRIMARY'
+insert into t3 values ('tom',39);
+select * from t3;
+mysql> insert into t3 values (null,39);
+ERROR 1048 (23000): Column 'name' cannot be null
+select * from t3;
+show tables;
+desc t1;
+alter table t1 add primary key(name);
+desc t1;
+alter table t1 drop primary key;
+desc t1;
+
+
+
+主键auto_increment连用
+语法格式：字段名  类型  primary key auto_increment
+功能：字段通过自加一方式赋值
+auto_increment：自增长（如果不给自增长字段赋值，该字段每次自加1给自己赋值），自增长通常和主键一起连用
+
+create table t1( id int primary key auto_increment,name char(10),age tinyint,class char(10));
+desc t1;
+insert into t1(name,age,class) values('bob',19,'nsd2002');
+select * from t1;
+insert into t1(name,age,class) values('tom',29,'nsd2002');
+select * from t1;
+insert into t1(name,age,class) values('tom',29,'nsd2003');
+select * from t1;
+
+自增长字段也可以给字段赋值，下次该字段自增长时，从新的数字自加1赋值
+insert into t1 values (7,'lucy',18,'nsd2011');
+select * from t1;
+insert into t1 (name,age,class) values('toma',29,'nsd2003');
+select * from t1;
+
+主键的值不能为null，也不能重复，当给一个字段添加了主键，并设置自增长，在赋值时如果该字段的值为null，也可以成功插入数据
+因为自增长属性会自动加1插入数据
+insert into t1 values (null,'john',19,'nsd2011');
+select * from t1;
+
+
+设置了自增长字段id的表，当删除所有数据后，重新插入数据如果不指定id字段的值，默认还是以前的id值继续增长
+delete from t1;
+insert into t1 (name,age,class) values ('tomb',29,'nsd2003');
+select * from t1;
+
+
+
+
+create table t2 (cip char(15),port int, status enum("yes","no"),primary key(cip,port));
+desc t2;
+insert into t2 values('1.1.1.1',21,'no');		--成功
+select * from t2;
+insert into t2 values('1.1.1.1',21,'yes');		--失败，cip字段和port字段同时重复
+insert into t2 values('1.1.1.1',22,'yes');		--cip字段值相同，port字段值不同，成功
+insert into t2 values('2.1.1.1',22,'yes');		--cip字段值不同，port字段值相同，成功
+select * from t2;
+
+
+删除表的复合主键
+alter table t2 drop primary key;
+desc t2;
+
+
+没有复合主键后，插入记录允许重复，不允许赋空值，约束条件NULL限制
+insert into t2 values('2.1.1.1',22,'yes');
+insert into t2 values(null,null,'yes');
+
+
+在已有表里创建复合主键
+语法格式：alter table 表名  add  primary key (字段名1，字段名2....)
+alter table t2 add primary key(cip,port);		--创建失败，表中的记录有重复
+delete from t2;
+alter table t2 add primary key(cip,port);
+desc t2;
+insert into t2 values('2.2.2.2',22,'no');
+select * from t2;
+
+
+
+
+create table yg(yg_id int primary key auto_increment,name char(15))engine=innodb;
+desc yg;
+insert into yg(name) values('bob');
+insert into yg(name) values('tom');
+select * from yg;
+create table gz( gz_id int,pay float(5,2),foregin key(gz_id) references yg(yg_id) on update cascade on delete cascade)engine=innodb;
+show create table gz\G		--通过查看建表过程，来查看表是否创建外键
+
+外键设置成功之后，gz（工资表）插入数据时，编号必须在yg（员工表）的yg_id范围之内
+select * from yg;
+insert into gz values(1,300.00);
+insert into gz values(2,500.00);
+insert into gz values(3,300.00);		--插入失败，编号必须在yg（员工表）编号范围之内
+
+
+在yg表里插入一条记录，用户名为john，编号采用自增长
+insert into yg(name) values('john');
+select * from yg;
+
+
+在gz表里插入记录，是否可以插入
+insert into gz values(3,300.00);
+select * from gz;
+
+
+---
 
 
 
