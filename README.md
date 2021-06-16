@@ -4147,6 +4147,110 @@ insert into gz values(3,300.00);
 select * from gz;
 ```
 
+### 测试同步删除和同步更新
+```sql
+delete from yg where yg_id=3;
+select * from yg;
+select from gz;
+update yq set yg id=6 where name="tom"
+select * from yg;
+select * from gz;
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
