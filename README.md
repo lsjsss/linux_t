@@ -4112,6 +4112,41 @@ insert into t1 values(null,'NSD2002','m'); #失
 
 
 
+```sql
+create table yg(yg_ id int primary key auto increment,name char(15))engine=innodb;
+desc yg;
+insert into yg(name) values('bob);
+insert into yg(name) values('tom");
+select * from yg;
+create table gz(
+gz_id int,
+pay float(5,2),
+foreign key(gz id) references yg(yg id) on update cascade on delete cascade)engine=innodb;
+show create table gz\G	-- 通过查看建表过程，来查看表是否创建
+```
+
+外键外键设置成功之后，gz (工资表)插入数据时，编号必须在yg (员工表)的yg_id范围之内
+```sql
+select * from ygi
+insert into gz values(1,300.00);
+insert into gz values(2,500.00);
+insert into gz values(3,300.00);	-- 插入失败,编号必须在yg (员工表)编号范围之内
+```
+
+
+在yg表里插入一条记录，用户名为john，编号采用自增长
+```sql
+insert into yg(name) values(john);
+select * from yg
+```
+
+
+在gz表里插入记录,是否可以插入
+```sql
+insert into gz values(3,300.00);
+select * from gz;
+```
+
 
 
 
