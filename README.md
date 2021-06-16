@@ -4158,6 +4158,54 @@ select * from gz;
 ```
 
 
+### 设置成外键的表字段也必须将其设置为主键,否则会出现对于同一个编号可以插入多次数据的情况,也会出现编号为null,插入数据同样成功的情况
+
+```sql
+desc gz;
+insert into gz values(1,200.00);
+insert into gz values(6,200.00);
+select * from gz;
+insert into gz values(null,200.00);
+select * from gz;
+```
+
+### 将表中的外键字段设置为主键
+
+```sql
+delete from gz;
+select * from gz;
+alter table gz add primary key(gz id);
+desc gz;
+insert into gz values(null,200.00);
+insert into gz values(1,200.00);
+insert into gz values(1,200.00);
+insert into gz values(6,200.00);
+insert into gz values(6,200.00);
+insert into gz values(7,200.00);
+```
+
+###删除表当一个表被其他表所依赖时,该表则不可以被删除删除方法有2种:
+> 1. 删除表中的外键
+> 2. 先删除gz (工资表)
+
+```sql
+drop table yg;#直接删除失败
+```
+
+### 删除外键：
+
+语法格式：
+
+```sql
+alter table 表名 drop foreign key 名称;
+```
+
+```sql
+show create table gz\G
+alter table gz drop foreign key gz_ibfk_1;
+show create table gz\G 
+drop table yg;
+```
 
 
 
