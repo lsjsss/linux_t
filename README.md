@@ -3948,111 +3948,159 @@ show tables;
 | primary key | 主键 |
 | foreign key | 外键 |
 
+> index、primary key、foreign key #生产环境一定会用到的键值类型
+
+### 索引介绍
+
+> 类似于书的目录
+>
+> 对表中字段值进行排序
+>
+> 索引算法：Btree、B+tree、hash
+
+#### Btree 算法(二叉树)：
 
 
+1. 查找数字 5 时，先用数字 5 和数字 4 对比；
+2. 当数字 5 大于数字 4，则直接从数字 4 的右分支进行查找；
+3. 接下来用要查找的数字 5 和数字 6 对比；2
+4. 当数字 5 小于数字 6，则直接从数字 6 的左分支进行查找；
+5. 按照以上的方式继续比对查找，直到查找到数据为止；
+
+### 索引的优缺点
+
+> 生产环境下，对数据查的请求远远高于对数据写的请求；
+
+### 普通索引 index
+
+使用规则
+
+### 创建索引
+
+> 建表的时候创建索引：index(字段名), index(字段名)....
+>
+> 创建 t1 表时，将 name 字段和 class 字段设置为索引
 
 
+```sql
+create table t1(name char(10), class char(9), sex enum("m", "w"), index(name),index(class));
+desc t1;    —- 约束条件Key变为MUL(索引的标志)
+```
+
+```sql
+在已有的表里创建索引：
+
+```sql
+create index 索引名 on 表名(字段名);
+```
+
+```sql
+create table t2 ( name char(16), pay float(5,2) );
+desc t2;
+```
+
+在已有表 t2 表中为字段创建索引 xxx(索引名称可以随便定义)
+
+```sql
+create index xxx on t2(name);
+desc t2;
+```
+
+### 查看索引
+
+语法格式：
+```sql
+show index from 表名 \G;
+```
+
+```sql
+show index from t1\G;
+    *************************** 1. row ***************************
+    Table: t9    —- 表名
+    Non_unique: 1
+    Key_name: name    —- 索引名
+    Seq_in_index: 1
+    Column_name: name    —- 字段名
+    ...
+```
 
 
+### 删除索引
+
+语法格式：
+
+```sql
+drop index 索引名 on 表名;
+```
+
+删除 t1 表中的索引 name
+
+```sql
+drop index name on t1;
+desc t1;
+show index from t1\G;4
+```
+
+## MySQL 主键 primary key：
+
+### 创建主键
+#### 主键的作用：限制字段赋值
 
 
+#### 主键的使用规则
 
+> 创建表时，表中存在类似身份证号，编号等时，将表中的该字段设置为主键，让其不能重复，可以自动增长。
 
+#### 创建主键
 
-            目录
-            1. MySQL 键值概述： .............................................................................................................. 1
-            1.1 索引介绍.............................................................................................................................. 1
-            1.2 索引的优缺点...................................................................................................................... 2
-            1.3 普通索引 index................................................................................................................... 2
-            1.3.1 创建索引....................................................................................................................... 2
-            1.3.2 查看索引....................................................................................................................... 3
-            1.3.3 删除索引....................................................................................................................... 3
-            2. MySQL 主键 primary key：............................................................................................... 4
-            2.1 创建主键.............................................................................................................................. 4
-            2.1.1 主键的作用：限制字段赋值....................................................................................... 4
-            2.1.2 主键的使用规则........................................................................................................... 4
-            2.1.3 创建主键....................................................................................................................... 4
-            2.2.4 删除主键....................................................................................................................... 51
-            1. MySQL 键值概述：
-            index、primary key、foreign key #生产环境一定会用到的键值类型
-            1.1 索引介绍
-            类似于书的目录
-            对表中字段值进行排序
-            索引算法：Btree、B+tree、hash
-            Btree 算法(二叉树)：
-            #1》查找数字 5 时，先用数字 5 和数字 4 对比；
-            #2》当数字 5 大于数字 4，则直接从数字 4 的右分支进行查找；
-            #3》接下来用要查找的数字 5 和数字 6 对比；2
-            #4》当数字 5 小于数字 6，则直接从数字 6 的左分支进行查找；
-            #5》按照以上的方式继续比对查找，直到查找到数据为止；
-            1.2 索引的优缺点
-            生产环境下，对数据查的请求远远高于对数据写的请求；
-            1.3 普通索引 index
-            使用规则
-            1.3.1 创建索引
-            建表的时候创建索引：index(字段名), index(字段名)....
-            创建 t1 表时，将 name 字段和 class 字段设置为索引
-            mysql> create table t1(name char(10), class char(9), sex enum("m", "w"), index(name),
-            index(class));
-            mysql> desc t1; #约束条件Key变为MUL(索引的标志)3
-            在已有的表里创建索引：create index 索引名 on 表名(字段名);
-            mysql> create table t2 ( name char(16), pay float(5,2) );
-            mysql> desc t2;
-            在已有表 t2 表中为字段创建索引 xxx(索引名称可以随便定义)
-            mysql> create index xxx on t2(name);
-            mysql> desc t2;
-            1.3.2 查看索引
-            语法格式：show index from 表名 \G;
-            mysql> show index from t1\G;
-            *************************** 1. row ***************************
-            Table: t9 #表名
-            Non_unique: 1
-            Key_name: name #索引名
-            Seq_in_index: 1
-            Column_name: name #字段名
-            ...
-            1.3.3 删除索引
-            语法格式：drop index 索引名 on 表名;
-            删除 t1 表中的索引 name
-            mysql> drop index name on t1;
-            mysql> desc t1;
-            mysql> show index from t1\G;4
-            2. MySQL 主键 primary key：
-            2.1 创建主键
-            2.1.1 主键的作用：限制字段赋值
-            2.1.2 主键的使用规则
-            创建表时，表中存在类似身份证号，编号等时，将表中的该字段设置为主键，让其不能重复，
-            可以自动增长。
-            2.1.3 创建主键
-            建表时创建主键，命令：primary key(字段名)
-            创建 t3 表，字段有：姓名(name)，年龄(age) ，将 name 字段设置为主键 primary key
-            mysql> create table t3(name char(10) primary key, age int);
-            mysql> desc t10; #查看t3表的表结构，key的值为PRI，则代表该字段为主键
-            在表t3中插入数据，主键所在的字段，数据不能重复，不允许有空值
-            mysql> insert into t3 values("bob",29); #成功
-            mysql> insert into t3 values("bob",39); #失败，主键字段的数据重复
-            mysql> insert into t3 values("jim",19); #成功
-            mysql> insert into t3 values(null,29); #失败，主键所在的字段值不能为NULL值
-            mysql> insert into t3 values("null",39); #成功，加引号代表的是字符串5
-            mysql> insert into t3 values("",59); #””指没有内容，不代表null
-            mysql> select * from t3;
-            在已有表里创建主键
-            语法格式：alter table 表名 add primary key(字段名列表);
-            将表中的字段设置为主键时，则表中该字段的值不能为空，也不能重复，否则添加失败; 表中
-            没有数据时，添加成功
-            mysql> select * from t1;
-            mysql> desc t1; #查看t1表的表结构，原先没有主键，允许数据重复
-            mysql> alter table t1 add primary key(name); #将t1表中的字段name设置为主键
-            mysql> desc t1;
-            2.2.4 删除主键
-            语法格式：alter table 表名 drop primary key;
-            删除 t1 表的主键
-            mysql> alter table t1 drop primary key;
-            mysql> desc t1; #主键消失，但是name字段的约束条件不许为空，可以重复插入数据
-            mysql> insert into t1 values('bob','NSD2001','m'); #成功
-            mysql> insert into t1 values('bob','NSD2002','m'); #成功
-            mysql> insert into t1 values(null,'NSD2002','m'); #失
+> 建表时创建主键，命令：`primary key`(字段名)
+>
+> 创建 t3 表，字段有：姓名(name)，年龄(age) ，将 name 字段设置为主键 primary key
 
+```sql
+create table t3(name char(10) primary key, age int);
+desc t10;    —- 查看t3表的表结构，key的值为PRI，则代表该字段为主键,在表t3中插入数据，主键所在的字段，数据不能重复，不允许有空值
+insert into t3 values("bob",29);    —- 成功
+insert into t3 values("bob",39);     —- 失败，主键字段的数据重复
+insert into t3 values("jim",19);     —- 成功
+insert into t3 values(null,29);     —- 失败，主键所在的字段值不能为NULL值
+insert into t3 values("null",39);     —- 成功，加引号代表的是字符串5
+insert into t3 values("",59);     —- ””指没有内容，不代表null
+select * from t3;
+```
+
+> 在已有表里创建主键
+
+语法格式：
+```sql
+alter table 表名 add primary key(字段名列表);
+```
+
+> 将表中的字段设置为主键时，则表中该字段的值不能为空，也不能重复，否则添加失败; 表中没有数据时，添加成功
+
+```sql
+select * from t1;
+desc t1; #查看t1表的表结构，原先没有主键，允许数据重复
+alter table t1 add primary key(name); #将t1表中的字段name设置为主键
+desc t1;
+```
+
+### 删除主键
+
+语法格式：
+```sql
+alter table 表名 drop primary key;
+```
+
+删除 t1 表的主键
+
+```sql
+alter table t1 drop primary key;
+desc t1; #主键消失，但是name字段的约束条件不许为空，可以重复插入数据
+insert into t1 values('bob','NSD2001','m'); #成功
+insert into t1 values('bob','NSD2002','m'); #成功
+insert into t1 values(null,'NSD2002','m'); #失
+```
 
 
 
