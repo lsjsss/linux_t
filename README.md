@@ -4207,6 +4207,28 @@ show create table gz\G
 drop table yg;
 ```
 
+### 构建mysq图形管理界面
+
+```shell
+yum -y install httpd
+systemctl start httpd
+yum -y install php php-mysql
+tar -xf phpMyAdmin-2.11.11-all-languages.tar.gz
+ls phpMyAdmin-2.11.11-all-languages
+mv phpMyAdmin-2.11.11-all-languages /var/www/html/phpmyadmin
+ls /var/www/html/
+ls /var/www/html/phpmyadmin/
+cd /var/www/html/phpmyadmin/
+cp config.sample.inc.php config.inc.php
+
+vim config.inc.php
+	17 $cfg['blowfish_secret'] = 'wj123';	#指定COOKIE的值，做认证，自定义
+	31 $cfg['Servers'][$i]['host'] = 'localhost';	#指定数据库服务器的地址
+
+
+systemctl restart httpd
+firefox http://192.168.4.10/phpmyadmin
+```
 
 
 
