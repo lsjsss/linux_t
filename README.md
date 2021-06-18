@@ -4343,12 +4343,35 @@ firefox http://192.168.4.10/phpmyadmin
 
 
 ---
+
+
+setenforce 0
+systemctl stop firewalld.service 
 echo A.tedu.cn > /etc/hostname
 cat /etc/hostname
 hostname A.tedu.cn
 exit
 nmcli connection  modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes
 nmcli connection up ens33 
+
+
+yum源安装
+
+
+mount /dev/cdrom /mnt
+vim /etc/yum.repos.d/mnt.repo
+
+[mnt]
+name=1
+enabled=1
+gpgcheck=0
+baseurl=file:///mnt
+
+
+rm -rf /etc/yum.repos.d/C*
+yum clean all
+yum repolist 
+
 
 为本机第一张网卡添加ip地址 192.168.100.1、24
 ip address add 192.168.100.1/24 dev ens33
@@ -5090,7 +5113,6 @@ netstat -anptu | grep :3306
 grep password /var/log/mysqld.log
 mysql -uroot -p' '
 mysql>
-show databases;
 alter user root@"localhost" identified by "123qqq...A";
 show databases;
 exit
@@ -5236,14 +5258,6 @@ show tables;
 
 drop database test;
 show databases;
-
-
-
-
-
-
-
-
 
 
 
@@ -5517,6 +5531,255 @@ select * from yg;
 在gz表里插入记录，是否可以插入
 insert into gz values(3,300.00);
 select * from gz;
+
+
+测试同步删除和同步更新
+delete from yg where yg_id=3;
+select * from yg;
+select * from gz;
+update yg set yg_id=6 where name="tom";
+select * from yg;
+select * from gz;
+
+
+设置成外键的表字段也必须将其设置为主键,否则会出现对于同一个编号可以插入多次数据的情况,也会出现编号为null,插入数据同样成功的情况
+
+
+desc gz;
+insert into gz values(1,200.00);
+insert into gz values(6,200.00);
+select * from gz;
+insert into gz values(null,200.00);
+select * from gz;
+
+
+将表中的外键字段设置为主键
+delete from gz;
+select * from gz;
+alter table gz add primary key(gz_id);
+desc gz;
+insert into gz values(null,200.00);
+insert into gz values(1,200.00);
+insert into gz values(1,200.00);
+insert into gz values(6,200.00);
+insert into gz values(6,200.00);
+insert into gz values(7,200.00);
+
+删除表当一个表被其他表所依赖时,该表则不可以被删除
+删除方法有2种:
+1)删除表中的外键
+2)先删除gz (工资表)
+drop table yg;	#直接删除失败
+
+删除外键:
+语法格式:
+alter table 表名 drop foreign key 名称;
+show create table gz\G
+alter table gz drop foreign key gz_ibfk_1;
+show create table gz\G
+drop table yg;
+
+
+
+
+数据导入/导出
+
+检索目录
+show variables like '%file%';		--查看文件默认的检索目录
+system ls /var/lib/mysql-files;		--在mysql下执行Linux系统命令
+exit
+
+修改检索目录
+vim /etc/my.cnf
+secure_file_priv="/myload"
+
+mkdir /myload
+chown mysql /myload/
+ls -ld /myload
+systemctl restart mysqld
+mysql -uroot -p'123qqq...A'
+show variables like '%file%';
+
+
+
+数据导入：把系统文件的内容存储到数据库的表里，默认只有数据库管理员root用户有数据导入权限
+数据导入步骤：
+1、建表
+2、拷贝文件到检索目录下
+3、导入数据
+
+语法格式：load data infile "/目录名/文件名" into table 库名.表名  fields terminated by "分隔符" lines terminated by "\n";
+
+use test;
+create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50));
+desc user;
+select * from user;
+system cp /etc/passwd /myload;
+system ls /myload;
+
+passwd
+
+load data infile "/myload/passwd" into table user fields terminated by ":" lines terminated by "\n";
+select * from user;
+
+为了方便管理，在user表的最前面设置行号字段id（主键和自增长）
+
+alter table user add id int primary key auto_increment first;
+select * from user;
+
+数据导入注意事项
+1、字段分隔符要与文件一致
+2、表字段类型和字段个数要与文件内容匹配
+3、导入数据时指定文件的绝对路径
+
+
+
+
+数据导出：
+语法格式：
+格式1：select 命令 into outfile  "/目录名/文件名";
+格式2：select 命令 into outfile  "/目录名/文件名"  fields terminated by "分隔符";
+格式3：select 命令 into outfile  "/目录名/文件名"  fields terminated by "分隔符" lines terminated by "\n";
+
+从user表中，查询出name，homedir，shell字段的前3行记录
+
+select name,homedir,shell from user limit 3;
+
+导出查询出的数据到user.txt文件中，不指定分隔符时，默认以一个tab为分隔符
+
+select name,homedir,shell from user limit 3 into outfile "/myload/user.txt";
+system cat /myload/user.txt;
+
+导出查询出的数据到user2.txt文件中，各字段之间以#分隔
+
+select name,homedir,shell from user limit 3 into outfile "/myload/user2.txt" fields terminated by "###";
+system cat /myload/user2.txt
+
+
+导出查询出的数据到user3.txt文件中，指定行的间隔符为！默认以"\n"换行符分隔
+
+select name,homedir,shell from user limit 3 into outfile "/myload/user3.txt" fields terminated by "###" lines terminated by "!!!";
+system cat /myload/user3.txt;
+
+数据导出注意事项：
+1、导出数据行数由SQL查询决定
+2、导出的是表记录，不包含字段名
+3、自动创建存储数据的文件
+4、存储数据文件，具有唯一性
+
+
+
+表管理记录
+insert into user values(30,'bob','x',3001,3001,'test user','/home/bob','/sbin/nologin');
+select * from user;
+insert into user values(31,'bob','x',3001,3001,'test user','/home/bob','/sbin/nologin'),(41,'tom','x',3002,3002,'student','/home/tom','/sbin/nologin');
+select * from user;
+insert into user(name,homedir) values('alice','/home/alice');
+select * from user;
+insert into user(name) values('alice'),('jack'),('toma');
+select * from user;
+
+注意事项：
+1、字段值要与字段类型相匹配
+2、字符类型的字段，要用""括起来
+3、依次给所有字段赋值时，字段名可以省略
+4、只给部分字段赋值时，必须明确写出对应的字段名称
+5、没有赋值的字段使用默认值或自增长赋值
+6、新纪录追加在末尾
+
+
+
+查询表记录
+语法格式：
+格式1：查看所有记录
+	select   字段1，字段1.....字段N  from 库名.表名
+格式2：条件查询
+	select   字段1，字段1.....字段N  from 库名.表名  where  条件表达式
+
+
+select * from user;
+select id,name from test.user;
+select id,name from test.user where id<=2;
+select id,name from test.user where id<4;
+
+
+注意事项：
+1、*代表所有字段
+2、查看当前库表记录时库名可以省略
+3、字段列表决定显示列个数
+4、条件决定显示行个数
+
+
+
+条件匹配更新
+语法格式：
+格式1：批量更新
+	update  库名.表名  set  字段名=值，字段名=值，字段名=值........
+格式2：条件匹配更新
+	update  库名.表名  set  字段名=值，字段名=值，字段名=值........  where表达式
+
+update user set password='A',comment='student';
+update user set password='x',comment='root' where name='root';
+
+
+注意事项：
+1、字段值要与字段类型相匹配
+2、对于字符类型的字段，值要用双引号括起来
+3、若不使用where限定条件，会更新所有记录
+4、限定条件时，只更新匹配条件的记录
+
+
+
+
+删除表记录
+基本匹配条件
+
+数值比较
+字段类型必须是数值类型
+
+select * from user where uid!=0;
+select * from user where id=1;
+select name,uid,gid from user where uid=gid;
+select name,uid from user where uid<10;
+
+
+
+
+字符比较
+字段类型必须是字符类型
+
+select name from user where shell='/sbin/nologin';
+select name,shell from user where shell!='/sbin/nologin';
+select name,shell from user where name='root';
+select name,id from user where name='root';
+insert into user(name) values(null),("null"),(""),(NULL);
+select name from user;
+select name,id from user where name is null;
+select name,id from user where name is not null;
+select name,id from user where name="";
+
+
+
+
+
+虚拟机A
+yum -y install httpd
+systemctl start httpd
+yum -y install php php-mysql
+tar -xf phpMyAdmin-2.11.11-all-languages.tar.gz
+ls phpMyAdmin-2.11.11-all-languages
+mv phpMyAdmin-2.11.11-all-languages /var/www/html/phpmyadmin
+ls /var/www/html/
+ls /var/www/html/phpmyadmin/
+cd /var/www/html/phpmyadmin/
+cp config.sample.inc.php config.inc.php
+vim config.inc.php
+17  $cfg['blowfish_secret'] = 'wj123';
+31  $cfg['Servers'][$i]['host'] = 'localhost';
+systemctl restart httpd
+firefox http://192.168.4.10/phpmyadmin
+
+
 
 
 ---
