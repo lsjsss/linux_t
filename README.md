@@ -10165,7 +10165,38 @@ mysql -uroot -p123qqq...A
     
     
     
-    
+    练习:
+
+
+1. 用命令行的形式连接到数据库
+
+```sql
+mysql -uroot -p123qqq...A
+```
+
+2. 在test库下创建一个user表
+
+```sql
+ show variables like '%file%'; --查看文件默认的检索目录 system ls /var/lib/mysql-files; --在mysql下执行Linux系统命令 exit
+修改检索目录 vim /etc/my.cnf secure_file_priv="/myload"
+mkdir /myload chown mysql /myload/ ls -ld /myload systemctl restart mysqld mysql -uroot -p'123qqq...A' show variables like '%file%';
+数据导入：把系统文件的内容存储到数据库的表里，默认只有数据库管理员root用户有数据导入权限 数据导入步骤： 1、建表 2、拷贝文件到检索目录下 3、导入数据
+语法格式：load data infile "/目录名/文件名" into table 库名.表名 fields terminated by "分隔符" lines terminated by "\n";
+use test; create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50)); desc user; select * from user; system cp /etc/passwd /myload; system ls /myload;
+passwd
+load data infile "/myload/passwd" into table user fields terminated by ":" lines terminated by "\n"; select * from user;
+为了方便管理，在user表的最前面设置行号字段id（主键和自增长）
+alter table user add id int primary key auto_increment first; select * from user;
+```
+
+3. 把存放用户信息的文件导入到test库下的user表
+
+```sql
+load data infile "/目录名/文件名" into table 库名.表名 fields terminated by "分隔符" lines terminated by "\n";
+use test; create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50)); desc user; select * from user; system cp /etc/passwd /myload; system ls /myload;
+```
+
+
     
     
     
