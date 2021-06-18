@@ -9812,22 +9812,23 @@ drop table stu;
 ## 6.18练习
 
 环境准备
-1、将虚拟机A开机
-2、关闭防火墙和SELinux
+
+1. 将虚拟机A开机
+2. 关闭防火墙和SELinux
 
     ```shell
     systemctl stop firewalld.service 
     setenforce 0
     ```
 
-3、配置IP地址为192.168.4.10
+3. 配置IP地址为192.168.4.10
 
     ```shell
     nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.10/24 connection.autoconnect yes 
     nmcli connection up ens33 
     ```
 
-4、配置本地yum源
+4. 配置本地yum源
 
     ```shell
     mount /dev/cdrom /mnt
@@ -9845,7 +9846,7 @@ drop table stu;
     yum repolist
     ```
 
-5、构建mysql数据库
+5. 构建mysql数据库
 
     ```shell
     systemctl stop firewalld.service 
@@ -9856,7 +9857,7 @@ drop table stu;
     systemctl enable mysqld
     ```
 
-6、数据库管理员密码设置为123qqq...A
+6. 数据库管理员密码设置为123qqq...A
 
 ```shell
 vim /etc/my.cnf
