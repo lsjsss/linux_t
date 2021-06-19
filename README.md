@@ -4071,7 +4071,7 @@ select * from t3;
 
 > 在已有表里创建主键
 
-语法格式：
+语法格式：　
 ```sql
 alter table 表名 add primary key(字段名列表);
 ```
@@ -4344,7 +4344,7 @@ firefox http://192.168.4.10/phpmyadmin
 
 ---
 
-
+```shell
 setenforce 0
 systemctl stop firewalld.service 
 echo A.tedu.cn > /etc/hostname
@@ -4356,8 +4356,6 @@ nmcli connection up ens33
 
 
 yum源安装
-
-
 mount /dev/cdrom /mnt
 vim /etc/yum.repos.d/mnt.repo
 
@@ -4371,6 +4369,7 @@ baseurl=file:///mnt
 rm -rf /etc/yum.repos.d/C*
 yum clean all
 yum repolist 
+
 
 
 为本机第一张网卡添加ip地址 192.168.100.1、24
@@ -5778,7 +5777,7 @@ vim config.inc.php
 31  $cfg['Servers'][$i]['host'] = 'localhost';
 systemctl restart httpd
 firefox http://192.168.4.10/phpmyadmin
-
+```
 
 
 
