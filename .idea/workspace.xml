@@ -5,7 +5,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.19 update" />
+    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.19 update">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +16,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="githubmaster" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -78,6 +80,8 @@
       <workItem from="1623922421082" duration="1561000" />
       <workItem from="1623973346233" duration="441000" />
       <workItem from="1624065282578" duration="1080000" />
+      <workItem from="1624094897811" duration="678000" />
+      <workItem from="1624100343766" duration="651000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -121,14 +125,7 @@
       <option name="project" value="LOCAL" />
       <updated>1623370256554</updated>
     </task>
-    <task id="LOCAL-00007" summary="6.19 update">
-      <created>1624069994478</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1624069994478</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,8 +149,7 @@
     <MESSAGE value="6.10 update" />
     <MESSAGE value="6.11 update" />
     <MESSAGE value="6.18 update" />
-    <MESSAGE value="6.19 update" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.19 update" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.18 update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
@@ -192,15 +188,15 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1624070131968">
-      <screen x="0" y="0" width="1552" height="996" />
+    <state x="398" y="236" key="Vcs.Push.Dialog.v2" timestamp="1623973927314">
+      <screen x="0" y="0" width="1680" height="1020" />
     </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1624070131968" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623810165055" />
     <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623973927314" />
-    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624065449372">
+    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624074279904">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1552.996@0.0.1552.996" timestamp="1624065449372" />
+    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1552.996@0.0.1552.996" timestamp="1624074279904" />
     <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623198343666" />
     <state x="502" y="284" key="git4idea.merge.GitPullDialog" timestamp="1617803961890">
       <screen x="0" y="0" width="1552" height="996" />
