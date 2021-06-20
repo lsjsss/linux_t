@@ -5,9 +5,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.18 update">
+    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.19 update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +80,8 @@
       <workItem from="1623922421082" duration="1561000" />
       <workItem from="1623973346233" duration="441000" />
       <workItem from="1624065282578" duration="1080000" />
+      <workItem from="1624094897811" duration="678000" />
+      <workItem from="1624100343766" duration="651000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -192,10 +193,10 @@
     </state>
     <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623810165055" />
     <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623973927314" />
-    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624065449372">
+    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624074279904">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1552.996@0.0.1552.996" timestamp="1624065449372" />
+    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1552.996@0.0.1552.996" timestamp="1624074279904" />
     <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623198343666" />
     <state x="502" y="284" key="git4idea.merge.GitPullDialog" timestamp="1617803961890">
       <screen x="0" y="0" width="1552" height="996" />
