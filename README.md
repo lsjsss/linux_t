@@ -10196,7 +10196,95 @@ use test; create table test.user( name char(50),password char(1),uid int,gid int
 ```
 
 
-    
+
+## 6.21 练习
+
+环境准备
+1. 将虚拟机svr7开机
+2. 关闭SELiunx和防火墙
+
+    ```shell
+    systemctl stop firewalld.service 
+    setenforce 0
+    ```
+
+3. 构建MySQL数据库
+
+    ```shell
+    tar -xf mysql-5.7.17.tar
+    yum -y install mysql-community-*.rpm
+    rpm -qa | grep mysql
+    systemctl start mysqld
+    systemctl enable mysqld
+    netstat -anptu | grep :3306
+    ls /var/lib/mysql
+    ```
+
+4. 数据库管理员密码设置为123qq..A
+
+```shell
+vim /etc/my.cnf
+	validate_password_policy=0
+	validate_password_length=6
+
+grep password /var/log/mysqld.log
+```
+
+```sql
+mysql -uroot -p'mysqld.log中的密码'
+	show variables like "%password%"; 
+	set global validate_password_policy=0;
+	set global validate_password_length=6;
+	alter user root@localhost identified by "123qq..A";
+	exit
+mysql -uroot -p123qq..A
+```
+
+5. 将/etc/passwd文件导入到test.user
+
+```sql
+show variables like '%file%';		-- 查看文件默认的检索目录
+system ls /var/lib/mysql-files;		-- 在mysql下执行Linux系统命令
+exit
+```
+
+```shell
+# 修改检索目录
+vim /etc/my.cnf
+	secure_file_priv="/myload"
+
+mkdir /myload
+chown mysql /myload/
+ls -ld /myload
+systemctl restart mysqld
+mysql -uroot -p123qq..A
+	show variables like '%file%';
+
+create database test;
+use test;
+create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50));
+desc user;
+select * from user;
+system cp /etc/passwd /myload;
+system ls /myload;
+
+load data infile "/myload/passwd" into table user fields terminated by ":" lines terminated by "\n";
+select * from user;
+```
+
+6. 往user表里添加新字段id,设置类型为自增长
+
+    ```sql
+    alter table user add id int primary key auto_increment first;
+    desc user;
+    ```
+
+7. 给name字段添加4条记录分别为(null,"null,",NULL)
+
+    ```sql
+    insert into user(name) values(null),("null"),(""),(NULL);
+    select * from user;
+    ```
     
     
     
