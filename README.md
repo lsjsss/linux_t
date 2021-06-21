@@ -4323,6 +4323,23 @@ select name from user where name regexp "[0-9]";	-- 查询user表用户名包含
 
 
 
+```sql
+select id,name,uid from user where id<=5;
+update user set uid=uid+1 where id<=5;
+select id,name,uid from user where id <=5;
+update user set uid=uid-1 where id<=5;
+select id,name,uid from user where id<=5;
+select name,uid from user where id<=5;
+select name,uid from user where uid % 2=0;
+select name,uid from user where uid % 2 !=0;
+select name,uid,gid from user where name="halt";
+select name,uid,gid,(uid+gid)/2 from user where name="halt";	-- 显示uid和gid的平均值,默认以算法作为临时字段名
+alter table user add age tinyint unsigned default 20 after name;
+desc user;
+select * from user;
+select name,age,2023-age start_y from user where name="root";	-- start_y临时字段名
+```
+
 
 
 
