@@ -5259,7 +5259,7 @@ drop database test;
 show databases;
 
 
-
+==============================================================================================================================================================================================================================================================================================================
 
 
 
@@ -5268,123 +5268,112 @@ tinyint		（整数）
 float(6,2)		(自然数）
 
 
-时间日期字段用法
+### 时间日期字段用法
 
-
+```sql
 create table t5(name char(10),s_year year,uptime time,birthday date,party datetime);
 desc t5;
 insert into t5 values ('bob',1990,08000,20231120,202030214183000);
 select * from t5;
-select curtime();				--获取当前系统时间
-select curdate();				--获取当前系统日期
-select now();				--获取当前系统日期和时间
-select year(now());				--从当前系统时间中只取出年份
-select month(now());				--从当前系统时间中只取出月份
-select day(now());				--从当前系统时间中只取出天数
-select date(now());				--从当前系统中只取出年月日
-select time(now());				--从当前系统中只取出时分秒
-insert into t5 values ('tom',2000,time(now()),curdate(),now());		--利用时间函数插入表记录
+select curtime();				-- 获取当前系统时间
+select curdate();				-- 获取当前系统日期
+select now();				-- 获取当前系统日期和时间
+select year(now());				-- 从当前系统时间中只取出年份
+select month(now());				-- 从当前系统时间中只取出月份
+select day(now());				-- 从当前系统时间中只取出天数
+select date(now());				-- 从当前系统中只取出年月日
+select time(now());				-- 从当前系统中只取出时分秒
+insert into t5 values ('tom',2000,time(now()),curdate(),now());		-- 利用时间函数插入表记录
 select * from t5;
 create table t6(name char(10),meeting datetime,party timestamp);
 desc t6;
 insert into t6 values('bob',now(),now());
 select * from t6;
-insert into t6(name,meeting) values ('bob',20230214103000);		--当未给timestamp字段赋值时，自动以当前系统时间赋值
+insert into t6(name,meeting) values ('bob',20230214103000);		-- 当未给timestamp字段赋值时，自动以当前系统时间赋值
 select * from t6;
-insert into t6(name,party) values ('tom',19730701083000);		--当未给datetime字段赋值时，为NULL（空）
+insert into t6(name,party) values ('tom',19730701083000);		-- 当未给datetime字段赋值时，为NULL（空）
 select * from t6;
 desc t5;
 select s_year from t5;
 insert into t5(s_year) values(03),(81);
 select s_year from t5;
+```
 
 
 
+#### enum  set字段用法
 
-enum  set字段用法
-
+```sql
 create table t7(name char(10),sex enum('boy','girl'),likes set('eat','money','play','game','music'));
 desc t7;
 insert into t7 values ('bob','boy','eat,money');
 select * from t7;
 
 
-
-insert into t2 values (null,null,null);	--插入全为空
-insert into t2(name) values('tom')	--name字段不为空，其余为空
+insert into t2 values (null,null,null);	-- 插入全为空
+insert into t2(name) values('tom')	-- name字段不为空，其余为空
 
 create table t3(name char(10) not null,age tinyint unsigned default 18,class char(8) not null default 'NSD2006');
 desc t3;
 insert into t3(name) values('zs');
-select * from t3;			--显示name字段，其余自动赋值
+select * from t3;			-- 显示name字段，其余自动赋值
 insert into t3 values ('tom',29,'NSD2007');
-select * from t3;			--正常赋值
-insert into t3 values (null,null,null);	--失败，name字段不允许为空
-insert into t3 values ("null",null,null);	--失败，class字段不允许为空
-insert into t3 values ("null",null,"");	--null用引号引起来代表是普通字符，直接加引号，不为空，是0个字符
+select * from t3;			-- 正常赋值
+insert into t3 values (null,null,null);	-- 失败，name字段不允许为空
+insert into t3 values ("null",null,null);	-- 失败，class字段不允许为空
+insert into t3 values ("null",null,"");    -- null用引号引起来代表是普通字符，直接加引号，不为空，是0个字符
 select * from t3;
-  
 
 
-desc t1;
-向t1表添加字段email，不指定字段位置，默认插入到表的最后
+
+#### 向t1表添加字段email，不指定字段位置，默认插入到表的最后
 alter table t1 add email varchar(30) not null default "stu@tedu.cn";
 desc t1;
 
-
-向t1表最前面添加字段stu_id
+#### 向t1表最前面添加字段stu_id
 alter table t1 add stu_id char(9) first;
 desc t1;
 
-
-向t1表中name字段后插入新字段sex
+#### 向t1表中name字段后插入新字段sex
 alter table t1 add sex enum('boy','girl') default 'boy' after name;
 desc t1;
 
-
-
-使用modify修改t1表的sex字段，设置默认值为man
+#### 使用modify修改t1表的sex字段，设置默认值为man
 alter table t1 modify sex enum('man','woman','boy')default 'man';	--字段里需要包含原表中的数据类型boy，否则冲突
 desc t1;
 select * from t1;
 desc t1;
 
 
-
-修改t1表中的name字段类型，修改为varchar
+#### 修改t1表中的name字段类型，修改为varchar
 alter table t1 modify name varchar(15);
 desc t1;
 
 
-将email字段移动到sex字段的后面，其他不变
+#### 将email字段移动到sex字段的后面，其他不变
 alter table t1 modify email varchar(30) not null default 'stu@tedu.cn' after sex;
 desc t1;
-select * from t1;		--数据不发生变化
+select * from t1;		-- 数据不发生变化
 
-
-
-
-删除t1表中的stu_id字段
+#### 删除t1表中的stu_id字段
 alter table t1 drop stu_id;
 desc t1;
 select * from t1;
 
 
-删除t1表中的多个字段（email和party）
+#### 删除t1表中的多个字段（email和party）
 alter table t1 drop email,drop party;
 desc t1; 
 select * from t1;
 
-
-
-修改t1表的name字段名称改为abc
+#### 修改t1表的name字段名称改为abc
 desc t1;
 alter table t1 change name abc varchar;
 desc t1;
 
 
 
-将t1表重命名为stuinfo
+#### 将t1表重命名为stuinfo
 alter table t1 rename stuinfo;
 show tables;
 desc stuinfo;
@@ -5777,6 +5766,10 @@ vim config.inc.php
 31  $cfg['Servers'][$i]['host'] = 'localhost';
 systemctl restart httpd
 firefox http://192.168.4.10/phpmyadmin
+
+
+==============================================================================================================================================================================================================================================================================================================
+
 ```
 
 
