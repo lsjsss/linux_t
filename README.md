@@ -4295,6 +4295,30 @@ select name from user where name like "__%__";
 
 
 
+#### 正则表达式格式
+
+> 格式: ` where 字段 regexp "正则表达式" `
+>
+> 正则元字符: `^` `$` `.` `[]` `*` `|`
+
+| ^ | 匹配输入字符串的开始位置 |
+| -- | -- |
+| $ | 匹配输入字符串的结束位置 |
+| . | 匹配除 "\n" 之外的任何单个字符 |
+| [...] | 字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的 'a' |
+| * | 匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。* 等价于{0,} |
+| p1|p2|p3 | 匹配 p1 或 p2 或 p3。例如，'z|food' 能匹配 "z" 或 "food"。'(z|f)ood' 则匹配 "zood" 或 "food" |
+
+```sql
+select name from user where name regexp "^r";
+select name from user where name regexp "^a";
+select name from user where name regexp "^a|t$";;
+select name from user where name regexp "^r.*t$";
+select name from user where name regexp "[0-9]";
+insert into user(name) values("haha99"),("66haha"),("6xixi"),("ya7ya");
+select name from user;
+select name from user where name regexp "[0-9]";	-- 查询user表用户名包含数字的name字段
+```
 
 
 
