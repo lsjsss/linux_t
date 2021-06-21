@@ -4232,7 +4232,22 @@ firefox http://192.168.4.10/phpmyadmin
 
 
 
+### 范围匹配
 
+| in (`值列表`) | 在....里 |
+| -- | -- |
+| not in (`值列表`) | 不在...里... |
+| between `数字` and `数字` | 在...之间… |
+
+举例：
+```sql
+select name,uid from user where name in("mysql","bin","null");
+select name,uid from user where uid in(3,6,9,15);
+select name,shell from user where shell not in("/bin/bash","/sbin/nologin")
+select name,uid from user where uid between 15 and 30;
+select name,uid from user where uid between 15 and 100;
+select id,name,uid from user where id between 10 and 13;
+```
 
 
 
