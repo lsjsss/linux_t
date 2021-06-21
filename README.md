@@ -4307,7 +4307,7 @@ select name from user where name like "__%__";
 | . | 匹配除 "\n" 之外的任何单个字符 |
 | [...] | 字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的 'a' |
 | * | 匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。* 等价于{0,} |
-| p1|p2|p3 | 匹配 p1 或 p2 或 p3。例如，'z|food' 能匹配 "z" 或 "food"。'(z|f)ood' 则匹配 "zood" 或 "food" |
+| p1\|p2\|p3 | 匹配 p1 或 p2 或 p3。例如，'z|food' 能匹配 "z" 或 "food"。'(z|f)ood' 则匹配 "zood" 或 "food" |
 
 ```sql
 select name from user where name regexp "^r";
