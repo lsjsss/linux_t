@@ -4275,6 +4275,24 @@ select name,uid,shell from user where shell not in ("/bin/bash","/sbin/nologin")
 
 
 
+### 高级匹配条件
+
+#### 模糊查询
+
+格式: where 字段名 like "通配符"
+
+| _ | 表示1个字符 |
+| -- | -- |
+| % | 表示0-n个字符 |
+
+```sql
+select name from user where name like "_";
+select name from user where name like "____";
+select name from user where name like "%a%";
+select name from user where name like "a%";
+select name from user where name like "__%__";
+```
+
 
 
 
