@@ -4249,6 +4249,29 @@ select name,uid from user where uid between 15 and 100;
 select id,name,uid from user where id between 10 and 13;
 ```
 
+#### 逻辑匹配
+
+
+多个条件判断时使用
+
+
+| or | 逻辑或 | 有一个条件成立即可 |
+| -- | -- | -- |
+| and | 逻辑与(且) | 所有条件都要成立才可以 |
+| !或not | 逻辑非 |
+
+举例
+```sql
+select name,uid from user where name="root" and shell ="/sbin/nologin";
+select name,uid from user where name="root" and shell="/bin/bash";
+select name,uid from user where name="root" or shell="/sbin/nologin";
+select name,uid,shell from user where name="root" or shell="/sbin/nologin";
+select name,uid,shell from user where shell !="/bin/bash";
+
+select name,uid,shell from user where shell="/bin/bash";
+select name,uid,shell from user where shell in ("/bin/bash","/sbin/nologin");
+select name,uid,shell from user where shell not in ("/bin/bash","/sbin/nologin");
+```
 
 
 
