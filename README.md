@@ -10377,7 +10377,293 @@ select * from user;
     ```
     
     
-    
+   
+
+
+
+## 6.22 练习
+
+1. 构建mysql数据库，管理员密码为123qqq…A创建一个名为test库，将/etc/passwd文件导入到test.user
+
+```shell
+systemctl stop firewalld.service 
+setenforce 0
+
+tar -xf mysql-5.7.17.tar
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+systemctl start mysqld
+systemctl enable mysqld
+netstat -anptu | grep :3306
+ls /var/lib/mysql
+
+grep password /var/log/mysqld.log
+```
+
+```sql
+mysql -uroot -p'mysqld.log中的密码'
+	show variables like "%password%"; 
+	set global validate_password_policy=0;
+	set global validate_password_length=6;
+	alter user root@localhost identified by "123qqq...A";
+	exit
+mysql -uroot -p123qqq...A
+```
+
+```sql
+vim /etc/my.cnf
+	secure_file_priv="/myload"
+cat /etc/my.cnf
+
+mkdir /myload
+chown mysql /myload/
+ls -ld /myload
+systemctl restart mysqld
+mysql -uroot -p123qqq...A
+	show variables like '%file%';
+
+	create database test;
+	show databases;
+	use test;
+	create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50));
+	desc user;
+	select * from user;
+	system cp /etc/passwd /myload;
+	system ls /myload;
+	system chown mysql /myload;
+	load data infile "/myload/passwd" into table user fields terminated by ":" lines terminated by "\n";
+	select * from user;
+```
+
+2. 在用户名字段下方添加s_year字段 存放出生年份 默认值是1990
+
+```sql
+alter table user add s_year year default 1990 after name;
+```
+
+3. 在用户名字段下方添加字段名sex 字段值只能是gril 或boy 默认值是 boy
+
+```sql
+alter table user add sex enum('girl','boy') default 'boy' after name;
+```
+
+4. 在sex字段下方添加 age字段  存放年龄 不允许输入负数。默认值 是 21
+
+```sql
+alter table user add age tinyint unsigned default 21 after sex;
+```
+
+5. 把uid字段值是10到50之间的用户的性别修改为 girl
+
+```sql
+update user set sex='girl' where uid between 10 and 50;
+```
+
+6. 统计性别是girl的用户有多少个。(count(*)统计个数)
+
+```sql
+select count(*) from user where sex="girl";
+```
+
+7. 查看性别是girl用户里 uid号 最大的用户名 叫什么。（看最大值用max）
+
+```sql
+select name from user where uid=(select max(uid) from user where sex='girl');
+```
+
+8. 添加一条新记录只给name、uid 字段赋值 值为rtestd  1000
+
+```sql
+insert into  user(name,uid) values("rtestd", 1000);
+```
+
+9. 加一条新记录只给name、uid 字段赋值 值为rtest2d   2000
+
+```sql
+insert into  user(name,uid) values("rtest2d", 2000);
+```
+
+10. 显示uid 是四位数的用户的用户名和uid值。
+
+```sql
+select name, uid from user where uid>=1000;
+```
+
+11. 显示名字是以字母r 开头 且是以字母d结尾的用户名和uid。
+
+```sql
+select name, uid from user where name regexp "^r.*d$"; 
+```
+
+12. 查看是否有名字以字母a开头 并且是以字母c结尾的用户。
+
+```sql
+select name, uid from user where name regexp "^a&c$"; 
+```
+
+13. 把 gid  在100到500间用户的家目录修改为/root
+
+```sql
+update user set comment='/root' where gid between 100 and 500;
+```
+
+14. 把用户是  root 、 bin 、  sync 用户的shell 修改为  /sbin/nologin
+
+```sql
+update user set shell='/sbin/nologin' where name in('root','bin','sync');
+```
+
+15. 查看  gid 小于10的用户 都使用那些shell
+
+```sql
+select shell from user where gid<10;
+```
+
+16. 删除  名字以字母d开头的用户。
+
+```sql
+delete from user where name regexp '^d';
+```
+
+17. 查看那些用户没有家目录
+
+```sql
+select name from user where lujing='/';
+```
+
+18. 使用系统命令useradd 命令添加登录系统的用户名为lucy
+
+```sql
+system useradd lucy;
+system ls /home;
+```
+
+19. 把lucy用户的信息添加到user1表里
+
+```sql
+
+```
+
+20. 删除表中的 comment 字段
+
+```sql
+
+```
+
+21. 设置表中所有name字段值不允许为空
+
+```sql
+
+```
+
+22. 删除root用户家目录字段的值
+
+```sql
+delete from user where name='root';
+```
+
+23. 显示 gid 大于500的用户的用户名 家目录和使用的shell
+
+```sql
+
+```
+
+24. 删除uid大于100的用户记录
+
+```sql
+delete from user where uid>100;
+```
+
+25. 显示uid号在10到30区间的用户有多少个。
+
+```sql
+select count(*) from user where uid between 10 and 30;
+```
+
+26. 显示uid号是100以内的用户使用的shell。
+
+```sql
+select shell from user where uid<=100;
+```
+
+27. 显示uid号小于50且名字里有字母a 用户的详细信息
+
+```sql
+select * from user where  uid<50 and name like "%a%";
+```
+
+28. 只显示用户 root   bin   daemon  3个用户的详细信息。
+
+```sql
+select * from user where name in('root','bin','daemon');
+```
+
+29. 显示除root用户之外所有用户的详细信息。
+
+```sql
+ select * from user where name!='root';
+```
+
+30. 显示名字里含字母c 用户的详细信息
+
+```sql
+
+```
+
+31. 在sex字段下方添加名为pay的字段，用来存储工资，默认值15000.00
+
+```sql
+
+```
+
+32. 把所有女孩的工资修改为10000
+
+```sql
+update user set pay=10000.00 where sex='girl';
+```
+
+33. 把root用户的工资修改为30000
+
+```sql
+update user set pay=30000 where name='root';
+```
+
+34. 给adm用户涨500元工资
+
+```sql
+
+```
+
+35. 查看所有用户的名字和工资
+
+```sql
+select name,pay from user;
+```
+
+36. 查看工资字段的平均值（平均值用avg）
+
+```sql
+select avg(pay) from user;
+```
+
+37. 显示工资字段值小于平均工资的用户名
+
+```sql
+select name from user where pay<(select avg(pay) from user);
+```
+
+38. 查看女生里uid号最大用户名
+
+```sql
+select name from user where  uid=(select max(uid) from user where sex='girl');
+```
+
+39. 查看bin用户的uid gid 字段的值 及 这2个字段相加的和
+
+```sql
+select uid,gid,uid+gid from user where name='bin';
+```
+ 
     
     
     
