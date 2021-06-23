@@ -4411,6 +4411,18 @@ select name,uid,gid from user limit 3,3;
 ```
 
 
+查询user表中gid最大的前5个用户使用的shell
+
+```sql
+select name,gid,shell from user order by gid desc limit 5;
+```
+
+把gid最小的前5个用户信息保存到/myload/min5.txt文件里
+
+```sql
+select name,gid,shell from user order by gid limit 5 into outfile "/var/lib/mysql-files/min5.txt";
+system cat /var/lib/mysql-files/min5.txt 1
+```
 
 
 
