@@ -10613,7 +10613,7 @@ system useradd lucy;
 system ls /home;
 ```
 
-19. 把lucy用户的信息添加到user1表里
+19. 把lucy用户的信息添加到user表里
 
 ```sql
 system cat /etc/passwd
@@ -10636,7 +10636,7 @@ alter table user modify name char(50) not null;
 22. 删除root用户家目录字段的值
 
 ```sql
-delete from user where name='root';
+update user set homedir=null where name='root';
 ```
 
 23. 显示 gid 大于500的用户的用户名家目录和使用的shell
