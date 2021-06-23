@@ -10617,13 +10617,14 @@ system ls /home;
 
 ```sql
 system cat /etc/passwd
+insert into user values('lucy',null,null,null,'x',1001,1001,null,'/home/lucy','/bin/bash');
 ```
 
 20. 删除表中的 comment 字段
 
 ```sql
-insert into user values('lucy','x',1001,1001,null,'/home/lucy','/bin/bash');
-select * from user;
+alter table user drop comment;
+desc user;
 ```
 
 21. 设置表中所有name字段值不允许为空
