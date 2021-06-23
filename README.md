@@ -10741,7 +10741,25 @@ select name from user where  uid=(select max(uid) from user where sex='girl');
 select uid,gid,uid+gid from user where name='bin';
 ```
 
- 
+
+40. 显示uid号最小的前10个用户的信息
+
+```sql
+select * from user order by uid limit 10;
+```
+
+41. 显示表中第10条记录到第15条记录
+
+```sql
+select * from user limit 9,5;
+```
+
+42. 统计name字段不为空有多少条记录
+
+```sql
+select count(*) from user where name is not null;
+```
+
     
     
     
