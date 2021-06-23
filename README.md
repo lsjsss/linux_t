@@ -4365,6 +4365,31 @@ select count(name) from user where name like "___";
 
 
 
+### 排序
+
+> 格式: SQL查询 order by 字段名 [asc|desc] 升序|降序
+
+```sql
+select name,uid from user where uid>=10 and uid<=200;
+select name,uid from user where uid>=10 and uid<-200 order by uid;
+select name,uid from user where uid>=10 and uid<=200 order by uid desc;
+```
+
+
+### 分组
+
+> 格式: SQL查询 group by 字段名
+
+```sql
+select shell from user where uid<500;
+select shell from user where uid<500 group by shell;
+```
+
+> 去重显示格式: select distinct 字段名 from 表名
+
+```sql
+select distinct shell from user where uid<500;
+```
 
 
 
