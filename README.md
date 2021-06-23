@@ -4392,6 +4392,23 @@ select distinct shell from user where uid<500;
 ```
 
 
+### 限制查询结果
+
+> 显示行数用法
+
+
+> SQL查询limit数字;	//显示查询结果前多少条记录
+>
+> SQL查询limit数字1,数字2;	//显示指定范围内的查询记录
+
+数字1 起始行(0表示第1行)
+
+数字2 总行数
+
+```sql
+select name,uid,gid from user limit 3;
+select name,uid,gid from user limit 3,3;
+```
 
 
 
