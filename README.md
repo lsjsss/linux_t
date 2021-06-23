@@ -4232,16 +4232,113 @@ firefox http://192.168.4.10/phpmyadmin
 
 
 
+### 范围匹配
+
+| in (`值列表`) | 在....里 |
+| -- | -- |
+| not in (`值列表`) | 不在...里... |
+| between `数字` and `数字` | 在...之间… |
+
+举例：
+```sql
+select name,uid from user where name in("mysql","bin","null");
+select name,uid from user where uid in(3,6,9,15);
+select name,shell from user where shell not in("/bin/bash","/sbin/nologin")
+select name,uid from user where uid between 15 and 30;
+select name,uid from user where uid between 15 and 100;
+select id,name,uid from user where id between 10 and 13;
+```
+
+#### 逻辑匹配
+
+
+多个条件判断时使用
+
+
+| or | 逻辑或 | 有一个条件成立即可 |
+| -- | -- | -- |
+| and | 逻辑与(且) | 所有条件都要成立才可以 |
+| !或not | 逻辑非 |
+
+举例
+```sql
+select name,uid from user where name="root" and shell ="/sbin/nologin";
+select name,uid from user where name="root" and shell="/bin/bash";
+select name,uid from user where name="root" or shell="/sbin/nologin";
+select name,uid,shell from user where name="root" or shell="/sbin/nologin";
+select name,uid,shell from user where shell !="/bin/bash";
+
+select name,uid,shell from user where shell="/bin/bash";
+select name,uid,shell from user where shell in ("/bin/bash","/sbin/nologin");
+select name,uid,shell from user where shell not in ("/bin/bash","/sbin/nologin");
+```
+
+
+
+### 高级匹配条件
+
+#### 模糊查询
+
+格式: where 字段名 like "通配符"
+
+| _ | 表示1个字符 |
+| -- | -- |
+| % | 表示0-n个字符 |
+
+```sql
+select name from user where name like "_";
+select name from user where name like "____";
+select name from user where name like "%a%";
+select name from user where name like "a%";
+select name from user where name like "__%__";
+```
+
+
+
+#### 正则表达式格式
+
+> 格式: ` where 字段 regexp "正则表达式" `
+>
+> 正则元字符: `^` `$` `.` `[]` `*` `|`
+
+| ^ | 匹配输入字符串的开始位置 |
+| -- | -- |
+| $ | 匹配输入字符串的结束位置 |
+| . | 匹配除 "\n" 之外的任何单个字符 |
+| [...] | 字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的 'a' |
+| * | 匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。* 等价于{0,} |
+| p1\|p2\|p3 | 匹配 p1 或 p2 或 p3。例如，'z\|food' 能匹配 "z" 或 "food"。'(z\|f)ood' 则匹配 "zood" 或 "food" |
+
+```sql
+select name from user where name regexp "^r";
+select name from user where name regexp "^a";
+select name from user where name regexp "^a|t$";;
+select name from user where name regexp "^r.*t$";
+select name from user where name regexp "[0-9]";
+insert into user(name) values("haha99"),("66haha"),("6xixi"),("ya7ya");
+select name from user;
+select name from user where name regexp "[0-9]";	-- 查询user表用户名包含数字的name字段
+```
 
 
 
 
-
-
-
-
-
-
+```sql
+select id,name,uid from user where id<=5;
+update user set uid=uid+1 where id<=5;
+select id,name,uid from user where id <=5;
+update user set uid=uid-1 where id<=5;
+select id,name,uid from user where id<=5;
+select name,uid from user where id<=5;
+select name,uid from user where uid % 2=0;
+select name,uid from user where uid % 2 !=0;
+select name,uid,gid from user where name="halt";
+select name,uid,gid,(uid+gid)/2 from user where name="halt";	-- 显示uid和gid的平均值,默认以算法作为临时字段名
+alter table user add age tinyint unsigned default 20 after name;
+desc user;
+select * from user;
+select name,age,2023-age start_y from user where name="root";	-- start_y临时字段名
+```
 
 
 
@@ -5259,7 +5356,7 @@ drop database test;
 show databases;
 
 
-
+==============================================================================================================================================================================================================================================================================================================
 
 
 
@@ -5268,123 +5365,112 @@ tinyint		（整数）
 float(6,2)		(自然数）
 
 
-时间日期字段用法
+### 时间日期字段用法
 
-
+```sql
 create table t5(name char(10),s_year year,uptime time,birthday date,party datetime);
 desc t5;
 insert into t5 values ('bob',1990,08000,20231120,202030214183000);
 select * from t5;
-select curtime();				--获取当前系统时间
-select curdate();				--获取当前系统日期
-select now();				--获取当前系统日期和时间
-select year(now());				--从当前系统时间中只取出年份
-select month(now());				--从当前系统时间中只取出月份
-select day(now());				--从当前系统时间中只取出天数
-select date(now());				--从当前系统中只取出年月日
-select time(now());				--从当前系统中只取出时分秒
-insert into t5 values ('tom',2000,time(now()),curdate(),now());		--利用时间函数插入表记录
+select curtime();				-- 获取当前系统时间
+select curdate();				-- 获取当前系统日期
+select now();				-- 获取当前系统日期和时间
+select year(now());				-- 从当前系统时间中只取出年份
+select month(now());				-- 从当前系统时间中只取出月份
+select day(now());				-- 从当前系统时间中只取出天数
+select date(now());				-- 从当前系统中只取出年月日
+select time(now());				-- 从当前系统中只取出时分秒
+insert into t5 values ('tom',2000,time(now()),curdate(),now());		-- 利用时间函数插入表记录
 select * from t5;
 create table t6(name char(10),meeting datetime,party timestamp);
 desc t6;
 insert into t6 values('bob',now(),now());
 select * from t6;
-insert into t6(name,meeting) values ('bob',20230214103000);		--当未给timestamp字段赋值时，自动以当前系统时间赋值
+insert into t6(name,meeting) values ('bob',20230214103000);		-- 当未给timestamp字段赋值时，自动以当前系统时间赋值
 select * from t6;
-insert into t6(name,party) values ('tom',19730701083000);		--当未给datetime字段赋值时，为NULL（空）
+insert into t6(name,party) values ('tom',19730701083000);		-- 当未给datetime字段赋值时，为NULL（空）
 select * from t6;
 desc t5;
 select s_year from t5;
 insert into t5(s_year) values(03),(81);
 select s_year from t5;
+```
 
 
 
+#### enum  set字段用法
 
-enum  set字段用法
-
+```sql
 create table t7(name char(10),sex enum('boy','girl'),likes set('eat','money','play','game','music'));
 desc t7;
 insert into t7 values ('bob','boy','eat,money');
 select * from t7;
 
 
-
-insert into t2 values (null,null,null);	--插入全为空
-insert into t2(name) values('tom')	--name字段不为空，其余为空
+insert into t2 values (null,null,null);	-- 插入全为空
+insert into t2(name) values('tom')	-- name字段不为空，其余为空
 
 create table t3(name char(10) not null,age tinyint unsigned default 18,class char(8) not null default 'NSD2006');
 desc t3;
 insert into t3(name) values('zs');
-select * from t3;			--显示name字段，其余自动赋值
+select * from t3;			-- 显示name字段，其余自动赋值
 insert into t3 values ('tom',29,'NSD2007');
-select * from t3;			--正常赋值
-insert into t3 values (null,null,null);	--失败，name字段不允许为空
-insert into t3 values ("null",null,null);	--失败，class字段不允许为空
-insert into t3 values ("null",null,"");	--null用引号引起来代表是普通字符，直接加引号，不为空，是0个字符
+select * from t3;			-- 正常赋值
+insert into t3 values (null,null,null);	-- 失败，name字段不允许为空
+insert into t3 values ("null",null,null);	-- 失败，class字段不允许为空
+insert into t3 values ("null",null,"");    -- null用引号引起来代表是普通字符，直接加引号，不为空，是0个字符
 select * from t3;
-  
 
 
-desc t1;
-向t1表添加字段email，不指定字段位置，默认插入到表的最后
+
+#### 向t1表添加字段email，不指定字段位置，默认插入到表的最后
 alter table t1 add email varchar(30) not null default "stu@tedu.cn";
 desc t1;
 
-
-向t1表最前面添加字段stu_id
+#### 向t1表最前面添加字段stu_id
 alter table t1 add stu_id char(9) first;
 desc t1;
 
-
-向t1表中name字段后插入新字段sex
+#### 向t1表中name字段后插入新字段sex
 alter table t1 add sex enum('boy','girl') default 'boy' after name;
 desc t1;
 
-
-
-使用modify修改t1表的sex字段，设置默认值为man
+#### 使用modify修改t1表的sex字段，设置默认值为man
 alter table t1 modify sex enum('man','woman','boy')default 'man';	--字段里需要包含原表中的数据类型boy，否则冲突
 desc t1;
 select * from t1;
 desc t1;
 
 
-
-修改t1表中的name字段类型，修改为varchar
+#### 修改t1表中的name字段类型，修改为varchar
 alter table t1 modify name varchar(15);
 desc t1;
 
 
-将email字段移动到sex字段的后面，其他不变
+#### 将email字段移动到sex字段的后面，其他不变
 alter table t1 modify email varchar(30) not null default 'stu@tedu.cn' after sex;
 desc t1;
-select * from t1;		--数据不发生变化
+select * from t1;		-- 数据不发生变化
 
-
-
-
-删除t1表中的stu_id字段
+#### 删除t1表中的stu_id字段
 alter table t1 drop stu_id;
 desc t1;
 select * from t1;
 
 
-删除t1表中的多个字段（email和party）
+#### 删除t1表中的多个字段（email和party）
 alter table t1 drop email,drop party;
 desc t1; 
 select * from t1;
 
-
-
-修改t1表的name字段名称改为abc
+#### 修改t1表的name字段名称改为abc
 desc t1;
 alter table t1 change name abc varchar;
 desc t1;
 
 
 
-将t1表重命名为stuinfo
+#### 将t1表重命名为stuinfo
 alter table t1 rename stuinfo;
 show tables;
 desc stuinfo;
@@ -5777,6 +5863,10 @@ vim config.inc.php
 31  $cfg['Servers'][$i]['host'] = 'localhost';
 systemctl restart httpd
 firefox http://192.168.4.10/phpmyadmin
+
+
+==============================================================================================================================================================================================================================================================================================================
+
 ```
 
 
@@ -10196,10 +10286,384 @@ use test; create table test.user( name char(50),password char(1),uid int,gid int
 ```
 
 
+
+## 6.21 练习
+
+环境准备
+1. 将虚拟机svr7开机
+2. 关闭SELiunx和防火墙
+
+    ```shell
+    systemctl stop firewalld.service 
+    setenforce 0
+    ```
+
+3. 构建MySQL数据库
+
+    ```shell
+    tar -xf mysql-5.7.17.tar
+    yum -y install mysql-community-*.rpm
+    rpm -qa | grep mysql
+    systemctl start mysqld
+    systemctl enable mysqld
+    netstat -anptu | grep :3306
+    ls /var/lib/mysql
+    ```
+
+4. 数据库管理员密码设置为123qq..A
+
+```shell
+vim /etc/my.cnf
+	validate_password_policy=0
+	validate_password_length=6
+
+grep password /var/log/mysqld.log
+```
+
+```sql
+mysql -uroot -p'mysqld.log中的密码'
+	show variables like "%password%"; 
+	set global validate_password_policy=0;
+	set global validate_password_length=6;
+	alter user root@localhost identified by "123qq..A";
+	exit
+mysql -uroot -p123qq..A
+```
+
+5. 将/etc/passwd文件导入到test.user
+
+```sql
+show variables like '%file%';		-- 查看文件默认的检索目录
+system ls /var/lib/mysql-files;		-- 在mysql下执行Linux系统命令
+exit
+```
+
+```shell
+# 修改检索目录
+vim /etc/my.cnf
+	secure_file_priv="/myload"
+
+mkdir /myload
+chown mysql /myload/
+ls -ld /myload
+systemctl restart mysqld
+mysql -uroot -p123qq..A
+	show variables like '%file%';
+
+create database test;
+use test;
+create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50));
+desc user;
+select * from user;
+system cp /etc/passwd /myload;
+system ls /myload;
+
+load data infile "/myload/passwd" into table user fields terminated by ":" lines terminated by "\n";
+select * from user;
+```
+
+6. 往user表里添加新字段id,设置类型为自增长
+
+    ```sql
+    alter table user add id int primary key auto_increment first;
+    desc user;
+    ```
+
+7. 给name字段添加4条记录分别为(null,"null,",NULL)
+
+    ```sql
+    insert into user(name) values(null),("null"),(""),(NULL);
+    select * from user;
+    ```
     
     
-    
-    
+   
+
+
+
+## 6.22 练习
+
+1. 构建mysql数据库，管理员密码为123qqq…A创建一个名为test库，将/etc/passwd文件导入到test.user
+
+```shell
+systemctl stop firewalld.service 
+setenforce 0
+
+tar -xf mysql-5.7.17.tar
+yum -y install mysql-community-*.rpm
+rpm -qa | grep mysql
+systemctl start mysqld
+systemctl enable mysqld
+netstat -anptu | grep :3306
+ls /var/lib/mysql
+
+grep password /var/log/mysqld.log
+```
+
+```sql
+mysql -uroot -p'mysqld.log中的密码'
+	show variables like "%password%"; 
+	set global validate_password_policy=0;
+	set global validate_password_length=6;
+	alter user root@localhost identified by "123qqq...A";
+	exit
+mysql -uroot -p123qqq...A
+```
+
+```sql
+vim /etc/my.cnf
+	secure_file_priv="/myload"
+cat /etc/my.cnf
+
+mkdir /myload
+chown mysql /myload/
+ls -ld /myload
+systemctl restart mysqld
+mysql -uroot -p123qqq...A
+	show variables like '%file%';
+
+	create database test;
+	show databases;
+	use test;
+	create table test.user( name char(50),password char(1),uid int,gid int,comment varchar(150),homedir char(100),shell char(50));
+	desc user;
+	select * from user;
+	system cp /etc/passwd /myload;
+	system ls /myload;
+	system chown mysql /myload;
+	load data infile "/myload/passwd" into table user fields terminated by ":" lines terminated by "\n";
+	select * from user;
+```
+
+2. 在用户名字段下方添加s_year字段 存放出生年份 默认值是1990
+
+```sql
+alter table user add s_year year default 1990 after name;
+```
+
+3. 在用户名字段下方添加字段名sex 字段值只能是gril 或boy 默认值是 boy
+
+```sql
+alter table user add sex enum('girl','boy') default 'boy' after name;
+```
+
+4. 在sex字段下方添加 age字段  存放年龄 不允许输入负数。默认值 是 21
+
+```sql
+alter table user add age tinyint unsigned default 21 after sex;
+```
+
+5. 把uid字段值是10到50之间的用户的性别修改为 girl
+
+```sql
+update user set sex='girl' where uid between 10 and 50;
+```
+
+6. 统计性别是girl的用户有多少个。(count(*)统计个数)
+
+```sql
+select count(*) from user where sex="girl";
+```
+
+7. 查看性别是girl用户里 uid号 最大的用户名 叫什么。（看最大值用max）
+
+```sql
+select name from user where uid=(select max(uid) from user where sex='girl');
+```
+
+8. 添加一条新记录只给name、uid 字段赋值 值为rtestd  1000
+
+```sql
+insert into  user(name,uid) values("rtestd", 1000);
+```
+
+9. 加一条新记录只给name、uid 字段赋值 值为rtest2d   2000
+
+```sql
+insert into  user(name,uid) values("rtest2d", 2000);
+```
+
+10. 显示uid 是四位数的用户的用户名和uid值。
+
+```sql
+select name, uid from user where uid>=1000;
+```
+
+11. 显示名字是以字母r 开头 且是以字母d结尾的用户名和uid。
+
+```sql
+select name, uid from user where name regexp "^r.*d$"; 
+```
+
+12. 查看是否有名字以字母a开头 并且是以字母c结尾的用户。
+
+```sql
+select name, uid from user where name regexp "^a&c$"; 
+```
+
+13. 把 gid  在100到500间用户的家目录修改为/root
+
+```sql
+update user set comment='/root' where gid between 100 and 500;
+```
+
+14. 把用户是  root 、 bin 、  sync 用户的shell 修改为  /sbin/nologin
+
+```sql
+update user set shell='/sbin/nologin' where name in('root','bin','sync');
+```
+
+15. 查看  gid 小于10的用户 都使用那些shell
+
+```sql
+select shell from user where gid<10;
+```
+
+16. 删除  名字以字母d开头的用户。
+
+```sql
+delete from user where name regexp '^d';
+```
+
+17. 查看那些用户没有家目录
+
+```sql
+select name from user where lujing='/';
+```
+
+18. 使用系统命令useradd 命令添加登录系统的用户名为lucy
+
+```sql
+system useradd lucy;
+system ls /home;
+```
+
+19. 把lucy用户的信息添加到user1表里
+
+```sql
+
+```
+
+20. 删除表中的 comment 字段
+
+```sql
+
+```
+
+21. 设置表中所有name字段值不允许为空
+
+```sql
+
+```
+
+22. 删除root用户家目录字段的值
+
+```sql
+delete from user where name='root';
+```
+
+23. 显示 gid 大于500的用户的用户名 家目录和使用的shell
+
+```sql
+
+```
+
+24. 删除uid大于100的用户记录
+
+```sql
+delete from user where uid>100;
+```
+
+25. 显示uid号在10到30区间的用户有多少个。
+
+```sql
+select count(*) from user where uid between 10 and 30;
+```
+
+26. 显示uid号是100以内的用户使用的shell。
+
+```sql
+select shell from user where uid<=100;
+```
+
+27. 显示uid号小于50且名字里有字母a 用户的详细信息
+
+```sql
+select * from user where  uid<50 and name like "%a%";
+```
+
+28. 只显示用户 root   bin   daemon  3个用户的详细信息。
+
+```sql
+select * from user where name in('root','bin','daemon');
+```
+
+29. 显示除root用户之外所有用户的详细信息。
+
+```sql
+ select * from user where name!='root';
+```
+
+30. 显示名字里含字母c 用户的详细信息
+
+```sql
+
+```
+
+31. 在sex字段下方添加名为pay的字段，用来存储工资，默认值15000.00
+
+```sql
+
+```
+
+32. 把所有女孩的工资修改为10000
+
+```sql
+update user set pay=10000.00 where sex='girl';
+```
+
+33. 把root用户的工资修改为30000
+
+```sql
+update user set pay=30000 where name='root';
+```
+
+34. 给adm用户涨500元工资
+
+```sql
+
+```
+
+35. 查看所有用户的名字和工资
+
+```sql
+select name,pay from user;
+```
+
+36. 查看工资字段的平均值（平均值用avg）
+
+```sql
+select avg(pay) from user;
+```
+
+37. 显示工资字段值小于平均工资的用户名
+
+```sql
+select name from user where pay<(select avg(pay) from user);
+```
+
+38. 查看女生里uid号最大用户名
+
+```sql
+select name from user where  uid=(select max(uid) from user where sex='girl');
+```
+
+39. 查看bin用户的uid gid 字段的值 及 这2个字段相加的和
+
+```sql
+select uid,gid,uid+gid from user where name='bin';
+```
+ 
     
     
     
