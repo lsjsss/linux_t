@@ -8125,17 +8125,17 @@ ls
 2. 永久配置静态IP地址为192.168.4.20/24
 
     ```shell
+    nmcli connection modify ens33 ipv4.addresses 192.168.4.20/24 connection.autoconnect yes
+
     #安装yum源
     mount /dev/cdrom /mnt/	#先连接光盘
-    vi /etc/fstab
-    	/dev/cdrom /mnt iso9660 defaults 0 0
+    echo "/dev/cdrom /mnt iso9660 defaults 0 0" >> /etc/fstab
     
-    vi /etc/yum.repos.d/mnt.repo
-    	[mnt]
-    	name=Centos7.5
-    	baseurl=file:///mnt
-    	enable=1
-    	gpgcheck=0
+    echo "[mnt]
+    name=Centos7.5
+    baseurl=file:///mnt
+    enable=1
+    gpgcheck=0" > /etc/yum.repos.d/mnt.repo
     
     rm -rf /etc/yum.repos.d/CentOS-*
     yum clean all
@@ -8144,7 +8144,7 @@ ls
     yum -y install vim-enhanced	#安装vim包
     yum -y install net-tools	#安装ifconfig支持包
     yum -y install bash-completion	#安装Tab键支持包
-    poweroff	#重启以生效
+    reboot	#重启以生效
     #调整网络适配器，开机
     
     nmcli connection modify ens33 ipv4.addresses 192.168.4.20/24 connection.autoconnect yes
