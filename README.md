@@ -10408,6 +10408,7 @@ mysql -uroot -p'mysqld.log中的密码'
 	alter user root@localhost identified by "123qqq...A";
 	exit
 mysql -uroot -p123qqq...A
+exit
 ```
 
 ```sql
@@ -10667,4 +10668,4 @@ select uid,gid,uid+gid from user where name='bin';
     
     
     
-    > 如有侵权，请联系作者删除
+> 如有侵权，请联系作者删除
