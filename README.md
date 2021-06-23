@@ -10400,6 +10400,7 @@ select * from user;
 
 
 
+
 ## 6.22 练习
 
 1. 构建mysql数据库，管理员密码为123qqq…A创建一个名为test库，将/etc/passwd文件导入到test.user
@@ -10561,19 +10562,20 @@ system ls /home;
 19. 把lucy用户的信息添加到user1表里
 
 ```sql
-
+system cat /etc/passwd
 ```
 
 20. 删除表中的 comment 字段
 
 ```sql
-
+insert into user values('lucy','x',1001,1001,null,'/home/lucy','/bin/bash');
+select * from user;
 ```
 
 21. 设置表中所有name字段值不允许为空
 
 ```sql
-
+alter table user modify name char(50) not null;
 ```
 
 22. 删除root用户家目录字段的值
@@ -10582,10 +10584,10 @@ system ls /home;
 delete from user where name='root';
 ```
 
-23. 显示 gid 大于500的用户的用户名 家目录和使用的shell
+23. 显示 gid 大于500的用户的用户名家目录和使用的shell
 
 ```sql
-
+select name,homedir,shell from user where gid>500;
 ```
 
 24. 删除uid大于100的用户记录
@@ -10621,19 +10623,19 @@ select * from user where name in('root','bin','daemon');
 29. 显示除root用户之外所有用户的详细信息。
 
 ```sql
- select * from user where name!='root';
+select * from user where name!='root';
 ```
 
-30. 显示名字里含字母c 用户的详细信息
+30. 显示名字里含字母c用户的详细信息
 
 ```sql
-
+select * from user where name like '%c%';
 ```
 
 31. 在sex字段下方添加名为pay的字段，用来存储工资，默认值15000.00
 
 ```sql
-
+alter table user add pay float(7,2) default 15000.00 after sex;
 ```
 
 32. 把所有女孩的工资修改为10000
@@ -10651,7 +10653,7 @@ update user set pay=30000 where name='root';
 34. 给adm用户涨500元工资
 
 ```sql
-
+update user set pay=pay+500 where name='adm';
 ```
 
 35. 查看所有用户的名字和工资
@@ -10683,6 +10685,7 @@ select name from user where  uid=(select max(uid) from user where sex='girl');
 ```sql
 select uid,gid,uid+gid from user where name='bin';
 ```
+
  
     
     
