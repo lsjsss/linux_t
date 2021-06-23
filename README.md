@@ -4342,7 +4342,26 @@ select name,age,2023-age start_y from user where name="root";	-- start_y临时�
 
 
 
+### 聚集函数
 
+> MySQL内置数据统计函数(字段必须是数值类型)
+
+| avg(字段名) | 统计字段平均值 |
+| sum(字段名) | 统计字段之和 |
+| min(字段名) | 统计字段最小值 |
+| max(字段名) | 统计字段最大值 |
+| count(字段名) | 统计字段值个数 |
+
+举例
+```sql
+select avg(uid) from user;
+select sum(uid) from user;
+select min(uid) from user;
+select max(uid) from user;
+select count(*) from user;
+select count(*) from user where name like "___";
+select count(name) from user where name like "___";
+```
 
 
 
