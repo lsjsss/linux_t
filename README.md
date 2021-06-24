@@ -4442,7 +4442,7 @@ grant 权限列表 on 库名 to 用户名@"客户端地址"
 grant all on db4.* to yaya@"%" identified by"123qqq...A"; 
 ```
 
-* 权限列表
+#### 权限列表
 
 > all	-- 所有权限
 >
@@ -4452,7 +4452,7 @@ grant all on db4.* to yaya@"%" identified by"123qqq...A";
 >
 > select, update (字段1, .字段N)	-- 指定字段库名
 
-* 库名
+#### 库名
 
 > *.*	-- 所有库所有表
 >
@@ -4464,7 +4464,7 @@ grant all on db4.* to yaya@"%" identified by"123qqq...A";
  - 授权时自定义 要有标识性
  - 存储在mysql库的user表里
 
-* 客户端地址
+#### 客户端地址
 
 > %	-- 所有主机
 >
@@ -4475,7 +4475,25 @@ grant all on db4.* to yaya@"%" identified by"123qqq...A";
 > localhost	-- 数据库服务器本机
 
 
-示例：
+##### 应用示例1
+ - 添加用户mydba，对所有库、表有完全权限
+ - 允许从任何客户端连接，密码123qqq...A
+ - 且有授权权限
+
+```sql
+grant all on *.* to mydba@"%" 	dentified by "123qqq...A" with grant option; 
+```
+
+##### 应用示例2
+ - 添加admin用户，允许从192.168.4.0/24网段连接，对db3库的user表有查询权限，密码123qqq...A
+ - 添加admin2用户，允许从本机连接，允许对db3库的所有表有查询/更新/插入/删除记录权限，密码123qqq...A
+
+```sql
+grant select on db3.user to admin@"192.168.4.%" identified by "123qqq...A";
+grant select,insert,update,delete on db3.* to admin2@"localhost" identified by "123qq...A"; 
+```
+
+#### 示例3：
 
 > 添加用户mydba，对所有库所有表有完全权限，允许从任何客户端连接，密码为123qqq...A，且有授权权限
 
@@ -4487,7 +4505,19 @@ grant all on *.* to mydba@"%" identified by '123qq...A' with grant option;
 ``虚拟机pc207测试:
 yum -y install mariadb
 mysql -h192.168.4.7 -umydba -p'123qq...A' 
-```      
+```         
+
+
+#### 登录用户使用
+
+```sql
+select user();	-- 显示登录用户名及客户端地址
+show grants;	-- 用户显示自身访问权限
+show grants for用户名@"客户端地址";	-- 管理员查看已有授权用户权限
+set password=password("密码");	-- 授权用户连接后修改连接密码
+set password for用户名@"客户端地址"= password("密码");	-- 管理员重置授权用户连接密码
+drop user 用户名@"客户端地址";	-- 删除授权用户(必须有管理员权限) 
+```
 
 
 
