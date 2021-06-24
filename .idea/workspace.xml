@@ -5,7 +5,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.18 update">
+    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.24 update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -17,7 +17,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="githubmaster" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -45,7 +45,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -148,7 +148,8 @@
     <MESSAGE value="6.10 update" />
     <MESSAGE value="6.11 update" />
     <MESSAGE value="6.18 update" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.18 update" />
+    <MESSAGE value="6.24 update" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.24 update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
@@ -171,10 +172,14 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="245" y="82" width="1258" height="833" key="MergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617850455547" />
-    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog" timestamp="1617850466339">
+    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog" timestamp="1624521907954">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617850466339" />
+    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1624521907954" />
+    <state x="277" y="142" key="SettingsEditor" timestamp="1624522278791">
+      <screen x="0" y="0" width="1552" height="996" />
+    </state>
+    <state x="277" y="142" key="SettingsEditor/0.0.1552.996@0.0.1552.996" timestamp="1624522278791" />
     <state x="85" y="75" width="1368" height="812" key="ShowDiffWithBranchDialog" timestamp="1617806815030">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
@@ -187,10 +192,10 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="398" y="236" key="Vcs.Push.Dialog.v2" timestamp="1623973927314">
-      <screen x="0" y="0" width="1680" height="1020" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1624522029446">
+      <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1623810165055" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1624522029446" />
     <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623973927314" />
     <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624065449372">
       <screen x="0" y="0" width="1552" height="996" />
