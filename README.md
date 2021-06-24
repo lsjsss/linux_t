@@ -4687,6 +4687,29 @@ show grants for admin2@"localhost";
 
 
 
+### 撤销权限
+* 命令格式
+revoke 权限列表 on 库名.表 from 用户名@"客户端地址";
+
+```sql
+REVOKE insert,drop ON test.* FROM sqler02@'localhost';
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
