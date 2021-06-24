@@ -4650,7 +4650,39 @@ mysql库记录授权信息,主要表如下:
 `查看表记录可以获取用户权限;也可以通过更新记录,修改用户权限`
 
 
+* mysql库记录授权信息,主要表如下:
 
+| user表 | 记录已有的授权用户及权限 |
+| -- | -- |
+| db表 | 记录已有授权用户对数据库的访问权限 |
+| tables_priv表 | 记录已有授权用户对表的访问权限 |
+| columns_priv表 | 记录已有授权用户对字段的访问权限 |
+
+```sql
+mysql -uroot-p'123qq...A'
+select user,host from mysql.user;
+show grants for admin@"192.168.4.%";	-- 查看admin用户的权限
+select * from mysql.user where host="192.168.4.%" and user="admin"\G
+select * from mysgl.tables priv where host="192.168.4.%" and user="admin"\G
+desc mysql.tables priv\G
+update mysql.tables_priv set Table_priv="select,create,insert,update" where user="admin" and host="192.168.4.%";	-- 通过改表字段的值修改授权用户权限
+flush privileges;	-- 刷新，让配置生效
+select * from mysql.tables_priv where host="192.168.4.%" and user="admin"\G 
+show grants for admin@"192.168.4.%";
+desc mysql.db;
+select host,db,user from mysgl.db;
+select * from mysql.db where db="db3"\G
+show grants for admin2@"localhost";
+update mysql.db set Delete_priv="N" where user="admin2";
+flush privileges;
+show grants for admin2@"localhost";
+select * from mysql.db where db="db3"\G 
+desc mysql.columns_priv;
+select * from mysql.columns_priv;
+grant select,update(name) on db3.user to admin2@"localhost" identified by "123qqq...A";
+select * from mysql.columns_priv;
+show grants for admin2@"localhost";
+```
 
 
 
