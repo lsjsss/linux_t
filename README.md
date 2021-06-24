@@ -4342,6 +4342,423 @@ select name,age,2023-age start_y from user where name="root";	-- start_y临时�
 
 
 
+### 聚集函数
+
+> MySQL内置数据统计函数(字段必须是数值类型)
+
+| avg(字段名) | 统计字段平均值 |
+| sum(字段名) | 统计字段之和 |
+| min(字段名) | 统计字段最小值 |
+| max(字段名) | 统计字段最大值 |
+| count(字段名) | 统计字段值个数 |
+
+举例
+```sql
+select avg(uid) from user;
+select sum(uid) from user;
+select min(uid) from user;
+select max(uid) from user;
+select count(*) from user;
+select count(*) from user where name like "___";
+select count(name) from user where name like "___";
+```
+
+
+
+### 排序
+
+> 格式: SQL查询 order by 字段名 [asc|desc] 升序|降序
+
+```sql
+select name,uid from user where uid>=10 and uid<=200;
+select name,uid from user where uid>=10 and uid<-200 order by uid;
+select name,uid from user where uid>=10 and uid<=200 order by uid desc;
+```
+
+
+### 分组
+
+> 格式: SQL查询 group by 字段名
+
+```sql
+select shell from user where uid<500;
+select shell from user where uid<500 group by shell;
+```
+
+> 去重显示格式: select distinct 字段名 from 表名
+
+```sql
+select distinct shell from user where uid<500;
+```
+
+
+### 限制查询结果
+
+> 显示行数用法
+
+
+> SQL查询limit数字;	//显示查询结果前多少条记录
+>
+> SQL查询limit数字1,数字2;	//显示指定范围内的查询记录
+
+数字1 起始行(0表示第1行)
+
+数字2 总行数
+
+```sql
+select name,uid,gid from user limit 3;
+select name,uid,gid from user limit 3,3;
+```
+
+
+查询user表中gid最大的前5个用户使用的shell
+
+```sql
+select name,gid,shell from user order by gid desc limit 5;
+```
+
+把gid最小的前5个用户信息保存到/myload/min5.txt文件里
+
+```sql
+select name,gid,shell from user order by gid limit 5 into outfile "/var/lib/mysql-files/min5.txt";
+system cat /var/lib/mysql-files/min5.txt 1
+```
+
+
+
+## 用户授权
+### grant 授权
+
+> 授权：添加用户并设置权限
+
+命令格式
+
+```sql
+-- 客户端
+grant 权限列表 on 库名 to 用户名@"客户端地址"
+	identified by "密码"	-- 授权用户密码
+	with grant option;	-- 有授权权限，可选项
+
+grant all on db4.* to yaya@"%" identified by"123qqq...A"; 
+```
+
+#### 权限列表
+
+> all	-- 所有权限
+>
+> usage	-- 无权限
+>
+> select,update,insert	-- 个别权限
+>
+> select, update (字段1, .字段N)	-- 指定字段库名
+
+#### 库名
+
+> *.*	-- 所有库所有表
+>
+> 库名.*	-- —个库
+>
+> 库名.表名	-- 一张表 
+
+* 用户名
+ - 授权时自定义 要有标识性
+ - 存储在mysql库的user表里
+
+#### 客户端地址
+
+> %	-- 所有主机
+>
+> 192.168.4.%	-- 网段内的所有主机
+>
+> 192.168.4.1	-- 1台主机
+>
+> localhost	-- 数据库服务器本机
+
+
+##### 应用示例1
+ - 添加用户mydba，对所有库、表有完全权限
+ - 允许从任何客户端连接，密码123qqq...A
+ - 且有授权权限
+
+```sql
+grant all on *.* to mydba@"%" 	dentified by "123qqq...A" with grant option; 
+```
+
+##### 应用示例2
+ - 添加admin用户，允许从192.168.4.0/24网段连接，对db3库的user表有查询权限，密码123qqq...A
+ - 添加admin2用户，允许从本机连接，允许对db3库的所有表有查询/更新/插入/删除记录权限，密码123qqq...A
+
+```sql
+grant select on db3.user to admin@"192.168.4.%" identified by "123qqq...A";
+grant select,insert,update,delete on db3.* to admin2@"localhost" identified by "123qq...A"; 
+```
+
+#### 示例3：
+
+> 添加用户mydba，对所有库所有表有完全权限，允许从任何客户端连接，密码为123qqq...A，且有授权权限
+
+```sql
+-- 虚拟机svr7操作
+mysql -uroot -p'123qqq...A'
+grant all on *.* to mydba@"%" identified by '123qq...A' with grant option;
+
+``虚拟机pc207测试:
+yum -y install mariadb
+mysql -h192.168.4.7 -umydba -p'123qq...A' 
+```         
+
+
+### 登录用户使用
+
+```sql
+select user();	-- 显示登录用户名及客户端地址
+show grants;	-- 用户显示自身访问权限
+show grants for用户名@"客户端地址";	-- 管理员查看已有授权用户权限
+set password=password("密码");	-- 授权用户连接后修改连接密码
+set password for用户名@"客户端地址"= password("密码");	-- 管理员重置授权用户连接密码
+drop user 用户名@"客户端地址";	-- 删除授权用户(必须有管理员权限) 
+```
+
+
+示例：
+
+虚拟机pc207
+
+```shell
+yum-y install mariadb
+mysql -h192.168.4.7-umydba -p'123qqq...A'
+```
+
+```sql
+select user();	-- 查看当前的登录用户及客户端地址
+show grants;	-- 查看当前登录用户mydba所拥有的权限
+```
+
+虚拟机svr7
+```sql
+show grants for mydba@"%";	-- 管理员查看已有授权用户权限
+```
+
+虚拟机pc207
+```sql
+set password=password("456aaa...A");	-- 授权用户修改自己的连接密码
+exit
+
+mysql -h192.168.4.7 -umydba -p'456aaa...A'
+exit	-- 使用新密码登录数据库
+```
+
+虚拟机svr7
+```sql
+set password for mydba@"%"=password("123qqq ..A");	-- 管理员重置授权用户连接密码
+```
+
+虚拟机pc207
+```shell
+mysql-h192.168.4.7 -umydba -p'123qqq...A'
+```
+
+
+#### 测试权限
+
+pc207
+```shell
+mysql -h192.168.4.7 -umydba -p'123qqq...A'
+```
+```shell
+show grants;
+show databases
+drop database test;
+create database test;
+create database bbsdb;
+grant all on bbsdb.* to abc@"localhost" identified by '123qqq..A;	-- 用户mydba可以给其他用户授权虚拟机
+```
+
+svr7
+```shell
+mysql -uabc -p'123qq..A'
+```
+```shell
+# 删除授权用户mydba (必须有管理员权限)
+mysql -uroot -p '123qqq...A';
+```
+```sql
+drop user mydba@"%";
+```
+
+pc207
+```sql
+mysql -h192.168.4.7 -umydba -p'123qqq...A'	-- 连接失败
+```
+
+
+##### 应用示例4:
+- 添加admin用户，允许从192.168.4.0/24网段连接，对db3库的user表有查询权限,密码123qqq...A
+- 添加admin2用户，允许从本机连接，允许对db3库的所有表有查询/更新/插入/删除记录权限，密码123qqq...A
+
+```sql
+grant select on db3.user to admin@"192.168.4.%" identified by "123qqq...A";
+grant select,insert,update,delete on db3.* to admin2@"localhost" identified by "123qqq...A"; 
+```
+
+svr7
+```sql
+mysql -uroot -p'123qqq...A'
+```
+
+添加admin用户，允许从192.168.4.0/24网段连接，对db3库的user表有查询权限，密码为123qqq...A
+```sql
+grant create,select on db3.user to admin@"192.168.4.%" identified by '123qqq...A';	-- 给用户授权时如果不是all权限,当对应的库和表不存在时必须有create权限
+```
+添加admin2用户,允许从本机连接,对db3库的所有表有查询/更新/插入/删除权限,密码为123qqq...A
+```sql
+grant create,select,update,insert,delete on db3.* to admin2@"localhost" identified by '123qqq...A';
+create database db3;
+exit
+```
+pc207：测试admin用户的权限
+```sql
+mysql -h192.168.4.7 -uadmin -p'123qqq...A'
+show grants;
+create table db3.user(name char(50),sex enum("m","w");
+select * from db3.user;
+insert into db3.user values("bob","m");	-- 插入失败
+```
+svr7：测试admin2用户的权限,只能从本机登录
+```sql
+mysql -uadmin2 -p'123qqq...A'
+show grants;
+use db3;
+show tables;
+insert into db3.user values("bob","m");
+select * from user;
+delete from user;
+create table t1(id int);
+```
+
+
+### 授权库
+
+mysql库记录授权信息,主要表如下:
+
+| user表 | 记录已有的授权`用户`及权限 |
+| -- | -- |
+| db表 | 记录已有授权用户对`数据库`的访问权限 |
+| tables_priv表 | 记录已有授权用户对`表`的访问权限 |
+| columns_priv表 | 记录已有授权用户对`字段`的访问权限 |
+
+`查看表记录可以获取用户权限;也可以通过更新记录,修改用户权限`
+
+
+* mysql库记录授权信息,主要表如下:
+
+| user表 | 记录已有的授权用户及权限 |
+| -- | -- |
+| db表 | 记录已有授权用户对数据库的访问权限 |
+| tables_priv表 | 记录已有授权用户对表的访问权限 |
+| columns_priv表 | 记录已有授权用户对字段的访问权限 |
+
+```sql
+mysql -uroot-p'123qq...A'
+select user,host from mysql.user;
+show grants for admin@"192.168.4.%";	-- 查看admin用户的权限
+select * from mysql.user where host="192.168.4.%" and user="admin"\G
+select * from mysgl.tables priv where host="192.168.4.%" and user="admin"\G
+desc mysql.tables priv\G
+update mysql.tables_priv set Table_priv="select,create,insert,update" where user="admin" and host="192.168.4.%";	-- 通过改表字段的值修改授权用户权限
+flush privileges;	-- 刷新，让配置生效
+select * from mysql.tables_priv where host="192.168.4.%" and user="admin"\G 
+show grants for admin@"192.168.4.%";
+desc mysql.db;
+select host,db,user from mysgl.db;
+select * from mysql.db where db="db3"\G
+show grants for admin2@"localhost";
+update mysql.db set Delete_priv="N" where user="admin2";
+flush privileges;
+show grants for admin2@"localhost";
+select * from mysql.db where db="db3"\G 
+desc mysql.columns_priv;
+select * from mysql.columns_priv;
+grant select,update(name) on db3.user to admin2@"localhost" identified by "123qqq...A";
+select * from mysql.columns_priv;
+show grants for admin2@"localhost";
+```
+
+
+
+
+### 撤销权限
+* 命令格式
+revoke 权限列表 on 库名.表 from 用户名@"客户端地址";
+
+```sql
+REVOKE insert,drop ON test.* FROM sqler02@'localhost';
+```
+
+
+```sql
+select host,user from mysql.user;
+show grants for admin@"192.168.4.%";
+revoke update,create on db3.user from admin@" 192.168.4.%";
+show grants for admin@"192.168.4.%";
+select * from mysgl.tables priv where user='admin"\G
+select host,user from mysql.user;
+show grants for admin2@"localhost";
+revoke insert,update on db3.* from admin2@"localhost";
+show grants for admin2@"localhost";
+revoke all on db3.* from admin2@"localhost";
+show grants for admin2@"localhost";
+revoke all on db3.user from admin2@"localhost";
+show grants for admin2@"localhost";
+drop user admin2@"localhost";
+exit
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8093,7 +8510,7 @@ ls
 2. 采取自动分区规划
 3. 软件选择“最小安装”
 
-### 案例2（重复）： 配置网络参数，要求如下：
+### 案例2（重复）(最小化装机）： 配置网络参数，要求如下：
 1. 永久设置主机名为 A.tedu.cn
 
     ```shell
@@ -8106,17 +8523,17 @@ ls
 2. 永久配置静态IP地址为192.168.4.20/24
 
     ```shell
+    nmcli connection modify ens33 ipv4.addresses 192.168.4.20/24 connection.autoconnect yes
+
     #安装yum源
     mount /dev/cdrom /mnt/	#先连接光盘
-    vi /etc/fstab
-    	/dev/cdrom /mnt iso9660 defaults 0 0
+    echo "/dev/cdrom /mnt iso9660 defaults 0 0" >> /etc/fstab
     
-    vi /etc/yum.repos.d/mnt.repo
-    	[mnt]
-    	name=Centos7.5
-    	baseurl=file:///mnt
-    	enable=1
-    	gpgcheck=0
+    echo "[mnt]
+    name=Centos7.5
+    baseurl=file:///mnt
+    enable=1
+    gpgcheck=0" > /etc/yum.repos.d/mnt.repo
     
     rm -rf /etc/yum.repos.d/CentOS-*
     yum clean all
@@ -8125,7 +8542,7 @@ ls
     yum -y install vim-enhanced	#安装vim包
     yum -y install net-tools	#安装ifconfig支持包
     yum -y install bash-completion	#安装Tab键支持包
-    poweroff	#重启以生效
+    reboot	#重启以生效
     #调整网络适配器，开机
     
     nmcli connection modify ens33 ipv4.addresses 192.168.4.20/24 connection.autoconnect yes
@@ -10381,6 +10798,7 @@ select * from user;
 
 
 
+
 ## 6.22 练习
 
 1. 构建mysql数据库，管理员密码为123qqq…A创建一个名为test库，将/etc/passwd文件导入到test.user
@@ -10408,6 +10826,7 @@ mysql -uroot -p'mysqld.log中的密码'
 	alter user root@localhost identified by "123qqq...A";
 	exit
 mysql -uroot -p123qqq...A
+exit
 ```
 
 ```sql
@@ -10538,34 +10957,36 @@ system useradd lucy;
 system ls /home;
 ```
 
-19. 把lucy用户的信息添加到user1表里
+19. 把lucy用户的信息添加到user表里
 
 ```sql
-
+system cat /etc/passwd
+insert into user values('lucy',null,null,null,'x',1001,1001,null,'/home/lucy','/bin/bash');
 ```
 
 20. 删除表中的 comment 字段
 
 ```sql
-
+alter table user drop comment;
+desc user;
 ```
 
 21. 设置表中所有name字段值不允许为空
 
 ```sql
-
+alter table user modify name char(50) not null;
 ```
 
 22. 删除root用户家目录字段的值
 
 ```sql
-delete from user where name='root';
+update user set homedir=null where name='root';
 ```
 
-23. 显示 gid 大于500的用户的用户名 家目录和使用的shell
+23. 显示 gid 大于500的用户的用户名家目录和使用的shell
 
 ```sql
-
+select name,homedir,shell from user where gid>500;
 ```
 
 24. 删除uid大于100的用户记录
@@ -10601,19 +11022,19 @@ select * from user where name in('root','bin','daemon');
 29. 显示除root用户之外所有用户的详细信息。
 
 ```sql
- select * from user where name!='root';
+select * from user where name!='root';
 ```
 
-30. 显示名字里含字母c 用户的详细信息
+30. 显示名字里含字母c用户的详细信息
 
 ```sql
-
+select * from user where name like '%c%';
 ```
 
 31. 在sex字段下方添加名为pay的字段，用来存储工资，默认值15000.00
 
 ```sql
-
+alter table user add pay float(7,2) default 15000.00 after sex;
 ```
 
 32. 把所有女孩的工资修改为10000
@@ -10631,7 +11052,7 @@ update user set pay=30000 where name='root';
 34. 给adm用户涨500元工资
 
 ```sql
-
+update user set pay=pay+500 where name='adm';
 ```
 
 35. 查看所有用户的名字和工资
@@ -10663,8 +11084,27 @@ select name from user where  uid=(select max(uid) from user where sex='girl');
 ```sql
 select uid,gid,uid+gid from user where name='bin';
 ```
- 
+
+
+40. 显示uid号最小的前10个用户的信息
+
+```sql
+select * from user order by uid limit 10;
+```
+
+41. 显示表中第10条记录到第15条记录
+
+```sql
+select * from user limit 9,5;
+```
+
+42. 统计name字段不为空有多少条记录
+
+```sql
+select count(*) from user where name is not null;
+```
+
     
     
     
-    > 如有侵权，请联系作者删除
+> 如有侵权，请联系作者删除
