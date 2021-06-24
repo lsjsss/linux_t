@@ -4696,7 +4696,23 @@ REVOKE insert,drop ON test.* FROM sqler02@'localhost';
 ```
 
 
-
+```sql
+select host,user from mysql.user;
+show grants for admin@"192.168.4.%";
+revoke update,create on db3.user from admin@" 192.168.4.%";
+show grants for admin@"192.168.4.%";
+select * from mysgl.tables priv where user='admin"\G
+select host,user from mysql.user;
+show grants for admin2@"localhost";
+revoke insert,update on db3.* from admin2@"localhost";
+show grants for admin2@"localhost";
+revoke all on db3.* from admin2@"localhost";
+show grants for admin2@"localhost";
+revoke all on db3.user from admin2@"localhost";
+show grants for admin2@"localhost";
+drop user admin2@"localhost";
+exit
+```
 
 
 
