@@ -4426,7 +4426,68 @@ system cat /var/lib/mysql-files/min5.txt 1
 
 
 
+## 用户授权
+### grant 授权
 
+> 授权：添加用户并设置权限
+
+命令格式
+
+```sql
+-- 客户端
+grant 权限列表 on 库名 to 用户名@"客户端地址"
+	identified by "密码"	-- 授权用户密码
+	with grant option;	-- 有授权权限，可选项
+
+grant all on db4.* to yaya@"%" identified by"123qqq...A"; 
+```
+
+* 权限列表
+
+> all	-- 所有权限
+>
+> usage	-- 无权限
+>
+> select,update,insert	-- 个别权限
+>
+> select, update (字段1, .字段N)	-- 指定字段库名
+
+* 库名
+
+> *.*	-- 所有库所有表
+>
+> 库名.*	-- —个库
+>
+> 库名.表名	-- 一张表 
+
+* 用户名
+ - 授权时自定义 要有标识性
+ - 存储在mysql库的user表里
+
+* 客户端地址
+
+> %	-- 所有主机
+>
+> 192.168.4.%	-- 网段内的所有主机
+>
+> 192.168.4.1	-- 1台主机
+>
+> localhost	-- 数据库服务器本机
+
+
+示例：
+
+> 添加用户mydba，对所有库所有表有完全权限，允许从任何客户端连接，密码为123qqq...A，且有授权权限
+
+```sql
+-- 虚拟机svr7操作
+mysql -uroot -p'123qqq...A'
+grant all on *.* to mydba@"%" identified by '123qq...A' with grant option;
+
+``虚拟机pc207测试:
+yum -y install mariadb
+mysql -h192.168.4.7 -umydba -p'123qq...A' 
+```      
 
 
 
