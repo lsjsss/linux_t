@@ -4508,7 +4508,7 @@ mysql -h192.168.4.7 -umydba -p'123qq...A'
 ```         
 
 
-#### 登录用户使用
+### 登录用户使用
 
 ```sql
 select user();	-- 显示登录用户名及客户端地址
@@ -4559,6 +4559,37 @@ mysql-h192.168.4.7 -umydba -p'123qqq...A'
 ```
 
 
+#### 测试权限
+
+pc207
+```shell
+mysql -h192.168.4.7 -umydba -p'123qqq...A'
+```
+```shell
+show grants;
+show databases
+drop database test;
+create database test;
+create database bbsdb;
+grant all on bbsdb.* to abc@"localhost" identified by '123qqq..A;	-- 用户mydba可以给其他用户授权虚拟机
+```
+
+svr7
+```shell
+mysql -uabc -p'123qq..A'
+```
+```shell
+# 删除授权用户mydba (必须有管理员权限)
+mysql -uroot -p '123qqq...A';
+```
+```sql
+drop user mydba@"%";
+```
+
+pc207
+```sql
+mysql -h192.168.4.7 -umydba -p'123qqq...A'	-- 连接失败
+```
 
 
 
