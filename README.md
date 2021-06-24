@@ -4592,6 +4592,62 @@ mysql -h192.168.4.7 -umydba -p'123qqq...A'	-- 连接失败
 ```
 
 
+##### 应用示例4:
+- 添加admin用户，允许从192.168.4.0/24网段连接，对db3库的user表有查询权限,密码123qqq...A
+- 添加admin2用户，允许从本机连接，允许对db3库的所有表有查询/更新/插入/删除记录权限，密码123qqq...A
+
+```sql
+grant select on db3.user to admin@"192.168.4.%" identified by "123qqq...A";
+grant select,insert,update,delete on db3.* to admin2@"localhost" identified by "123qqq...A"; 
+```
+
+svr7
+```sql
+mysql -uroot -p'123qqq...A'
+```
+
+添加admin用户，允许从192.168.4.0/24网段连接，对db3库的user表有查询权限，密码为123qqq...A
+```sql
+grant create,select on db3.user to admin@"192.168.4.%" identified by '123qqq...A';	-- 给用户授权时如果不是all权限,当对应的库和表不存在时必须有create权限
+```
+添加admin2用户,允许从本机连接,对db3库的所有表有查询/更新/插入/删除权限,密码为123qqq...A
+```sql
+grant create,select,update,insert,delete on db3.* to admin2@"localhost" identified by '123qqq...A';
+create database db3;
+exit
+```
+pc207：测试admin用户的权限
+```sql
+mysql -h192.168.4.7 -uadmin -p'123qqq...A'
+show grants;
+create table db3.user(name char(50),sex enum("m","w");
+select * from db3.user;
+insert into db3.user values("bob","m");	-- 插入失败
+```
+svr7：测试admin2用户的权限,只能从本机登录
+```sql
+mysql -uadmin2 -p'123qqq...A'
+show grants;
+use db3;
+show tables;
+insert into db3.user values("bob","m");
+select * from user;
+delete from user;
+create table t1(id int);
+```
+
+
+### 授权库
+
+mysql库记录授权信息,主要表如下:
+
+| user表 | 记录已有的授权`用户`及权限 |
+| -- | -- |
+| db表 | 记录已有授权用户对`数据库`的访问权限 |
+| tables_priv表 | 记录已有授权用户对`表`的访问权限 |
+| columns_priv表 | 记录已有授权用户对`字段`的访问权限 |
+
+`查看表记录可以获取用户权限;也可以通过更新记录,修改用户权限`
 
 
 
