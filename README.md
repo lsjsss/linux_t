@@ -8531,7 +8531,7 @@ ls
     echo "[mnt]
     name=Centos7.5
     baseurl=file:///mnt
-    enable=1
+    enabled=1
     gpgcheck=0" > /etc/yum.repos.d/mnt.repo
     
     rm -rf /etc/yum.repos.d/CentOS-*
