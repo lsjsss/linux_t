@@ -3702,6 +3702,7 @@ lsblk
 fdisk /dev/sdb
 	n
 	+2100M
+    p
 	wq
 partprobe /dev/sdb
 lsblk
