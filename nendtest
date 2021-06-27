@@ -3621,7 +3621,8 @@ chronyc sources -v	#验证时间是否同步成功
 2. 永久配置静态IP地址为192.168.4.20/24
 
     ```shell
-    nmcli connection modify ens33 ipv4.addresses 192.168.4.20/24 connection.autoconnect yes
+    nmcli connection modify ens33 ipv4.addresses 192.168.4.7/24 ipv4.method manual connection.autoconnect yes
+    nmcli connection up ens33
 
     ### xshell
     
