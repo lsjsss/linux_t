@@ -3658,6 +3658,7 @@ chronyc sources -v	#验证时间是否同步成功
 reboot
 systemctl stop firewalld
 setenforce 0
+lsblk
 fdisk /dev/sdb
 	n +5G
 	p
