@@ -3737,6 +3737,7 @@ systemctl enable nfs-server
 * pc207
 ```shell
 yum -y install nfs-utils
+rpm -q nfs-utils
 showmount -e 192.168.4.7
 mkdir /nsd
 mount 192.168.4.7:/public /nsd
@@ -3744,12 +3745,12 @@ df -h
 ls /nsd
 echo "192.168.4.7:/public /nsd xfs defaults,_netdev  0  0" >> /etc/fstab
 mount -a
+cat /etc/fstab
 yum  -y install autofs
 systemctl restart autofs
 echo "autonfs -fstype=nfsmount 192.168.4.7:/protected" >> /etc/auto.misc
 systemctl restart autofs
 ls /misc
-cd  /misc/autonfs  
 df -ah
 ```
 
