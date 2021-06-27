@@ -3742,7 +3742,7 @@ mkdir /nsd
 mount 192.168.4.7:/public /nsd
 df -h
 ls /nsd
-echo "192.168.4.7:/public /nsd nsd defaults,_netdev  0  0" >> /etc/fstab
+echo "192.168.4.7:/public /nsd xfs defaults,_netdev  0  0" >> /etc/fstab
 mount -a
 yum  -y install autofs
 systemctl restart autofs
