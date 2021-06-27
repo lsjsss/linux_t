@@ -3726,10 +3726,14 @@ df -h
 * svr7
 ```shell
 yum -y install nfs-utils
+rpm -q nfs-utils
 mkdir /public
 mkdir /protected
 echo "/public 192.168.4.0/24(ro)                              
-/protected (rw)" > /etc/exports
+/protected * (rw)" > /etc/exports
+cat /etc/exports
+chmod 777 /protected/
+
 systemctl restart nfs-server
 systemctl enable nfs-server
 ```
@@ -3742,16 +3746,21 @@ showmount -e 192.168.4.7
 mkdir /nsd
 mount 192.168.4.7:/public /nsd
 df -h
-ls /nsd
-echo "192.168.4.7:/public /nsd xfs defaults,_netdev  0  0" >> /etc/fstab
+
+# /public自动挂载
+echo "192.168.4.7:/public /nsd nfs defaults,_netdev  0  0" >> /etc/fstab
+umount /nsd
 mount -a
-cat /etc/fstab
-yum  -y install autofs
+
+# /protected触发挂载到/nfsmount
+yum -y install autofs
+rpm -q autofs
 systemctl restart autofs
-echo "autonfs -fstype=nfsmount 192.168.4.7:/protected" >> /etc/auto.misc
+echo "/nfsmount /etc/auto.misc" >> /etc/auto.master
+echo "/nfsmount -fstype=nfs 192.168.4.7:/protected" >> /etc/auto.misc
+
 systemctl restart autofs
-ls /misc
-df -ah
+ls /nfsmount
 ```
 
 
