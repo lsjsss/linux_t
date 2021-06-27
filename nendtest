@@ -3712,7 +3712,7 @@ lsblk
 mkfs.xfs /dev/sdb1
 mkdir /data
 mount /dev/sdb1 /data
-echo "/dev/sdb1 /data xfs defaults,_netdev 0 0":wq >> /etc/fstab
+echo "/dev/sdb1 /data xfs defaults,_netdev 0 0" >> /etc/fstab
 mount -a
 df -h
 ```
