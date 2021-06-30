@@ -3617,13 +3617,16 @@ chronyc sources -v	#验证时间是否同步成功
 
 
 
-### 最小化装机
-2. 永久配置静态IP地址为192.168.4.20/24
+## 最小化装机
+
+
+
+2. 永久配置静态IP地址为192.168.4.7/24
 
     ```shell
-    nmcli connection modify ens33 ipv4.addresses 192.168.4.7/24 ipv4.method manual connection.autoconnect yes
+    nmcli connection modify ens33 ipv4.method manual ipv4.addresses 192.168.4.7/24 connection.autoconnect yes
     nmcli connection up ens33
-
+    
     ### xshell
     
     mount /dev/cdrom /mnt/
@@ -3654,13 +3657,15 @@ chronyc sources -v	#验证时间是否同步成功
 * svr7
 
 ```shell
-### 添加磁盘
-reboot
+poweroff
+
+### 添加磁盘，启动虚拟机
 systemctl stop firewalld
 setenforce 0
 lsblk
 fdisk /dev/sdb
-	n +5G
+	n
+	+5G
 	p
 	wq
 partprobe /dev/sdb
@@ -3686,7 +3691,9 @@ systemctl enable target.service
 ```shell
 yum -y install iscsi-initiator-utils
 rpm -q iscsi-initiator-utils
-echo "InitiatorName=iqn.2021-05.com.example:desktop" > /etc/iscsi/initiatorname.iscsi
+vim /etc/iscsi/initiatorname.iscsi
+	InitiatorName=iqn.2021-05.com.example:desktop
+cat /etc/iscsi/initiatorname.iscsi
 systemctl restart iscsi	d
 iscsiadm --mode discoverydb --type sendtargets --portal 192.168.4.7 --discover
 ```
@@ -3706,33 +3713,35 @@ fdisk /dev/sdb
 	+2100M
     p
 	wq
-partprobe /dev/sdb
 lsblk
 
 mkfs.xfs /dev/sdb1
 mkdir /data
 mount /dev/sdb1 /data
-echo "/dev/sdb1 /data xfs defaults,_netdev 0 0" >> /etc/fstab
+vim /etc/fstab
+	/dev/sdb1 /data xfs defaults,_netdev 0 0
+cat /etc/fstab
 mount -a
 df -h
 ```
 
 
 
-
-
-案例五 普通NFS共享
+##  普通NFS共享
 
 * svr7
 ```shell
+systemctl stop firewalld.services
+setenforce 0
 yum -y install nfs-utils
 rpm -q nfs-utils
 mkdir /public
 mkdir /protected
-echo "/public 192.168.4.0/24(ro)                              
-/protected * (rw)" > /etc/exports
+vim /etc/exports
+	/public 192.168.4.0/24(ro)
+	/protected * (rw)
 cat /etc/exports
-chmod 777 /protected/
+chmod 777 /protected
 
 systemctl restart nfs-server
 systemctl enable nfs-server
@@ -3742,23 +3751,30 @@ systemctl enable nfs-server
 ```shell
 yum -y install nfs-utils
 rpm -q nfs-utils
-showmount -e 192.168.4.7
-mkdir /nsd
-mount 192.168.4.7:/public /nsd
+--showmount -e 192.168.4.7
+mkdir /nfs
+mount 192.168.4.7:/public /nfs
 df -h
+ls /nfs
 
-# /public自动挂载
-echo "192.168.4.7:/public /nsd nfs defaults,_netdev  0  0" >> /etc/fstab
-umount /nsd
+# /public开机自动挂载
+vim /etc/fstab
+	192.168.4.7:/public /nfs nfs defaults,_netdev  0  0
+cat /etc/fstab
+umount /nfs
 mount -a
+df -h
 
 # /protected触发挂载到/nfsmount
 yum -y install autofs
 rpm -q autofs
 systemctl restart autofs
-echo "/nfsmount /etc/auto.misc" >> /etc/auto.master
-echo "/nfsmount -fstype=nfs 192.168.4.7:/protected" >> /etc/auto.misc
-
+vim /etc/auto.master
+	/nfsmount /etc/auto.misc
+cat /etc/auto.master
+vim /etc/auto.misc
+	/nfsmount -fstype=nfs 192.168.4.7:/protected
+cat /etc/auto.misc
 systemctl restart autofs
 ls /nfsmount
 ```
@@ -3767,29 +3783,540 @@ ls /nfsmount
 
 
 
+## 多区域dns分离解析
+
+
+
+多区域DNS分离解析
+
+1. 分类(配户端相同)相同：
+
+
+192.168.4.207 --> www.tedu.cn --> 192.168.4.100
+
+
+		www.qq.com
+
+
+其他地址 --> www.tedu.cn --> 1.2.3.4
+
+
+		www.qq.com
+
+
+
+2. 分类(匹配客户端来源不相同)不相同：
+
+
+客户端192.168.4.207 --> www.tedu.cn --> 192.168.4.100
+
+
+客户端其他地址 --> www.tedu.cn --> 1.2.3.4
+
+
+客户端192.168.4.10 --> www.qq.com -->192.168.10.100
+
+
+客户端其他地址 --> www.qq.com --> 172.25.0.11
+
+
+
+> 分析：
+>
+> 192.168.4.207 --> www.tedu.cn --> 192.168.4.100 --> 地址库tedu.cn.zone
+>
+> 192.168.4.207 --> www.qq.com --> 172.25.0.11 --> qq.com.other
+>
+> 
+>
+> 192.168.4.10 --> www.tedu.cn --> 1.2.3.4 --> tedu.cn.other
+>
+> 192.168.4.10 --> www.qq.com --> 192.168.10.100 --> qq.com.other
+>
+> 
+>
+> et其他地址 --> www.tedu.cn --> 1.2.3.4 --> tedu.cn.other
+>
+> 其他地址 --> www.qq.com --> 172.25.0.11 --> qq.com.zone
+
+```shell
+#服务端(svr7)
+yum -y install bind bind-chroot
+vim /etc/named.conf
+	options {
+		directory "/var/named";
+	};
+	view "nsd" {
+		match-clients { 192.168.4.207; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.zone";	#192.168.4.100
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.zone";	#172.25.0.11
+		};
+	 };
+	view "vip" {
+		match-clients { 192.168.4.10; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other";	#1.2.3.4
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.other";	#192.168.10.100
+		};
+	 };
+	view "others" {
+		match-clients { any; };
+		zone "tedu.cn" IN {
+			type master;
+			file "tedu.cn.other";	#1.2.3.4
+		};
+		zone "qq.com" IN {
+			type master;
+			file "qq.com.zone";	#172.25.0.11
+		};
+	 };
+
+cd /var/named/
+cp -p named.localhost tedu.cn.zone
+vim tedu.cn.zone
+$TTL 1D
+@	IN SOA	@ rname.invalid. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+tedu.cn.	NS	svr7
+svr7	A	192.168.4.7
+www	A	1.2.3.4
+
+cp -p tedu.cn.zone tedu.cn.other
+vim tedu.cn.other
+$TTL 1D
+@	IN SOA	@ rname.invalid. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+
+tedu.cn.	NS	svr7
+svr7	A	192.168.4.7
+www	A	192.168.4.100
+
+
+cp -p tedu.cn.zone qq.com.zone
+vim qq.com.zone
+$TTL 1D
+@	IN SOA	@ rname.invalid. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+
+qq.com.	NS	svr7
+svr7	A	192.168.4.7
+www	A	172.25.0.11
+
+cp -p qq.com.zone qq.com.other
+vim qq.com.other
+$TTL 1D
+@	IN SOA	@ rname.invalid. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+
+qq.com.	NS	svr7
+svr7	A	192.168.4.7
+www	A	192.168.10.100
+
+systemctl restart named
+```
+
+客户机(pc207)
+
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+客户机A
+
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+服务端(svr7)
+
+```shell
+echo "nameserver 192.168.4.7" > /etc/resolv.conf
+yum -y install bind-utils
+nslookup www.qq.com
+nslookup www.tedu.cn
+```
+
+
+案例
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210601185635109.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDM0MDEyOQ==,size_16,color_FFFFFF,t_70)
+
+web 服务器和 DNS 服务结合（web 服务器做需要开启基于域名的虚拟主机，DNS 需要使用分离解析技术）
+
+| -            | 主机名        | ip地址        |
+| ------------ | ------------- | ------------- |
+| 虚拟机 A     | A.tedu.cn     | 192.168.4.10  |
+| 虚拟机 B     | B.tedu.cn     | 192.168.4.20  |
+| 虚拟机 C     | C.tedu.cn     | 192.168.4.208 |
+| 虚拟机 svr7  | svr7.tedu.cn  | 192.168.4.7   |
+| 虚拟机 pc207 | pc207.tedu.cn | 192.168.4.207 |
+
+虚拟机 A 操作：
+
+```shell
+#1.安装软件包 httpd
+yum -y install httpd
+
+#2.建立修改调用配置文件
+vim /etc/httpd/conf.d/nsd01.conf
+    <VirtualHost *:80>
+        ServerName www.qq.com
+        DocumentRoot /var/www/qq
+    </VirtualHost>
+    <VirtualHost *:80>
+        ServerName www.163.com
+        DocumentRoot /var/www/163
+    </VirtualHost>
+
+mkdir /var/www/qq /var/www/163
+echo '<h1> Web1 QQ' > /var/www/qq/index.html
+echo '<h1> Web1 163' > /var/www/163/index.html
+
+systemctl restart httpd
+```
+
+虚拟机 B 操作：
+
+```shell
+yum -y install httpd
+
+#从虚拟机A拷贝nsd01配置文件
+scp /etc/httpd/conf.d/nsd01.conf 192.168.4.20:/etc/httpd/conf.d/
+mkdir /var/www/qq /var/www/163
+echo '<h1>Web2 QQ' > /var/www/qq/index.html
+echo '<h1>Web2 163' > /var/www/163/index.html
+
+systemctl restart httpd
+```
+
+虚拟机 svr7 操作：
+
+```shell
+#1、修改主配置文件
+vim /etc/named.conf
+        ……
+        view "vip" {
+            match-clients { 192.168.4.207; };
+            zone "163.com" IN {
+                type master;
+                file "163.com.zone";
+            };
+            zone "qq.com" IN {
+                type master;
+                file "qq.com.zone";
+            };
+        };
+        view "other" {
+            match-clients { any; };
+            zone "163.com" IN {
+                type master;
+                file "163.com.other";
+            };
+            zone "qq.com" IN {
+                type master;
+                file "qq.com.other";
+            };
+        };
+
+#2、建立地址库文件
+cd /var/named/
+cp -p qq.com.zone 163.com.zone
+cp -p qq.com.zone 163.com.other
+
+vim 163.com.zone
+        …….
+        163.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.168.4.10
+
+vim qq.com.zone
+        …
+        qq.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.18.4.10
+
+vim 163.com.other
+        …
+        163.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.168.4.20
+
+vim qq.com.other
+        ……
+        qq.com. NS svr7
+        svr7 A 192.168.4.7
+        www A 192.168.4.20
+
+systemctl restart named
+```
+
+测试：指定 DNS 服务器地址
+虚拟机pc207
+
+```shell
+echo nameserver 192.168.4.7 > /etc/resolv.conf
+curl www.qq.com
+curl www.163.com
+```
+
+虚拟机C
+
+```shell
+echo nameserver 192.168.4.7 > /etc/resolv.conf
+curl www.qq.com
+curl www.163.com
+```
+
+
+
+## 配置web服务
+
+svr7
+
+```shell
+# 网页文件目录为 /webroot
+yum -y install httpd
+systemctl restart httpd
+echo "页面内容" > /var/www/html/index.html
+curl http://192.168.4.7
+
+vim /etc/httpd/conf/httpd.conf
+<Directory "/webroot">
+	Require all granted
+<Directory>
+
+mkdir /webroot
+echo webroot > /webroot/index.html
+systemctl restart httpd
+```
+
+
+
+pc207
+
+```shell
+curl http://192.168.4.7
+```
 
 
 
 
 
+## 案例4：虚拟WEB主机（一台主机多个域名）（共8分）
+
+svr
+
+```shell
+vim /etc/httpd/conf.d/web.conf
+<virtualost *:80>
+	servername server.example.com
+	documentroot /var/www/server
+</virtualhost>
+<virtualost *:80>
+	servername desktop.example.com
+	documentroot /var/www/desktop
+</virtualhost>
+<virtualost *:80>
+	servername webapp.example.com
+	documentroot /var/www/webapp
+</virtualhost>
+
+mkdir /var/www/server
+mkdir /var/www/desktop
+mkdir /var/www/webapp
+echo server > /var/www/serever/index.html
+echo desktop > /var/www/desktop/index.html
+echo webapp > /var/www/webapp/index.html
+```
+
+
+
+pc
+
+```shell
+vim /etc/hosts
+	192.168.4.7 server.example.com desktop.example.com webapp.example.com
+
+curl server.example.com
+curl desktop.example.com
+curl webapp.example.com
+```
+
+
+
+## 案例6：构建DNS服务（共10分）
+
+负责解析sina.com域名
+
+svr
+
+```shell
+yum -y install bind bind-chroot
+rpm -q bind bind-chroot
+cp /etc/named.conf /etc/named.bak
+vim /etc/named.conf
+# 解析 sina.com 域名
+options {
+	directory "/var/named";
+};
+
+zone "sina.com" IN {
+	type master;
+	file "sina.com.zone";
+};
+
+# 客户端解析www.sina.com -> 10.11.12.13
+cd /var/named/
+cp -p named.localhost sina.com.zone
+vim sina.com.zone
+$TTL 1D
+@	IN SOA	@ rname.invalid. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+
+baidu.com.	NS	svr7
+svr7	A	192.168.4.7
+www	A	10.11.12.13
+```
+
+
+
+pc
+
+```shell
+rpm -q bind-utils
+echo nameserver 192.168.4.7 > /etc/resolv.conf
+nslookup www.sina.com
+```
 
 
 
 
 
+## 案例8：构建邮件服务（共15分）
+
+1、在虚拟机pc207上配置邮件服务，要求如下：
+
+1)  邮件域名为example.com
+
+svr
+
+```shell
+vim /etc/named.conf
+cp -p qq.com.zone example.com.zone
+vim example.com.zone
+options {
+	directory "/var/named";
+};
+zone "example.com" IN {
+	tye master;
+	file "example.com.zone";
+};
+$TTL 1D
+@	IN SOA	@ rname.invalid. (
+					0	; serial
+					1D	; refresh
+					1H	; retry
+					1W	; expire
+					3H )	; minimum
+
+example.com.	NS	svr7
+example.com.	MX 10 mall
+svr7	A	192.168.4.7
+mail	A	192.168.4.207
+
+systemctl restart named
+
+rpm -q postfix
+vim /etc/postfix/main.cf
+	#99L - 去除注释
+	myorigin = example.com
+	#116L
+	inet_interfaces = all
+	#164L
+	mydestination = example.com
+
+systemctl restart postfix
+
+# 用户测试
+useradd fajianren
+useradd shoujianren
+yum -y install mailx
+rpm -q mailx
+
+echo abc | mail -s 'mail title' -r fajianren shoujianren
+mail -u shoujianren
+```
 
 
 
+### 案例21：NTP时间同步
+
+0. 在虚拟机A设置ntp时间同步
+1. 设置时间服务器上层与0.centos.pool.ntp.org同步
+2. 设置本地服务器层数为10
+3. 允许192.168.4.0/24网络的主机同步时间
+4. 客户端B验证时间是否同步
+
+```shell
+yum -y install chrony
+rpm -qc chrony	#查看配置文件（.conf结尾的文件）
+
+vim /etc/chrony.conf
+	server 0.centos.pool.ntp.org iburst	#网络标准时间服务器（快速同步）
+	allow 192.168.4.0/24	#允许同步时间的主机网络段
+	local statum 10	#访问层数
+
+systemctl restart chronyd	#重启时间同步服务
+
+setenforce 0
+systemctl stop firewalld	#关闭防火墙
+```
 
 
+```shell
+#虚拟机B
+vim /etc/chrony.conf
+	server 192.168.4.10 iburst	#指定要同步时间的服务器（192.168.4.7）
+systemctl restart chronyd	#重启时间同步服务
+chronyc sources -v	#验证时间是否同步成功
+```
 
 
-
-
-
-
-
-
+### 案
 
 
 
@@ -5716,7 +6243,7 @@ mysql -uroot -p123qqq...A
 
 ​    
 ​    
-    练习:
+​    练习:
 
 
 1. 用命令行的形式连接到数据库
