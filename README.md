@@ -1,3 +1,5 @@
+> 本文约 4968。字，阅读大约需要 100 分钟
+
 @[TOC](Linux 操作系统命令 | Linux)
 
 ---
@@ -52,7 +54,7 @@ root 标志：**#**
 > 组账号类型：
 >
 > 	基本组（私有组）
-> 	
+> 		
 > 	附加组（从属组）
 
 
@@ -108,7 +110,7 @@ grep 要查找的用户 /etc/passwd
 > 用户相关文件说明：
 >
 > 	**/etc/passwd**：存放用户账户信息文件
-> 	
+> 		
 > 	**/etc/shadow**：存放用户密码文件
 
 
@@ -2879,8 +2881,8 @@ nalookup www.tedu.cn 192.168.4.207
 
 ```shell
 vim /etc/dhcp/dhcpd.conf
-	subnet 192.168.4.0 netmask 255.255.255.0 {	//声明网段
-		range 192.168.4.10 192.168.4.200;	//IP范围
+	subnet 192.168.4.0 netmask 255.255.255.0 {	# 声明网段
+		range 192.168.4.10 192.168.4.200;	# IP范围
 	}
 	netstat -antpu I grep dhcpd	//确认结果
 	udp	0	00.0.0.0:67	0.0.0.0:*	8380/dhcpd
@@ -8531,7 +8533,7 @@ ls
     echo "[mnt]
     name=Centos7.5
     baseurl=file:///mnt
-    enable=1
+    enabled=1
     gpgcheck=0" > /etc/yum.repos.d/mnt.repo
     
     rm -rf /etc/yum.repos.d/CentOS-*
@@ -10667,7 +10669,7 @@ mysql -uroot -p123qqq...A
 
 ​    
 ​    
-    练习:
+​    练习:
 
 
 1. 用命令行的形式连接到数据库
