@@ -5,7 +5,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.24 update" />
+    <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.24 update">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/v2rayN-Core.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/18141040117 李帅君.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/5.31/.keep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/18141040117-云1-李帅君.doc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/18141040117-李帅君.doc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/云计算网络服务第一周周测-1班.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/第二次周测/18141040117 李帅君.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/赤峰学院云计算网络应用考试题.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/院校/院校.md" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -90,6 +101,10 @@
       <workItem from="1624579343490" duration="5700000" />
       <workItem from="1624801509717" duration="106000" />
       <workItem from="1625023318423" duration="666000" />
+      <workItem from="1626223158723" duration="134000" />
+      <workItem from="1626330532091" duration="905000" />
+      <workItem from="1627877301580" duration="219000" />
+      <workItem from="1640794331185" duration="635000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -161,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625023426140</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="8.2">
+      <created>1627877363736</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1627877363737</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,65 +210,13 @@
     <MESSAGE value="6.19 update" />
     <MESSAGE value="6.25" />
     <MESSAGE value="6.24 update" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.24 update" />
+    <MESSAGE value="8.2" />
+    <option name="LAST_COMMIT_MESSAGE" value="8.2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="256" y="72" key="#Project_Structure/0.0.1552.996@0.0.1552.996" timestamp="1617804171279" />
-    <state x="92" y="92" width="1368" height="812" key="DiffContextDialog" timestamp="1623122248128">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="92" y="92" width="1368" height="812" key="DiffContextDialog/0.0.1552.996@0.0.1552.996" timestamp="1623122248128" />
-    <state x="556" y="252" key="FileChooserDialogImpl" timestamp="1617804122585">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="556" y="252" key="FileChooserDialogImpl/0.0.1552.996@0.0.1552.996" timestamp="1617804122585" />
-    <state x="648" y="395" key="Github.ShareDialog" timestamp="1617777903682">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="648" y="395" key="Github.ShareDialog/0.0.1552.996@0.0.1552.996" timestamp="1617777903682" />
-    <state x="265" y="84" width="1258" height="833" key="MergeDialog" timestamp="1624154380690">
-      <screen x="0" y="0" width="1680" height="1020" />
-    </state>
-    <state x="245" y="82" width="1258" height="833" key="MergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617850455547" />
-    <state x="265" y="84" key="MergeDialog/0.0.1680.1020@0.0.1680.1020" timestamp="1624154380690" />
-    <state x="298" y="373" width="810" height="268" key="MultipleFileMergeDialog" timestamp="1624154382883">
-      <screen x="0" y="0" width="1680" height="1020" />
-    </state>
-    <state x="275" y="364" width="810" height="268" key="MultipleFileMergeDialog/0.0.1552.996@0.0.1552.996" timestamp="1617850466339" />
-    <state x="298" y="373" key="MultipleFileMergeDialog/0.0.1680.1020@0.0.1680.1020" timestamp="1624154382883" />
-    <state x="85" y="75" width="1368" height="812" key="ShowDiffWithBranchDialog" timestamp="1617806815030">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="85" y="75" width="1368" height="812" key="ShowDiffWithBranchDialog/0.0.1552.996@0.0.1552.996" timestamp="1617806815030" />
-    <state x="622" y="410" key="VCS.ChangelistChooser" timestamp="1617807924650">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="622" y="410" key="VCS.ChangelistChooser/0.0.1552.996@0.0.1552.996" timestamp="1617807924650" />
-    <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key" timestamp="1617850453926">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1625024280495">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1625024280495" />
-    <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1624584484121" />
-    <state x="704" y="432" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624801533004">
+    <state x="753" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1640794400248">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state x="569" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1552.996@0.0.1552.996" timestamp="1624521555808" />
-    <state x="616" y="420" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1020@0.0.1680.1020" timestamp="1623198343666" />
-    <state x="704" y="432" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1624801533004" />
-    <state x="536" y="209" key="git4idea.branch.GitSmartOperationDialog" timestamp="1624521630257">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="536" y="209" key="git4idea.branch.GitSmartOperationDialog/0.0.1552.996@0.0.1552.996" timestamp="1624521630257" />
-    <state x="502" y="284" key="git4idea.merge.GitPullDialog" timestamp="1617803961890">
-      <screen x="0" y="0" width="1552" height="996" />
-    </state>
-    <state x="502" y="284" key="git4idea.merge.GitPullDialog/0.0.1552.996@0.0.1552.996" timestamp="1617803961890" />
+    <state x="753" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1050@0.0.1920.1050" timestamp="1640794400248" />
   </component>
 </project>
