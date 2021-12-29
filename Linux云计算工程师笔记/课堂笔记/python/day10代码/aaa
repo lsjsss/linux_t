@@ -1,0 +1,7 @@
+{"name": "zs", "age": 19}
+
+xml
+<person>
+    <name>zs</name>
+    <age>19</age>
+</person>
