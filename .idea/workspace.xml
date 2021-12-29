@@ -6,16 +6,446 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="368fe273-cdb3-4484-8b83-28723d9743c1" name="Default Changelist" comment="6.24 update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/v2rayN-Core.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/18141040117 李帅君.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/5.31/.keep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/18141040117-云1-李帅君.doc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/18141040117-李帅君.doc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/云计算网络服务第一周周测-1班.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/周测/第二次周测/18141040117 李帅君.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/云计算网络应用管理/赤峰学院云计算网络应用考试题.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/院校/院校.md" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Ansible Vault &amp; Common users use Ansible _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Ansible ad-hoc &amp; Ansible module _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Ansible advanced &amp; Ansible Role _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Archiving and compression &amp; redirection and pipeline operations &amp; find precise search &amp; advanced use.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Basic USAGE of AWK &amp; AWK application cases &amp; comprehensive scripts _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Basic Web applications &amp; BASIC NFS services &amp; triggering mount _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Basic rights and ownership &amp; additional rights &amp; and ACL policy management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Batch installation environment &amp; PXE boot configuration &amp; Kickstart auto answer _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Big data and Hadoop &amp; distributed file systems &amp; distributed Hadoop clusters _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Block storage application cases &amp; distributed file system &amp; and object storage _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Case statement &amp; function and interrupt control &amp; string handling _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Ceph Overview &amp; Ceph cluster deployment &amp; Ceph block storage _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Command line foundation &amp; directory and file management &amp; text content operation _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Comprehensive project &amp; network upgrade _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Computer networks &amp; network communication reference model &amp; switch command line _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Conditional testing, if selection structure &amp; loop structure _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Configure the Linux network &amp; log management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Create and manage clusters _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/DNS service basics &amp; special resolution &amp; DNS master-slave architecture _ Cloud computinng.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Data analysis &amp; node management &amp; setting up NFS gateway service _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Data import and export &amp; management table records &amp; MySQL management tools _Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Data read and write separation &amp; MySQL multi-instance _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Data sharding overview &amp; MyCAT service deployment &amp; test configuration _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Database services Overview &amp; building MySQL services &amp; database basic management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Deploy Dashboard &amp; Prometheus &amp; HPA clusters _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Deploy Git version control system &amp; optimize Web server _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Deploy GitLab &amp; configure GitLab &amp; CI_CD Overview &amp; Deploy Jenkins _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Deploy LNMP &amp; Nginx+FastCGI &amp; Nginx advanced technology _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Deploy the mysql database service &amp; deploy the NFS shared storage service _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Disk space management &amp; swap space _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/File object &amp; function foundation &amp; module foundation _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Function foundation &amp; function advanced application &amp; module _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Huawei cloud management &amp; cloud host management &amp; cloud project combat _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Incremental recovery &amp; data query expansion _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Installing the Linux OS &amp; Linux Basic Operations _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Introduction to cluster and LVS &amp; LVS-NAT cluster &amp; LVS-DR cluster _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Iptables Typical application of firewall &amp; filter table control &amp; NAT table _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Jenkins project management &amp; build distribution server &amp; Ansible foundation _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Judgment statements &amp; while loops &amp; for loops _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/K8S Resource object management &amp; service and load balancing &amp; Ingress _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Kali system &amp; scanning and packet capture &amp; service security _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Keepalived Hot standby &amp; Keepalived+LVS &amp; HAProxy server _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Keepalived highly available &amp; Ceph deployed distributed storage _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Kubectl command &amp; K8S resource object management &amp; K8S cluster management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Linux Container Management &amp; Podman Command Line &amp; Advanced Container management.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Lists and tuples &amp; dictionaries &amp; collections _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Log analysis systems ELK &amp; Elasticsearch &amp; Kibana _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Logical volume management &amp; VDO &amp; RAID array &amp; process management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Logstash &amp; Real-time analysis of Web logs _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/MHA Cluster Overview &amp; deployment of an MHA cluster _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Mail and JSON &amp; Requests module &amp; API interface calls _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Master-slave replication &amp; persistence, data types _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Monitor resource usage &amp; manage storage volumes _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Monitoring Overview &amp; Zabbix foundation &amp; Zabbix monitoring service _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/MySQL primary_secondary synchronization &amp; Primary_secondary synchronization modes _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/NAT &amp; VRRP _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Native cloud K8S decryption &amp; K8S cluster installation and deployment _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Nginx installation &amp; user authentication &amp; Nginx web hosting _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Nginx proxy server &amp; Nginx optimization _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/NoSQL overview &amp; Deploy Redis service &amp; deploy LNMP+Redis _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/OOP basics &amp; OOP advanced &amp; RE modules _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/OSPF &amp; transport layer &amp; and ACL _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Overview of Python &amp; environment preparation &amp; Getting Started with Python _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Overview of container technology &amp; images and containers &amp; Docker configuration management _ Cloud c.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/PXC &amp; MySQL storage engine _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Percona software introduction &amp; Innobackupex backup and recovery _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Private cloud Overview &amp; private cloud configuration management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Prometheus server &amp; Prometheus monitored end &amp; Grafana &amp; and monitoring database _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/PyMySQL module &amp; multithreaded programming &amp; Paramiko module _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/RPM software package management &amp; Yum software package repository _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Regular expressions &amp; basic usage of SED &amp; sed application cases _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Release container server &amp; private image warehouse _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Remote login &amp; numerical &amp; classless networking &amp; ipv6 _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/SELinux &amp; system troubleshooting &amp; firewall policy management &amp; service management _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Server hardware &amp; deployment LNMP dynamic website _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Session is shared with cookies &amp; deployment memcached &amp; and Session _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Shell overview &amp; writing &amp; executing scripts &amp; numerical calculations _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Software package management &amp; Systemd service management &amp; VPN server _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Split parsing &amp; NTP time synchronization &amp; custom Yum repository _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/System management module &amp; grammar style and layout &amp; string details _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/TCP_IP configuration _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Table structure &amp; MySQL key values _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Time method &amp; exception handling &amp; file system related modules _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Tomcat server &amp; Tomcat application cases &amp; Maven application cases _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Upgrade the website running platform &amp; deploy the cache service &amp; migrate data _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/User authorization &amp; full backup, incremental backup _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/User management &amp; group account management &amp; scheduled tasks _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/VLAN technology &amp; application &amp; TRUNK &amp; network layer resolution _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Version control &amp; Git basics &amp; Git advanced _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Virtualization management &amp; public cloud overview _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Website architecture &amp; LNP+Mariadb database separation &amp; Web server cluster _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/YAML syntax &amp; Ansible Playbook scripts &amp; Ansible variables &amp; summaries and QQS _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Zabbix alarm mechanism &amp; Zabbix advanced operation &amp; monitoring cases _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/Zookeeper high availability cluster &amp; distributed message queue Kafka _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/案例/rsync synchronization operation &amp; inotify real-time synchronization &amp; database _ Cloud computing.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo01.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo02.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo03.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo04.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo05.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo06.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo07.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo07_2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/demo07_3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/test01.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day01代码/test02.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/.keep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo01_list.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo02_tuple.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo03_dict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo04_list_pro.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo05_if.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo06_if_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo07_if.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo08_if_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo09_if_test_2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo10_while.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo11_while_1_100.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo12_while_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day02代码/demo13_while.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/a.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo01_else.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo01_while_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo02_for.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo03_for.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo04_for_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo05_range.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo06_list_gen.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo07_shulie.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo08_file_read.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo09_file_big.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo10_file_readlines.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo11_file_write.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo12_file_write_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo13_file_cp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day03代码/demo14_function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo01_func_args.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo02_func.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo03_func.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo04_func_args_default_value.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo05_return_value.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo06_func_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo07_func_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo08_import.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo09_shutil_copy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo10_subprocess.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/demo11_subprocess_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day04代码/randpass.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/add_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/demo01_keyword.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/demo02_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/demo03_string_format.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/demo04_string_func.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/demo05_list.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/demo06_tuple.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/list_for_stack.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day05代码/randpass.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/demo01_dict.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/demo02_set.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/demo03_time.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/demo04_datetime.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/demo04_time_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/set_log.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day06代码/user_login.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo01_timedelta.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo02_exception.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo03_diy_exc_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo04_diy_exception.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo05_os.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo06_pickle.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo07_pickle_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo08_func.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/demo09_var_scope.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day07代码/time_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/aa.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo01_func_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo02_nonamefunc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo03_map.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo04_iter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo05_gen.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo06_gen_2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo07_gen_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo08_module_path.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo09_module_import.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo10_hashlib.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo11_hashlib_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day08代码/demo12_tarfile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo01_oop.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo02_oop_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo03_oop_extend.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo04_oop_extends_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo05_oop_mutli_extend.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo06_oop_method.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day09代码/demo07_re.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/aaa" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/count_patt.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo01_re.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo02_thread.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo03_thread_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo04_paramiko.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo05_email.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo06_file_tar.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/day10代码/demo07_json.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/.keep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/cfbd8db9a88b496dbe23f648f8cd3105.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/clip_image001-16304663019751.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/clip_image001-16304664275602.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/clip_image001.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/clip_image019.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/clip_image036.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/image-20210901102008044.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/image-20210901104430001.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/image-20211011142501388.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/image-20211013132949218.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/day01.assets/image-20211013133238406.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第一部分md文件/第一部分.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第七部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第七部分md文件/day07.assets/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第七部分md文件/day07.assets/image-20210902173003230.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第七部分md文件/day07.assets/image-20210906192434903.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第七部分md文件/第七部分.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210810162704041.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210818112341722.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210818160603298.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210818160654685.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210820093940661.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210820095215754.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210820095922659.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210820103515549.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210820140502426.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210820144421748.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210910010603248.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210910011547852.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/day03.assets/image-20210910012326825.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第三部分md文件/第三部分.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/001_程序三大流程-16294530025332.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/001_程序三大流程.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/005_ifelse语句是一个完整的代码块1-16294471005751.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/005_ifelse语句是一个完整的代码块1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210810141526547.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210810143915383.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210810145954312.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820154641789.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820155158934.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820155842138.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820155958688.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820160000285.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820170741694.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820175702734.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820190503142.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820190549836.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/image-20210820193335551.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.assets/购物车.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第二部分md文件/day02.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210824143139697.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210824143803486.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210824145211251.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210825103813637.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210825103817541.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210825103849758.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210825104018962.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210825104320266.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210901134620859.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210901134738699.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210901135012274.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210901135205332.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/day05.assets/image-20210901135432435.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第五部分md文件/第五部分.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/001_植物大战僵尸类图-16287315034881.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/002_Person类.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/002_飞机设计图纸.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/003_飞机对象.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/011_继承对比图示.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/image-20210907093827558.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/image-20210911095101190.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/image-20210911101454850.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/image-20210911103911358.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F02%2F39%2F36%2F59c2a5becf71e_610.jpg&amp;refer=http%3A%2F%2Fpic.51yuansu.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.assets/v2-03ff081024bb06cfd447abf321b73b26_r.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第八部分md文件/day08.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第六部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第六部分md文件/day06.assets/image-20210901151620671.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第六部分md文件/day06.assets/image-20210901153422726.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第六部分md文件/day06.assets/image-20210901174254244.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第六部分md文件/第六部分.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第四部分.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第四部分md文件/day04.assets/image-20210830142726064.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/第四部分md文件/day04.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210919172932733.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921121330058.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921123514234.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921123826605.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921123852285.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921163202272.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921163224791.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/image-20210921163833114.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.assets/mysql-16352546455171.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/python/终章/终章.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ADMIN01.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ADMIN02.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ADMIN03.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ADMIN04.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ADMIN05.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ADMIN06.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ENGINEER01.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ENGINEER02.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ENGINEER03.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ENGINEER04.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/ENGINEER05.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/Linux云计算-阶段1-必备知识-21-6.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/SERVICES01.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/SERVICES02.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/SERVICES03.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/SERVICES04.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/SERVICES05.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第一阶段/SERVICES06.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/ensp安装过程.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/network 01.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/network 02.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/network 03.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/network 04.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/network 05.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/network 06.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation 01.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation 02.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation 03.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation 04.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation 05.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation 06.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/operation环境准备.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/shell  02.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/shell  03.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/shell  04.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/shell  05.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/shell 01.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/环境准备.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Linux云计算工程师笔记/课堂笔记/第二阶段/课外练习-sudo.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Ansible Vault &amp; Common users use Ansible _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Ansible ad-hoc &amp; Ansible module _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Ansible advanced &amp; Ansible Role _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Archiving and compression &amp; redirection and pipeline operations &amp; find precise search &amp; advanced use.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Basic USAGE of AWK &amp; AWK application cases &amp; comprehensive scripts _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Basic Web applications &amp; BASIC NFS services &amp; triggering mount _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Basic rights and ownership &amp; additional rights &amp; and ACL policy management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Batch installation environment &amp; PXE boot configuration &amp; Kickstart auto answer _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Big data and Hadoop &amp; distributed file systems &amp; distributed Hadoop clusters _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Block storage application cases &amp; distributed file system &amp; and object storage _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Case statement &amp; function and interrupt control &amp; string handling _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Ceph Overview &amp; Ceph cluster deployment &amp; Ceph block storage _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Command line foundation &amp; directory and file management &amp; text content operation _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Comprehensive project &amp; network upgrade _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Computer networks &amp; network communication reference model &amp; switch command line _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Conditional testing, if selection structure &amp; loop structure _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Configure the Linux network &amp; log management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Create and manage clusters _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/DNS service basics &amp; special resolution &amp; DNS master-slave architecture _ Cloud computinng.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Data analysis &amp; node management &amp; setting up NFS gateway service _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Data import and export &amp; management table records &amp; MySQL management tools _Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Data read and write separation &amp; MySQL multi-instance _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Data sharding overview &amp; MyCAT service deployment &amp; test configuration _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Database services Overview &amp; building MySQL services &amp; database basic management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Deploy Dashboard &amp; Prometheus &amp; HPA clusters _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Deploy Git version control system &amp; optimize Web server _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Deploy GitLab &amp; configure GitLab &amp; CI_CD Overview &amp; Deploy Jenkins _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Deploy LNMP &amp; Nginx+FastCGI &amp; Nginx advanced technology _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Deploy the mysql database service &amp; deploy the NFS shared storage service _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Disk space management &amp; swap space _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/File object &amp; function foundation &amp; module foundation _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Function foundation &amp; function advanced application &amp; module _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Huawei cloud management &amp; cloud host management &amp; cloud project combat _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Incremental recovery &amp; data query expansion _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Installing the Linux OS &amp; Linux Basic Operations _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Introduction to cluster and LVS &amp; LVS-NAT cluster &amp; LVS-DR cluster _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Iptables Typical application of firewall &amp; filter table control &amp; NAT table _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Jenkins project management &amp; build distribution server &amp; Ansible foundation _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Judgment statements &amp; while loops &amp; for loops _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/K8S Resource object management &amp; service and load balancing &amp; Ingress _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Kali system &amp; scanning and packet capture &amp; service security _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Keepalived Hot standby &amp; Keepalived+LVS &amp; HAProxy server _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Keepalived highly available &amp; Ceph deployed distributed storage _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Kubectl command &amp; K8S resource object management &amp; K8S cluster management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Linux Container Management &amp; Podman Command Line &amp; Advanced Container management.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Lists and tuples &amp; dictionaries &amp; collections _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Log analysis systems ELK &amp; Elasticsearch &amp; Kibana _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Logical volume management &amp; VDO &amp; RAID array &amp; process management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Logstash &amp; Real-time analysis of Web logs _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/MHA Cluster Overview &amp; deployment of an MHA cluster _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Mail and JSON &amp; Requests module &amp; API interface calls _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Master-slave replication &amp; persistence, data types _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Monitor resource usage &amp; manage storage volumes _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Monitoring Overview &amp; Zabbix foundation &amp; Zabbix monitoring service _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/MySQL primary_secondary synchronization &amp; Primary_secondary synchronization modes _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/NAT &amp; VRRP _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Native cloud K8S decryption &amp; K8S cluster installation and deployment _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Nginx installation &amp; user authentication &amp; Nginx web hosting _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Nginx proxy server &amp; Nginx optimization _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/NoSQL overview &amp; Deploy Redis service &amp; deploy LNMP+Redis _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/OOP basics &amp; OOP advanced &amp; RE modules _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/OSPF &amp; transport layer &amp; and ACL _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Overview of Python &amp; environment preparation &amp; Getting Started with Python _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Overview of container technology &amp; images and containers &amp; Docker configuration management _ Cloud c.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/PXC &amp; MySQL storage engine _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Percona software introduction &amp; Innobackupex backup and recovery _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Private cloud Overview &amp; private cloud configuration management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Prometheus server &amp; Prometheus monitored end &amp; Grafana &amp; and monitoring database _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/PyMySQL module &amp; multithreaded programming &amp; Paramiko module _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/RPM software package management &amp; Yum software package repository _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Regular expressions &amp; basic usage of SED &amp; sed application cases _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Release container server &amp; private image warehouse _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Remote login &amp; numerical &amp; classless networking &amp; ipv6 _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/SELinux &amp; system troubleshooting &amp; firewall policy management &amp; service management _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Server hardware &amp; deployment LNMP dynamic website _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Session is shared with cookies &amp; deployment memcached &amp; and Session _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Shell overview &amp; writing &amp; executing scripts &amp; numerical calculations _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Software package management &amp; Systemd service management &amp; VPN server _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Split parsing &amp; NTP time synchronization &amp; custom Yum repository _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/System management module &amp; grammar style and layout &amp; string details _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/TCP_IP configuration _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Table structure &amp; MySQL key values _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Time method &amp; exception handling &amp; file system related modules _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Tomcat server &amp; Tomcat application cases &amp; Maven application cases _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Upgrade the website running platform &amp; deploy the cache service &amp; migrate data _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/User authorization &amp; full backup, incremental backup _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/User management &amp; group account management &amp; scheduled tasks _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/VLAN technology &amp; application &amp; TRUNK &amp; network layer resolution _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Version control &amp; Git basics &amp; Git advanced _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Virtualization management &amp; public cloud overview _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Website architecture &amp; LNP+Mariadb database separation &amp; Web server cluster _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/YAML syntax &amp; Ansible Playbook scripts &amp; Ansible variables &amp; summaries and QQS _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Zabbix alarm mechanism &amp; Zabbix advanced operation &amp; monitoring cases _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/Zookeeper high availability cluster &amp; distributed message queue Kafka _ Cloud computing.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Linux云计算工程师笔记/rsync synchronization operation &amp; inotify real-time synchronization &amp; database _ Cloud computing.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +534,7 @@
       <workItem from="1626223158723" duration="134000" />
       <workItem from="1626330532091" duration="905000" />
       <workItem from="1627877301580" duration="219000" />
-      <workItem from="1640794331185" duration="635000" />
+      <workItem from="1640794331185" duration="1595000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -183,7 +613,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627877363737</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="12.30 update Linux cloud computing engineer">
+      <created>1640795098646</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1640795098646</updated>
+    </task>
+    <task id="LOCAL-00013" summary="12.30 update Linux cloud computing engineer">
+      <created>1640795870157</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1640795870157</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,9 +655,14 @@
     <MESSAGE value="6.25" />
     <MESSAGE value="6.24 update" />
     <MESSAGE value="8.2" />
-    <option name="LAST_COMMIT_MESSAGE" value="8.2" />
+    <MESSAGE value="12.30 update Linux cloud computing engineer" />
+    <option name="LAST_COMMIT_MESSAGE" value="12.30 update Linux cloud computing engineer" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="552" y="257" key="Vcs.Push.Dialog.v2" timestamp="1640795961490">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="552" y="257" key="Vcs.Push.Dialog.v2/0.0.1920.1050@0.0.1920.1050" timestamp="1640795961490" />
     <state x="753" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1640794400248">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
