@@ -14,7 +14,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="githubmaster" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -90,7 +90,6 @@
       <workItem from="1624579343490" duration="5700000" />
       <workItem from="1624801509717" duration="106000" />
       <workItem from="1625023318423" duration="666000" />
-      <workItem from="1625024326830" duration="415000" />
     </task>
     <task id="LOCAL-00001" summary="4.7">
       <created>1617804014933</created>
@@ -162,14 +161,7 @@
       <option name="project" value="LOCAL" />
       <updated>1625023426140</updated>
     </task>
-    <task id="LOCAL-00011" summary="6.30 update all">
-      <created>1625024431778</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1625024431778</updated>
-    </task>
-    <option name="localTasksCounter" value="12" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,8 +188,7 @@
     <MESSAGE value="6.19 update" />
     <MESSAGE value="6.25" />
     <MESSAGE value="6.24 update" />
-    <MESSAGE value="6.30 update all" />
-    <option name="LAST_COMMIT_MESSAGE" value="6.30 update all" />
+    <option name="LAST_COMMIT_MESSAGE" value="6.24 update" />
   </component>
   <component name="WindowStateProjectService">
     <state x="256" y="72" key="#Project_Structure" timestamp="1617804171279">
@@ -238,10 +229,10 @@
       <screen x="0" y="0" width="1552" height="996" />
     </state>
     <state x="566" y="256" key="Vcs.Multiple.Commit.Info.Dialog.Key/0.0.1552.996@0.0.1552.996" timestamp="1617850453926" />
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1625024737091">
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2" timestamp="1625024280495">
       <screen x="0" y="0" width="1552" height="996" />
     </state>
-    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1625024737091" />
+    <state x="368" y="230" key="Vcs.Push.Dialog.v2/0.0.1552.996@0.0.1552.996" timestamp="1625024280495" />
     <state x="398" y="236" key="Vcs.Push.Dialog.v2/0.0.1680.1020@0.0.1680.1020" timestamp="1624584484121" />
     <state x="704" y="432" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1624801533004">
       <screen x="0" y="0" width="1920" height="1050" />
